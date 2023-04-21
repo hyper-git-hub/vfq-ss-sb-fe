@@ -68,7 +68,7 @@ export class UserformComponent implements OnInit {
       department: [null],
       internal_role: [null,],
       work_location: [null],
-      // write: [true],
+      write: [true],
       user_picture: new FormControl(null, [Validators.required]),
       status: new FormControl(1),
     });
@@ -124,7 +124,7 @@ export class UserformComponent implements OnInit {
       work_location: formData.work_location,
       date_joined: date,
       internal_role: formData.internal_role,
-      // write: formData.write,
+      write: formData.write,
       image: formData.user_picture,
       user_type: formData['user_type'] = 2,
       usecase_id: formData['usecase_id'] = 5
