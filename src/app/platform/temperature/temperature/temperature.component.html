@@ -1,0 +1,45 @@
+<app-listing [breadCrumbs]="breadCrumbs" [filters]="temperatureFilters" [config]="temperatureTableConfig" [actions]="action"
+    [deviceType]="'temperature'" [deletionUrl]="deletionUrl" (signals)="onDeviceSignals($event)"></app-listing>
+
+<!-- <app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+
+<img *ngIf="loading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" width="150px" height="150px">
+
+<div class="w-100-p p-30" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start start">
+    <div fxLayout="row" class="w-100-p card round p-12">
+
+        <ngb-accordion class="w-100-p accord-overflow" activeIds="search-filters">
+            <ngb-panel id="search-filters">
+                <ng-template ngbPanelHeader let-opened="opened">
+                    <button ngbPanelToggle class="w-100-p btn p-0" style="color: #37474f;">
+                        <div class="w-100-p" fxLayout="row" fxLayoutAlign="space-between">
+                            <span class="font-size-14 fw-600"> Choose Parameters </span>
+                            <span><i [ngClass]="opened ? 'ri-subtract-line' : 'ri-add-line'"></i></span>
+                        </div>
+                    </button>
+                </ng-template>
+
+                <ng-template ngbPanelContent style="overflow: visible;">
+                    <app-device-filter (signals)="onFilterSignals($event)"></app-device-filter>
+                </ng-template>
+            </ngb-panel>
+        </ngb-accordion>
+    </div>
+
+    <div class="w-100-p panel panel-default card mb-0">
+        <div class="panel-heading">
+            <h3 class="panel-title fw-600 mb-0">Listing
+                <span class="fw-200 ml-10 grey-400">
+                    <i class="ri-question-line" tooltipPosition="right" ngbTooltip="some info goes here"></i>
+                </span>
+            </h3>
+        </div>
+
+        <div class="panel-body p-16">
+            <general-table style="height: 100%;" [count]="count" [config]="temperatureTableConfig" [actions]="actions"
+                [dataSource]="temperatureListingData" (signals)="onTableSignals($event)" [urlFilters]="temperatureFilters">
+            </general-table>
+        </div>
+    </div>
+
+</div> -->

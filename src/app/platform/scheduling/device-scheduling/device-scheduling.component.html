@@ -1,0 +1,59 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+
+<img *ngIf="loading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" srcset="" width="150px"
+    height="150px">
+
+<div class="p-30 w-100-p">
+    <div fxLayout="row" class="w-100-p card round p-12 mb-12">
+        <ngb-accordion class="w-100-p calender-overflow" activeIds="search-filters">
+            <ngb-panel id="search-filters">
+                <ng-template ngbPanelHeader let-opened="opened">
+                    <button ngbPanelToggle class="w-100-p btn p-0" style="color: #37474f;">
+                        <div class="w-100-p" fxLayout="row" fxLayoutAlign="space-between">
+                            <span class="font-size-14 fw-600"> Choose Parameters </span>
+                            <span><i [ngClass]="opened ? 'ri-subtract-line' : 'ri-add-line'"></i></span>
+                        </div>
+                    </button>
+                </ng-template>
+
+                <ng-template ngbPanelContent>
+                    <div class="w-100-p" fxLayout="row wrap">
+                        <app-device-filter class="w-100-p" [showReset]="false" [showDevices]="true" [actions]="actions" [showDeviceTypes]="true"
+                            [deviceTypes]="deviceTypes" [doCallDevices]="false" [deviceTypeClearable]="true" (signals)="onFilterSignals($event)"></app-device-filter>
+
+                        <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between start">
+                            <div fxFlex="15">
+                                <button fxLayoutAlign="center" class="btn btn-danger btn-round w-100-p" style="display: flex;"
+                                    (click)="onCreateSchedule()">
+                                    <i class="ri-add-circle"></i>&nbsp;
+                                    <span>Create New</span>
+                                </button>
+                            </div>
+
+                            <div fxFlex fxLayoutGap="8px" fxLayoutAlign="end start">
+                                <button fxFlex="18" fxLayoutAlign="center" class="btn btn-danger btn-round" (click)="showList()">Show Listing</button>
+                                <button fxFlex="18" fxLayoutAlign="center" class="btn btn-default btn-round" (click)="onReset()">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngb-panel>
+        </ngb-accordion>
+    </div>
+
+    <div class="w-100-p panel panel-default card ">
+        <div class="panel-heading">
+            <h3 class="panel-title fw-600 mb-0">List
+                <span class="fw-200 ml-10 grey-400">
+                    <i class="ri-question-line" tooltipPosition="right" ngbTooltip="some info goes here"></i>
+                </span>
+            </h3>
+        </div>
+
+        <div class="panel-body p-16">
+            <general-table style="height: 100%;" [count]="count" [config]="config" [actions]="actions" [urlFilters]="filters"
+                [dataSource]="scheduleList" (signals)="onTableSignals($event)">
+            </general-table>
+        </div>
+    </div>
+</div>

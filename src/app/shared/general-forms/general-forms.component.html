@@ -1,0 +1,64 @@
+<div fxFlex="100" [fxLayout]="config.layout" [fxLayoutGap]="config.flexGap" [fxLayoutAlign]="config.layoutAlign">
+    <ng-container *ngFor="let col of formFields; let i=index" [ngSwitch]="col.type">
+        <div *ngSwitchCase="'dropdown'" [style.width]="col.flex">
+            <div class="form-group mb-10">
+                <label *ngIf="col.title!=''">{{col.title}}</label>
+                <ng-select placeholder="{{col.placeholder}}" [clearable]="col.clearable"
+                    [formControl]="col.formControl">
+                    <ng-option *ngFor="let items of col.options" [value]="items">{{items.name}}
+                    </ng-option>
+                </ng-select>
+            </div>
+        </div>
+
+        <div *ngSwitchCase="'input'" [fxFlex]="col.flex">
+            <div class="form-group mb-10">
+                <label>{{col.title}}</label>
+                <input type="text" [formControl]="col.formControl" [required]="col.required"
+                    (keydown)="onKeyPress($event)">
+            </div>
+        </div>
+
+        <div *ngSwitchCase="'radio'" [fxFlex]="col.flex">
+            <div class="form-group mb-10">
+                <div fxLayout="row" fxLayoutGap="68px" class="mb-10">
+                    <div class="radio-custom fs-16" *ngFor="let items of col.options">
+                        <input type="radio" [id]="items.id" [value]="items.value" [name]="col.name"
+                            [formControl]="col.formControl" (change)="changedRadioButtons($event, items)">
+                        <label [for]="items.id">{{items.label}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngSwitchCase="'date'" [fxFlex]="col.flex">
+            <p-calendar placeholder="{{col.placeholder}}" [disabled]="disableDatePicker || col.disableDatePicker"
+                [formControl]="col.formControl" [id]="col.title + i" [showTime]="config.showtime"
+                hourFormat="24"></p-calendar>
+            <div class="form-group">
+                <!-- <div class="input-group"> -->
+                    <!-- <input class="form-control" placeholder="{{col.placeholder}}" ngbDatepicker
+                        #idRefDatePicker="ngbDatepicker" [min]="" [max]="" [formControl]="col.formControl"
+                        placement="right" (click)="idRefDatePicker.toggle()" [readonly]="disableEnableDatePicker">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary btn-icon" (click)="idRefDatePicker.toggle()"
+                            type="button" style="padding: 0 8px; border-radius: 0px; border-color: #ced4da;">
+                            <i class="ri-calendar-2-line"></i>
+                        </button>
+                    </div> -->
+                    <!-- <div class="row-filter">
+                        <div class="col-filter">
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+    </ng-container>
+
+    <ng-container *ngFor="let ac of config?.actions">
+        <button type="button" [ngClass]="ac.color" class="btn btn-block btn-round"
+            [ngbTooltip]="ac.tooltip">{{ac.name}}
+        </button>
+    </ng-container>
+</div>

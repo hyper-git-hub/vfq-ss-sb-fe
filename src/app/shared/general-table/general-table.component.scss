@@ -1,0 +1,130 @@
+.info {
+    font-weight: 400;
+    margin-left: 10px;
+}
+
+.info:hover {
+    text-decoration: underline;
+}
+
+.loader {
+    position: absolute;
+    top: 32%;
+    left: 42%;
+    z-index: 1;
+}
+
+.table {
+    margin-bottom: 0;
+    thead {
+        background-color: #ececec;
+
+        >tr >th {
+            height: 30px !important;
+            padding: 0 16px 0 4px !important;
+            font-weight: 700 !important;
+            font-size: 12px !important;
+            line-height: 28px;
+            position: relative;
+            cursor: pointer;
+        }
+    }
+
+    tbody {
+        >tr >td {
+            padding: 4px !important;
+            border: 1px solid #e4eaec !important;
+            // align-items: center;
+            // justify-content: center;
+            vertical-align: middle;
+            
+            >a {
+                text-decoration: none !important;
+                // width: 28px !important;
+                height: 28px !important;
+                line-height: 16px !important;
+            }
+        
+            >a :hover {
+                color: #000;
+            }
+
+            .make-oval {
+                background: #f3f7f9;
+                border-radius: 20px;
+                padding: 2px 8px;
+                margin-right: 2px;
+                margin-bottom: 4px;
+            }
+
+            .make-oval:hover {
+                background: #e7ecee;
+            }
+        }
+    }
+
+    .desc,
+    .asc {
+        position: absolute;
+        right: 0;
+        // top: -12px;
+        padding-right: 30px;
+    }
+
+    .desc::before {
+        content: "\2191";
+        opacity: 0.5;
+        position: absolute;
+        right: 8px;
+        top: -2px;
+    }
+
+    .asc::before {
+        content: "\2193";
+        opacity: 0.5;
+        position: absolute;
+        right: 2px;
+        top: -2px;
+    }
+
+    .desc::after {
+        content: "\2193";
+        opacity: 1;
+        position: absolute;
+        right: 2px;
+        top: -2px;
+    }
+
+    .asc::after {
+        content: "\2191";
+        opacity: 1;
+        position: absolute;
+        right: 8px;
+        top: -2px;
+    }
+
+
+    .btn-info {
+        background-color: #77d6e1 !important;
+        border-color: #77d6e1;
+        color: #fff;
+    }
+
+    .btn-info :hover {
+        color: #000 !important;
+    }
+
+    .btn-danger {
+        background-color: #f96868 !important;
+        border-color: #f96868;
+        color: #fff;
+    }
+
+    .btn-danger :hover {
+        color: #000 !important;
+    }
+}
+
+.even-row {
+    background-color: rgba(243, 247, 249, .3) !important;
+}

@@ -1,0 +1,124 @@
+<div class="modal-header">
+    <h4 class="modal-title titleHead" id="modal-basic-title">{{title}}</h4>
+    <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
+</div>
+<div class="modal-body">
+       
+
+
+        <div class="card w-100-p" style="border: none; height: 100%">
+                <img *ngIf="loading" src="/assets/images/block-loader.gif" alt="Loading" srcset="" width="150px" height="150px"
+                    style="position: absolute; top: 30%; left: 42%" />
+            
+                <div *ngIf="catagory === 'edit' " class="w-100-p" fxLayout="row wrap" style="height: 100%">
+            
+            <!--VIEW  EDIT -->
+            <form [formGroup]="editView" class="w-100-p"  >
+                    <!-- DropDown Mod-->
+                    <ng-select class="  " style="width:40% ;margin: 15px; " [searchable]="false"
+                        [clearable]="false" placeholder="Select Space" (change)="onAreaSelect($event)" formControlName="space">
+                        <ng-option *ngFor="let items of bySec" [value]="items.id">{{ items.name }}
+                        </ng-option>
+                    </ng-select>
+                    <div class="panel-body padding-15 w-100-p">
+            
+            
+                        <div class="table-responsive   vscroll" style="height: auto;">
+                            <table 
+                                class="table nowrap margin-bottom-0 table-bordered  table-striped theme-table1  bg-white  table-condensed  text-wrap"
+                                id="ppp">
+                                <thead>
+                                    <tr>
+                                        <th>Views</th>
+                                        <th>Cameras</th>
+                                        <th> Action </th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="viewList.length>0" >
+                                    <tr *ngFor="let data of viewList ; let i = index">
+                                        <td > 
+                                                 {{data.name}}
+                                      </td>
+                                      <td > <ng-select class=" "  [searchable]="false" [clearable]="false"
+                                            placeholder="Select Space" (change)="onChangeCam($event)" formControlName="camera_views">
+                                            <ng-option *ngFor="let items of cameraList" [value]="items.id">{{ items.name }}
+                                            </ng-option>
+                                        </ng-select>
+                                    </td> 
+                                        <td>
+                                            <a type="button"  (click)="deleteRow(i)" class="btn btn-icon  btn-danger btn-xs " data-toggle="modal"
+                                                data-target=""> <i class="ri-delete-bin-6-line"></i> </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            
+            
+                <!--VIEW ADD -->
+                <div *ngIf="catagory=== 'add'" class="w-100-p" fxLayout="row wrap" style="height: 100%">
+                    <form [formGroup]="userform" >
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group ">
+                                            <label>View Name</label>
+                                            <input type="text" class="form-control" required="true" formControlName="name" placeholder="Name">
+                                            
+                                            <ng-container *ngIf=" cameraName.invalid && (cameraName.touched || cameraName.dirty)">
+                                                <span class="text-danger" *ngIf="userform.controls['name'].hasError('required')">
+                                                    Please provide View Name
+                                                </span>
+                                            </ng-container>
+            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label>Views</label>
+                                            <ng-select class=" margin-bottom-10" [searchable]="false" [clearable]="false"
+                                                placeholder="Select Space" (change)="onChangeView($event)" formControlName="views">
+                                                <ng-option *ngFor="let items of viewList" [value]="items.id">{{ items.name }}
+                                                </ng-option>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label>Camera</label>
+                                            <ng-select class=" margin-bottom-10" [searchable]="false" [clearable]="false"
+                                                placeholder="Select Space" (change)="onChangeCam($event)" formControlName="camera">
+                                                <ng-option *ngFor="let items of cameraList" [value]="items.id">{{ items.name }}
+                                                </ng-option>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </form>
+            
+            
+                </div>
+            </div>
+
+
+
+
+</div>
+<div class="modal-footer">
+    <button type="submit" (click)="onSubmit()" class="btn btn-success btn-round btn-block1"><i
+            class="ri-check-fill"></i>Save</button>
+    <button type="button" (click)="onCloseModel()" class="btn btn-default btn-round btn-block1"><i
+            class="ri-arrow-go-back-line"></i>
+        Back</button>
+</div>

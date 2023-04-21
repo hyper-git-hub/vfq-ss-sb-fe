@@ -1,0 +1,88 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+    <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
+</div>
+
+
+<div class="modal-body">
+    <form [formGroup]="assignGroupForm" (ngSubmit)="onSubmitAssignGroup(assignGroupForm.value)">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label">Add User<span class="text-danger">*</span></label>
+                        <div class="input-icon">
+                            <!-- <p-multiSelect [options]="listOfUsers"
+                                    name="selectedAssetGroup" formControlName="user"
+                                    [(ngModel)]="selectedGroups" optionLabel="name"
+                                    styleClass="prime-dropdown" filter="true"
+                                    filterPlaceHolder="Search" defaultLabel="Select User">
+                                </p-multiSelect> -->
+                            <ng-select placeholder="Select user" formControlName="user" [multiple]="true">
+                                <ng-option *ngFor="let items of listOfUsers" [value]="items.guid">{{items.email}}
+                                </ng-option>
+                            </ng-select>
+
+                            <span class="error-message"
+                                    *ngIf="assignGroupForm.get('user').getError('required') && assignSubmitted">
+                                    Please provide user
+                                </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mt-20 ">
+                    <div class="form-group">
+                        <label class="control-label">Select Group<span class="required  text-danger">*</span></label>
+                        <!-- 
+                            <p-dropdown [options]="listOfGroups" formControlName="group"
+                                name="group" styleClass="prime-dropdown"
+                                (onChange)="onAssignGroupChange($event)"
+                                placeholder="Select Group">
+                            </p-dropdown> -->
+                        <ng-select placeholder="Select user" formControlName="group" (change)="onAssignGroupChange($event)" >
+                            <ng-option *ngFor="let items of  listOfGroups" [value]="items.id"  >{{items.name}} 
+                            </ng-option>
+                        </ng-select>
+
+                        <span class="error-message"
+                                *ngIf="assignGroupForm.get('group').getError('required') && assignSubmitted">
+                                Please provide group
+                            </span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+
+                <div class="form-group margin-bottom-10 shadow"
+                style="border: 1px solid rgb(238, 238, 238);border-radius: 5px;background-color: rgb(248, 248, 248); height: 200px!important; overflow-y: scroll">
+                <div style="padding: 10px;" *ngIf="filterFeatures.length>0">
+                    <h5><b>Super Admin</b></h5>
+                    <p>
+                        Super Admin has access to following feature(s).
+                    </p>
+                    <ul style="padding-left: 15px;"
+                    *ngFor="let index of filterFeatures">
+                        <li>{{index?.feature_name}}</li>
+                    </ul>
+                    <p></p>
+                </div>
+            </div>
+
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success btn-round btn-block1">
+                <i class="ri-check-fill"></i>
+                <span>Save</span>
+            </button>
+            <button type="button" class="btn btn-default btn-round btn-block1" (click)="onCloseModel()"><i
+                    class="ri-arrow-go-back-line"></i>
+                Back</button>
+        </div>
+    </form>
+
+
+</div>

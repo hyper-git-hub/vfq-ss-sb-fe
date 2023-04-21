@@ -1,0 +1,10 @@
+<div class="pg-container">
+    <div *ngIf="length === 0">Showing 0 to {{showedEntries}} of {{length}} entries</div>
+    <div *ngIf="length > 0">Showing {{pageInfo.offset + 1}} to {{showedEntries}} of {{length}} entries</div>
+    
+    <div class="ac-container">
+        <div class="ac p-ac" [class.disable-btn]="pageInfo.pageIndex <= 0" (click)="onPrevious()">Previous</div>
+        <span class="ac count">{{pageInfo.pageIndex + 1}}</span>
+        <div class="ac n-ac" (click)="onNext()">Next</div>
+    </div>
+</div>

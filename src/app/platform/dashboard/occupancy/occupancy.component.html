@@ -1,0 +1,67 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+<div class="page-container w-100-p" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start start">
+    <div fxLayout="row" class="w-100-p card round p-12">
+        <div class="panel-heading mb-0"></div>
+        <!-- [activeIds]="'filters'" -->
+        <ngb-accordion class="w-100-p" activeIds="filters">
+            <ngb-panel id="filters">
+                <ng-template ngbPanelHeader let-opened="opened">
+                    <button ngbPanelToggle class="w-100-p btn p-0" style="color: #37474f;">
+                        <div class="w-100-p" fxLayout="row" fxLayoutAlign="space-between">
+                            <span class="font-size-14 fw-600"> Choose Parameters </span>
+                            <span><i [ngClass]="opened ? 'ri-subtract-line' : 'ri-add-line'"></i></span>
+                        </div>
+                    </button>
+                </ng-template>
+
+                <ng-template ngbPanelContent>
+                    <div fxLayout="row wrap" fxFlex="100">
+                        <app-device-filter fxFlex="100" [showReset]="false" [actions]="actions" (signals)="onFilterSignals($event)"></app-device-filter>
+
+                        <fieldset class="form-fieldset w-100-p mt-8">
+                            <legend>Time Interval</legend>
+                            <app-general-forms class="w-100-p" [config]="formConfig" [actions]="actions" (signals)="onSelectTime($event)"></app-general-forms>
+                        </fieldset>
+
+                        <div class="w-100-p" fxLayoutAlign="end end">
+                            <button fxFlex="20" type="button" class="btn btn-danger btn-block btn-round mr-8" (click)="onSubmit()">
+                                Sumbit
+                            </button>
+
+                            <button fxFlex="20" type="button" class="btn btn-default btn-block btn-round" (click)="onReset()">
+                                Reset
+                            </button>
+                      
+                        </div>
+                    </div>
+                </ng-template>
+            </ngb-panel>
+        </ngb-accordion>
+    </div>
+
+    <div class="w-100-p panel panel-default card">
+        <div class="panel-heading">
+            <h3 class="panel-title fw-600 mb-0">Occupancy Analysis
+                <span class="fw-200 ml-10 grey-400">
+                    <i class="ri-question-line" tooltipPosition="right" ngbTooltip="Camera occupancy analysis graph"></i>
+                </span>
+            </h3>
+        </div>
+        <app-hybrid-drill-down-chart [chartOptions]="gData"></app-hybrid-drill-down-chart>
+    </div>
+
+    <div class="w-100-p panel panel-default card ">
+        <div class="panel-heading">
+            <h3 class="panel-title fw-600 mb-0">Camera Listing
+                <span class="fw-200 ml-10 grey-400">
+                    <i class="ri-question-line" tooltipPosition="right" ngbTooltip="some info goes here"></i>
+                </span>
+            </h3>
+        </div>
+
+        <div class="panel-body p-16">
+            <general-table [config]="config" [actions]="actions" [urlFilters]="filters"
+                (signals)="onTableSignals($event)"></general-table>
+        </div>
+    </div>
+</div>

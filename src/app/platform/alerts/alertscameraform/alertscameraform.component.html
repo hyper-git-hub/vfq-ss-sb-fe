@@ -1,0 +1,244 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{formTitle}}</h4>
+    <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
+
+</div>
+<div class="modal-body">
+    <form [formGroup]="alertscameraForm" (ngSubmit)="onSubmit(alertscameraForm.value)">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-10">
+                            <ng-select placeholder="Choose Alert Type" formControlName="alert_type">
+                                <ng-option *ngFor="let items of alert_type" [value]="items.id">{{items.name}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-10">
+                            <ng-select placeholder="Choose Camera" formControlName="camera">
+                                <ng-option *ngFor="let items of camera" [value]="items.id">{{items.name}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group margin-bottom-10 margin-top-10">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="radio-custom checkbox-inline1 radio-warning">
+                                <input type="radio" id="444" name="radio" checked="">
+                                <label for="444">Every Day</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="radio-custom checkbox-inline1 radio-warning">
+                                <input type="radio" id="555" name="radio">
+                                <label for="555">Working Day</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="radio-custom checkbox-inline1 radio-warning">
+                                <input type="radio" id="666" name="radio">
+                                <label for="666">Weekend </label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+
+
+                    <div class="table-responsive" style="height:auto">
+                        <table class="table nowrap table-bordered1 margin-bottom-0 table-condensed  bg-grey-1001   text-wrap">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox-custom checkbox-inline1 checkbox-warning">
+                                            <input type="checkbox" id="Monday" name="checkbox" checked="">
+                                            <label class="pl-10" for="Monday">Monday</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group margin-bottom-0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Start
+                                                    Time</span>
+                                                <input type="time" class="form-control" value="" placeholder="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group margin-bottom-0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">End
+                                                    Time</span>
+                                                <input type="time" class="form-control" value="" placeholder="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="checkbox-custom checkbox-inline1 checkbox-warning">
+                                            <input type="checkbox" id="All" name="checkbox" checked="">
+                                            <label class="pl-10" for="All">All
+                                                Day</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox-custom checkbox-inline1 checkbox-warning">
+                                            <input type="checkbox" id="Monday" name="checkbox" checked="">
+                                            <label class="pl-10" for="Monday">Tuesday</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group margin-bottom-0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Start
+                                                    Time</span>
+                                                <input type="time" class="form-control" value="" placeholder="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group margin-bottom-0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">End
+                                                    Time</span>
+                                                <input type="time" class="form-control" value="" placeholder="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="checkbox-custom checkbox-inline1 checkbox-warning">
+                                            <input type="checkbox" id="All" name="checkbox" checked="">
+                                            <label class="pl-10" for="All">All
+                                                Day</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox-custom checkbox-inline1 checkbox-warning">
+                                            <input type="checkbox" id="Monday" name="checkbox" checked="">
+                                            <label class="pl-10" for="Monday">Wednesday</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group margin-bottom-0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Start
+                                                    Time</span>
+                                                <input type="time" class="form-control" value="" placeholder="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group margin-bottom-0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">End
+                                                    Time</span>
+                                                <input type="time" class="form-control" value="" placeholder="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="checkbox-custom checkbox-inline1 checkbox-warning">
+                                            <input type="checkbox" id="All" name="checkbox" checked="">
+                                            <label class="pl-10" for="All">All
+                                                Day</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox-custom checkbox-inline1 checkbox-warning">
+                                            <input type="checkbox" id="Monday" name="checkbox" checked="">
+                                            <label class="pl-10" for="Monday">Thursday</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group margin-bottom-0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Start
+                                                    Time</span>
+                                                <input type="time" class="form-control" value="" placeholder="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group margin-bottom-0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">End
+                                                    Time</span>
+                                                <input type="time" class="form-control" value="" placeholder="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="checkbox-custom checkbox-inline1 checkbox-warning">
+                                            <input type="checkbox" id="All" name="checkbox" checked="">
+                                            <label class="pl-10" for="All">All
+                                                Day</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox-custom checkbox-inline1 checkbox-warning">
+                                            <input type="checkbox" id="Monday" name="checkbox" checked="">
+                                            <label class="pl-10" for="Monday">Friday</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group margin-bottom-0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Start
+                                                    Time</span>
+                                                <input type="time" class="form-control" value="" placeholder="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group margin-bottom-0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">End
+                                                    Time</span>
+                                                <input type="time" class="form-control" value="" placeholder="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="checkbox-custom checkbox-inline1 checkbox-warning">
+                                            <input type="checkbox" id="All" name="checkbox" checked="">
+                                            <label class="pl-10" for="All">All
+                                                Day</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-success btn-round btn-block1"><i class="ri-check-fill"></i>Save</button>
+    <button type="button" class="btn btn-default btn-round btn-block1"><i class="ri-arrow-go-back-line"></i>
+        Back</button>
+</div>

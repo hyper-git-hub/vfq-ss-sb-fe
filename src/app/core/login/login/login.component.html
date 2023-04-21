@@ -1,0 +1,61 @@
+<div fxLayout="row wrap" class="h-100-p"
+    style="background-image: url(assets/images/vodafone-background.jpg); background-size: cover;">
+
+    <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" [class.captchaAdded]="showCaptcha"
+        style="height: calc(100% - 36px); position: relative;">
+
+        <img class="loader" *ngIf="loading" src="../../../../assets/images/block-loader.gif" alt="Loading" width="150px"
+            height="150px">
+        <div class="w-314 h-418" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="8px">
+            <img src="assets/images/vf-bz-logo.png" class="w-200 h-66" alt="Logo">
+
+            <div class="w-100-p p-20 card text-center" >
+                <i class="fs-40 icofont-lock h-62"></i>
+                <h4 class="fs-18 fw-600 mb-30 green-800">LOGIN</h4>
+
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label class="sr-only">Email</label>
+                            <input name="email" formControlName="email" type="email" class="form-control"
+                                placeholder="Email" maxlength="50">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label class="sr-only">Password</label>
+                            <input [type]="showPassword ? 'text' : 'password' " formControlName="password" placeholder="Password"
+                                class="form-control" maxlength="50" id="password">
+                            <span class="input-group-addon" (click)="showPassword = !showPassword">
+                                <i [ngClass]="showPassword ? 'ri-eye-line' : 'ri-eye-off-line'"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div fxLayout="row" fxLayoutAlign="space-between start" style="clear: both;">
+                        <div class="checkbox-custom checkbox-inline" fxLayout="row">
+                            <input type="checkbox" formControlName="remember"
+                                id="inputCheckbox" style="margin-left: 0px !important;">
+                            <label for="inputCheckbox" class="ml-20">Remember me</label>
+                        </div>
+                        <a class="pull-left pt-6 colour" style="cursor: pointer;" (click)="onForgotPassword()">
+                            Forgot password?
+                        </a>
+                    </div>
+
+                    <div fxLayout="row" fxLayoutAlign=" start" [ngStyle]="{'margin-top': showCaptcha ? '25px' : '0px'}">
+                        <div class="recaptcha" *ngIf="showCaptcha">
+                            <re-captcha formControlName="recaptcha"
+                                (resolved)="addTokenLog('Reactive form mode resolved', $event)">
+                            </re-captcha>
+                        </div>
+                    </div>
+
+                    <button [ngStyle]="{'margin-top': showCaptcha ? '0px' : '20px'}" type="submit"
+                        [disabled]="loginForm.invalid || loading" class="btn btn-danger btn-block">Sign in</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

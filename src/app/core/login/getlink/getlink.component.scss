@@ -1,0 +1,22 @@
+.sign-in:hover {
+    background-color: rgba(0, 0, 0, .1);
+}
+
+::ng-deep.dropdown-toggle::after {
+    display:none;
+}
+
+.dropdown-menu {
+    left: -100px;
+    padding: 8px 8px;
+    border-radius: 4px;
+    min-width: 11rem;
+    min-height: 3rem;
+}
+
+.page-container-share-dashboard
+{
+ padding: 0 30px;
+}
+
+

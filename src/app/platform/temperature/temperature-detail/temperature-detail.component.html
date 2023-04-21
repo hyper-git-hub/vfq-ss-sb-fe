@@ -1,0 +1,10 @@
+<app-list-detail [deviceTitle]="'Temperature Details'" [breadCrumbs]="breadCrumbs" [loading]="loading" [table]="table"
+    [deviceDetail]="buildingDetails" [deviceImage]="'/assets/images/device.jpg'">
+</app-list-detail>
+
+<div class="px-30 pb-30 d-flex">
+    <div style="flex: 1;">
+        <app-gen-line-chart graphTitle="Temperature" unit="" [graphID]="'tempGraph'" [graphData]="graphData" [showDaysDropdown]="true"
+            [graphConfig]="tempGraphConfig" (signals)="onTempGraphSignals($event)"></app-gen-line-chart>
+    </div>
+</div>

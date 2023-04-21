@@ -1,0 +1,79 @@
+<ng-container *ngIf="isCollapsed">
+    <div class="w-100-p" fxLayout="row wrap">
+        <ng-container *ngFor="let menu of menus; let idx=index;">
+            <!-- sidebar with no submenu's -->
+            <ng-container *ngIf="!menu.is_parent">
+                <div class="w-100-p site-menu-item">
+                    <a class="h-38 w-100-p" fxFlex="100" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center"
+                        style="list-style: none;" [routerLink]="[menu.route]" routerLinkActive="active"
+                        [routerLinkActiveOptions]="{exact: true}">
+                        <i class="site-menu-icon fs-18 fw-400" ngClass="{{menu?.icon}}"></i>
+                        <span>{{menu.name}}</span>
+                    </a>
+                </div>
+            </ng-container>
+            <!-- sidebar with submenu's -->
+
+            <ng-container *ngIf="menu.is_parent">
+                <div class="w-100-p site-menu-item" fxLayoutAlign="space-between center" (click)="onSelectedItem(menus, idx)">
+                    <a class="h-38 w-100-p" fxFlex="100" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="space-between center"
+                        style="list-style: none;">
+                        <div fxLayoutGap="8px" fxLayoutAlign="start center">
+                            <i class="site-menu-icon fs-18 fw-400" ngClass="{{menu?.icon}}"></i>
+                            <span>{{menu.name}}</span>
+                        </div>
+    
+                        <i class="ri-add-line fw-400" *ngIf="!menu.expanded"></i>
+                        <i class="ri-subtract-line fw-400" *ngIf="menu.expanded"></i>
+                    </a>
+                </div>
+    
+                <ng-container *ngFor="let menu of menu.sub_menu">
+                    <div class="w-100-p site-menu-item" *ngIf="menus[idx]['expanded']">
+                        <a class="h-38 w-100-p" fxFlex="100" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center"
+                            style="list-style: none;" [routerLink]="[menu.route]" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{exact: true}">
+                            <i class="site-menu-icon fs-18 fw-400"></i>
+                            <span>{{menu.name}}</span>
+                        </a>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="!isCollapsed">
+    <div class="w-90 text-center">
+        <ng-container *ngFor="let menu of menus; let idx=index">
+            <ng-container *ngIf="!menu.is_parent">
+                <div class="w-100-p site-menu-item">
+                    <div class="menu" [routerLink]="[ menu.route ]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                        <i class="menu-icon fs-24 fw-400" ngClass="{{menu?.icon}}"></i>
+                        <span class="menu-title">{{menu.name}}</span>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="menu.is_parent">
+                <div class="w-100-p site-menu-item">
+                    <div class="menu">
+                        <i class="menu-icon fs-24 fw-400" ngClass="{{menu?.icon}}"></i>
+                        <span class="menu-title">{{menu.name}}</span>
+
+                        <div class="expanded-menu">
+                            <ng-container *ngFor="let sub_menu of menu.sub_menu">
+                                <a fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="w-100-p"
+                                    [routerLink]="[sub_menu.route]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                                    <!-- <i ngClass="{{sub_menu?.icon}}" class="fs-18 fw-400"></i> -->
+                                    <span>{{sub_menu.name}}</span>
+                                </a>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
+</ng-container>
+

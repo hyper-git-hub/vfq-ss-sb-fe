@@ -1,0 +1,81 @@
+:host {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Vodafone Lt';
+    background: #fff;
+}
+
+.site-menu-item {
+    padding: 0;
+    border-top: 1px solid #f9f9f9;
+    cursor: pointer;
+}
+
+.site-menu-item :hover {
+    background-size: cover;
+    background-color: #f8f8f8;
+}
+
+.site-menu-child:hover{
+    color: #d31a1a;
+}
+
+.active {
+    background-color: #f8f8f8;
+}
+
+a {
+    color: #444 !important;
+    line-height: 36px;
+    text-decoration: none;
+    padding: 0 16px;
+}
+
+.site-menu-icon {
+    color: #e60000;
+}
+
+.menu {
+    height: 36px;
+    width: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // position: relative;
+
+    .menu-icon {
+        display: flex;
+        color: #e60000;
+    }
+
+    .menu-title {
+        display: none;
+    }
+
+    .expanded-menu {
+        display: none !important;
+    }
+}
+
+.menu:hover {
+    .menu-icon {
+        display: none;
+    }
+
+    .menu-title {
+        display: flex;
+        font-size: 13px;
+    }
+
+    .expanded-menu {
+        background: #fff;
+        display: flex !important;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        width: 200px;
+        position: absolute;
+        left: 90px;
+        // top: 0;
+        z-index: 1;
+    }
+}

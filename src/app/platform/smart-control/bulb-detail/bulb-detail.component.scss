@@ -1,0 +1,39 @@
+.loader {
+  position: absolute;
+  top: 32%;
+  left: 42%;
+  z-index: 1;
+}
+
+.zoom {
+  transition: transform .2s;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+.zoom:hover {
+  transform: scale(1.5);
+}
+
+.left {
+  float: left !important;
+}
+
+.center {
+  background: #233c70;
+  width: 90px;
+  height: 90px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  position: absolute;
+  top: 29px;
+  left: 61px;
+}
+
+
+.allignment {
+  margin-top: 85px !important;
+}

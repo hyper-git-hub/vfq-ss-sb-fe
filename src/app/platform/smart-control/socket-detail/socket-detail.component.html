@@ -1,0 +1,138 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+
+<img *ngIf="loading" src="/assets/images/block-loader.gif" alt="Loading" srcset="" width="150px" height="150px"
+    style="position: absolute; top: 40%; left: 50%; z-index: 1;">
+
+<div class="p-30 w-100-p">
+    <div class="panel panel-default round shadow card">
+        <div class="panel-heading mb-0">
+            <h3 class="panel-title fw-600 mb-0">Socket Details</h3>
+            <div class="panel-actions right-8">
+                <a class="btn btn-success fs-14 btn-round h-32 white d-flex" (click)="onAddSchedule()">
+                    <i class="ri-add-circle-fill mr-6"></i>Add Schedule
+                </a>
+            </div>
+        </div>
+
+        <div class="panel-body p-15">
+            <div class="row">
+                <div class="col-md-12">
+                    <div fxLayout="row wrap" fxLayoutAlign="start center" class="mt-10">
+                        <div class="w-100-p mb-10 text-center">
+                            <img src="/assets/images/socket.jpg" height="150">
+                        </div>
+
+                        <div class="w-100-p mb-10 text-center">
+                            <div class="fs-24 fw-200 mb-0 grey-800">
+                                {{socketDetails?.device_name ? socketDetails?.device_name : socketDetails?.device}}
+                            </div>
+                        </div>
+                        <div class="w-100-p" style="margin-left: 48%;">
+                            <div class="onoffswitch">
+                                <input type="checkbox" (change)="setOnOff($event)" [(ngModel)]="socketTurnOn" [checked]="socketTurnOn"
+                                    class="onoffswitch-checkbox" id="onoffswitch">
+                                <label class="onoffswitch-label" for="onoffswitch">
+                                    <span class="onoffswitch-inner"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row pl-16 pr-16">
+                        <div class="col-md-6">
+                            <div class="form-group margin-bottom-10">
+                                <table class="table margin-bottom-0 table-bordered1 table-condensed   ">
+                                    <tbody>
+                                        <tr>
+                                            <th><b> Connectivity Status </b></th>
+                                            <td>{{deviceInfo?.connectivity_status ? 'On' : 'Off'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th><b>Floor </b></th>
+                                            <td>{{buildingDetails?.floor_name || '-'}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th><b>Voltage</b></th>
+                                            <td> {{ telemateryDetails?.voltage || '-'}} </td>
+                                        </tr>
+                                        <tr>
+                                            <th><b>Current</b></th>
+                                            <td> {{ telemateryDetails?.current || '-'}} </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group margin-bottom-10">
+                                <table class="table margin-bottom-0 table-bordered1 table-condensed   ">
+                                    <tbody>
+                                        <tr>
+                                            <th> <b>Building </b> </th>
+                                            <td>{{buildingDetails?.building_name || '-'}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th> <b> Space</b> </th>
+                                            <td> {{buildingDetails?.space_name || '-'}} </td>
+                                        </tr>
+                                        <tr>
+                                            <th> <b> Power</b> </th>
+                                            <td> {{telemateryDetails?.power || '-'}} </td>
+                                        </tr>
+                                        <tr>
+                                            <th> <b> Last Updated</b> </th>
+                                            <td> {{signalRresponse?.t ? getLocalTime(signalRresponse?.t) : getLocalTime(telemateryDetails?.updated_at)}} </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-100-p panel panel-default card ">
+        <div class="panel-heading">
+            <h3 class="panel-title fw-600 mb-0">Socket Schedules
+                <span class="fw-200 ml-10 grey-400">
+                    <i class="ri-question-line" tooltipPosition="right" ngbTooltip="some info goes here"></i>
+                </span>
+            </h3>
+        </div>
+
+
+        <div class="panel-body p-16">
+            <general-table style="height: 100%;" [count]="count" [config]="socketDetailTableConfig" [actions]="actions"
+                [dataSource]="sheduleListingData" (signals)="onTableSignals($event)" [urlFilters]="socketFilters">
+            </general-table>
+        </div>
+    </div>
+
+    <div class="w-100-p panel panel-default card ">
+        <div class="panel-heading">
+            <h3 class="panel-title fw-600 mb-0">Power Consumption
+                <span class="fw-200 ml-10 grey-400">
+                    <i class="ri-question-line" tooltipPosition="right" ngbTooltip="some info goes here"></i>
+                </span>
+            </h3>
+        </div>
+
+
+        <div class="panel-body p-16">
+            <div class="w-100-p">
+                <ng-container *ngIf="!!chartData else noGraph">
+                    <div id="chartdiv" class="h-400"></div>
+                </ng-container>
+                
+                <ng-template #noGraph>
+                    <div class="fs-16">No Graph Data</div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>

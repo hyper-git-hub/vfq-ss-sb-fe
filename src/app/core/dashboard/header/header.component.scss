@@ -1,0 +1,27 @@
+.sign-in:hover {
+    background-color: rgba(0, 0, 0, .1);
+}
+
+::ng-deep.dropdown-toggle::after {
+    display:none;
+}
+
+.dropdown-menu {
+    left: -121px;
+    padding: 8px 8px;
+    border-radius: 4px;
+    min-width: 174px;
+    min-height: 3rem;
+    width: 67px;
+}
+
+.list-group-item:hover {
+    background: #f3f7f9;
+}
+.viewed {
+    background: transparent;
+}
+.unviewed {
+    background: rgba(0, 0, 0, .05);
+}
+

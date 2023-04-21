@@ -1,0 +1,62 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+
+<img *ngIf="loading" src="/assets/images/block-loader.gif" alt="Loading" srcset="" width="150px" height="150px"
+    style="position: absolute; top: 40%; left: 50%; z-index: 1;">
+
+<div class="p-30 w-100-p">
+    <div class="panel panel-default round shadow card mb-0">
+        <div class="panel-heading mb-0">
+            <h3 class="panel-title fw-600 mb-0">{{deviceTitle}}</h3>
+            <div *ngIf="scheduleEnabled" class="panel-actions right-8">
+                <a class="btn btn-success fs-14 btn-round h-32 white d-flex" (click)="onAddSchedule()">
+                    <i class="ri-add-circle-fill mr-6"></i>Add Schedule
+                </a>
+            </div>
+        </div>
+
+        <div class="panel-body p-15">
+            <div class="row">
+                <div class="col-md-12">
+                    <div fxLayout="row wrap" fxLayoutAlign="start center" class="mt-10">
+                        <div class="w-100-p mb-10 text-center">
+                            <img [src]="deviceImage" height="150">
+                        </div>
+
+                        <div class="w-100-p mb-10 text-center">
+                            <div class="fs-24 fw-200 mb-0 grey-800">
+                                {{deviceDetail?.device_name ? deviceDetail?.device_name : deviceDetail?.device}}
+                            </div>
+                        </div>
+                        <div *ngIf="switchButton" class="w-100-p" style="margin-left: 48%;">
+                            <div class="onoffswitch">
+                                <input type="checkbox" (change)="setOnOff($event)" [(ngModel)]="deviceTurnOn"
+                                    [checked]="deviceTurnOn" class="onoffswitch-checkbox" id="onoffswitch">
+                                <label class="onoffswitch-label" for="onoffswitch">
+                                    <span class="onoffswitch-inner"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row pl-16 pr-16">
+                        <div class="w-100-p form-group margin-bottom-10">
+                            <table class="table margin-bottom-0 table-bordered1 table-condensed">
+                                <tbody>
+                                    <div class="w-100-p" fxLayout="row wrap">
+                                        <ng-container *ngFor="let item of table">
+                                            <tr class="col-md-6">
+                                                <th fxFlex><b> {{item.header}} </b></th>
+                                                <td fxFlex>{{item.value || '-'}}</td>
+                                            </tr>
+                                        </ng-container>
+                                    </div>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

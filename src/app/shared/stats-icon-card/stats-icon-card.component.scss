@@ -1,0 +1,64 @@
+.heightMinimum {
+    min-height: 90px !important;
+    min-width: 130px !important;
+}
+.padding-bottom-10 {
+    padding-bottom: 10px !important;
+}
+
+.white {
+    color: #fff !important;
+}
+
+.card-round {
+    margin-top: -35px;
+    background-color: #be0505;
+    padding: 15px;
+    border-radius: 15% !important;
+}
+.round{
+    border-radius: 5px !important;
+}
+.pull-left {
+    float: left !important;
+}
+
+.height-90 {
+    height: 90px;
+}
+
+.counter-md > .counter-number,
+.counter-md .counter-number-group {
+    font-size: 30px;
+}
+
+.mapfilters {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    min-width: 200px;
+    z-index: 1000;
+}
+.filters {
+    border-bottom: 1px solid;
+    border-color: rgba(0, 0, 0, 0.075);
+}
+
+.flex-card {
+    /* min-height: 160px; */
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.flex-card .text-uppercase {
+    flex: auto;
+    max-height: 50px;
+    overflow: hidden;
+}
+.flex-row {
+    display: flex !important;
+    flex-flow: row wrap !important;
+}
+

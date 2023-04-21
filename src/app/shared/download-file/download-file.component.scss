@@ -1,0 +1,26 @@
+::ng-deep .group-container .ng-select-container {
+    box-shadow: none;
+    border-radius: 0 !important;
+}
+
+::ng-deep .group-model .modal-dialog {
+    max-width: 600px !important;
+}
+
+.table {
+    tr {
+        th {
+            height: 30px !important;
+            padding: 4px !important;
+        }
+    }
+
+    tbody {
+        background: #fff;
+        td {
+            height: 44px !important;
+            padding: 4px !important;
+            vertical-align: middle;
+        }
+    }
+}

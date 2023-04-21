@@ -1,0 +1,167 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+<img *ngIf="loading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" width="150px" height="150px" />
+
+<div class="py-15 px-25 pos-relative" style="border-bottom: 1px solid #e2e2e2;">
+    <h1 class="my-0 fs-20">Cards Settings</h1>
+    <div class="pos-absolute right-30 top-12">
+        <a onclick="window.history.go(-1); return false;" class="btn btn-sm btn-default btn-round">
+            Back
+        </a>
+    </div>
+</div>
+
+<div class="px-25">
+    <div class="row" style="display: flex; flex-wrap: wrap; align-items: center;">
+        <div class="col-lg-12">
+            <h3 class="py-10 px-0 fs-14 fw-600">Overall Dashboard</h3>
+
+            <div class="panel panel-dark">
+                <div class="panel-heading round" style="background-color: rgba(0, 0, 0, .075);">
+                    <h3 class="panel-title fw-600 blue-grey-600"> Preview </h3>
+                </div>
+
+                <div class="panel-body p-0">
+                    <div class="table-responsive" style="border: 1px solid #ebebeb;">
+                        <table class="table mb-0 text-wrap theme-table1">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-2 text-left">Preview</th>
+                                    <th class="col-md-2">Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <ng-container *ngIf="cards.length > 0">
+                                    <tr *ngFor="let item of cards; let i = index" [attr.data-index]="i">
+                                        <td class="text-left" style="width: 5% !important;">
+                                            <ng-container *ngIf="item.code === 'DSBC'">
+                                                <div class="row no-space">
+                                                    <div class="col-md-6">
+                                                        <div class="p-30 shadow h-150 clearfix round"
+                                                            style="background-color:white">
+                                                            <div class="pull-left mt-15 ml-10">
+                                                                <i> <img src="./../../../assets/images/building-1.png"
+                                                                        alt="img" height="60"> </i>
+                                                            </div>
+                                                            <div class="mt-15 text-right pull-right">
+                                                                <div class="mb-0 clearfix fs-16">
+                                                                    Total Buildings
+                                                                </div>
+                                                                <div class="fs-30" style="color: #e60000;">
+                                                                    50
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="vertical-align text-center shadow h-150 round"
+                                                            style="background-color:white">
+                                                            <div class="vertical-align-middle mt-8">
+                                                                <div class="counter-label mb-0 fs-16">
+                                                                    Total Devices
+                                                                </div>
+                                                                <div class="fs-30" style="color: #e60000;">
+                                                                    45
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="vertical-align text-center shadow h-150 round"
+                                                            style="background-color:white">
+                                                            <div class="vertical-align-middle mt-8">
+                                                                <div class="counter-label mb-0 fs-16">
+                                                                    Online Devices
+                                                                </div>
+                                                                <div class="fs-30" style="color: #e60000;">
+                                                                    15
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                            <ng-container *ngIf="item.code === 'DSTC'">
+                                                <div class="row no-space  ">
+                                                    <div class="col-md-6">
+                                                        <div class="p-30 shadow h-150 round bg-white">
+                                                            <div class="vertical-align-middle"
+                                                                style="display: flex; align-items: center; flex-direction: column;">
+
+                                                                <select type="button"
+                                                                    class="btn btn-xs text-center fs-16 mt-10 mb-0">
+                                                                    <option>Building 1</option>
+                                                                    <option>Building 2</option>
+                                                                    <option>Building 3</option>
+                                                                    <option>Building 4</option>
+                                                                </select>
+                                                                <span class="fs-20 text-center margin-top-5"
+                                                                    style="color: #e60000;">
+                                                                    17 Floors
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-3">
+                                                        <div class="p-30 text-center shadow h-150 round" style="background-color:#e60000;">
+                                                            <div class="fs-10 mt-0 margin-bottom-5 white">Smart<br>
+                                                                <span class="fs-17">Cameras</span>
+                                                            </div>
+                                                            <div class="fs-20 fw-200 mb-0 white">53</div>
+                                                            <div class="fs-12 white" style="background-color: #B90303 !important;">
+                                                                25 online
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-3 ">
+                                                        <div class="p-30 text-center shadow h-150 round" style="background-color:#e60000;">
+                                                            <div class="fs-10 margin-top-0 margin-bottom-5 white">Smart<br>
+                                                                <span class="fs-17">Water Meter</span>
+                                                            </div>
+                                                            <div class="fs-20 fw-200 mb-0 white">34</div>
+                                                            <div class="fs-12 white" style="background-color: #B90303 !important;">
+                                                                21 online
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                        </td>
+
+                                        <td class="col-md-2" style="vertical-align: inherit;">
+                                            <div class="onoffswitch ">
+                                                <input type="checkbox" name="onoffswitch{{i}}" class="onoffswitch-checkbox"
+                                                    id="onoffswitch{{i}}" [(ngModel)]="item.switch" [(checked)]="item.switch">
+
+                                                <label class="onoffswitch-label" for="onoffswitch{{i}}">
+                                                    <span class="onoffswitch-inner"></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <ng-container *ngIf="cards.length === 0">
+                                    <tr>No record found</tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <hr />
+                    <div class="form-group" *ngIf="loggedInUser?.write == true">
+                        <button type="button" class="btn btn-success pull-right btn-round"
+                            [disabled]="cards?.length === 0" (click)="saveCardSettings()">
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

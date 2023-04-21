@@ -1,0 +1,66 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+
+<img *ngIf="loading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" srcset="" width="150px"
+    height="150px">
+    
+
+<div class="page-container w-100-p" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start start">
+    <div fxLayout="row" class="w-100-p card round p-12">
+        <div class="panel-heading mb-0"></div>
+
+        <ngb-accordion class="w-100-p  calender-overflow" [closeOthers]="true">
+            <ngb-panel id="search-filters">
+                <ng-template ngbPanelHeader let-opened="opened">
+                    <button ngbPanelToggle class="w-100-p btn p-0" style="color: #37474f;">
+                        <div class="w-100-p" fxLayout="row" fxLayoutAlign="space-between">
+                            <span class="font-size-14 fw-600"> Choose Parameters </span>
+                            <span><i [ngClass]="opened ? 'ri-subtract-line' : 'ri-add-line'"></i></span>
+                        </div>
+                    </button>
+                </ng-template>
+
+                <ng-template ngbPanelContent>
+                    <div fxLayout="row wrap">
+                        <div class="w-100-p" fxLayoutAlign="start start">
+                            <div class="w-52-p" fxLayoutAlign="start start" fxLayoutGap="8px">
+
+
+
+                            </div>
+                        </div>
+
+                        <div class="w-100-p" fxLayoutAlign="start start" fxLayoutGap="8px">
+
+                            <button fxFlex="20%" type="button" class="btn btn-danger  btn-round"
+                                (click)="onAddGroup()">
+                                <i class="ri-add-circle-fill"></i>Add Group</button>
+
+                            <button fxFlex="20%" type="button" (click)="onAssignGroup()"
+                                class="btn btn-danger  btn-round">
+                                <i class="ri-add-circle-fill"></i> Assign Group</button>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngb-panel>
+        </ngb-accordion>
+
+    </div>
+
+
+    <div class="w-100-p panel panel-default card ">
+        <div class="panel-heading">
+            <h3 class="panel-title fw-600 mb-0">Listing
+                <span class="fw-200 ml-10 grey-400">
+                    <i class="ri-question-line" tooltipPosition="right" ngbTooltip="some info goes here"></i>
+                </span>
+            </h3>
+        </div>
+
+
+        <div class="panel-body p-16">
+            <general-table [config]="config" [count]="count" [actions]="actions" [dataSource]="dataSource" 
+                (signals)="onTableSignals($event)"></general-table>
+        </div>
+    </div>
+
+</div>

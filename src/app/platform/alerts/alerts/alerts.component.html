@@ -1,0 +1,194 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+
+<img *ngIf="loading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" width="150px" height="150px" />
+
+<div class="w-100-p p-30" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start start">
+    <div fxLayout="row" class="w-100-p card round p-12">
+        <ngb-accordion class="w-100-p accord-overflow" activeIds="notif-filters">
+            <ngb-panel id="notif-filters">
+                <ng-template ngbPanelHeader let-opened="opened">
+                    <button ngbPanelToggle class="w-100-p btn p-0" style="color: #37474f">
+                        <div class="w-100-p" fxLayout="row" fxLayoutAlign="space-between">
+                            <span class="font-size-14 fw-600"> Choose Parameters </span>
+                            <span><i [ngClass]="opened ? 'ri-subtract-line' : 'ri-add-line'"></i></span>
+                        </div>
+                    </button>
+                </ng-template>
+
+                <ng-template ngbPanelContent style="overflow: visible !important">
+                    <div class="w-100-p" fxLayout="row wrap">
+                        <div [formGroup]="alertFilterForm" fxLayout="row wrap" fxFlex="100" fxLayoutGap="8px">
+                            <div fxFlex="18.5" class="form-group">
+                                <label class="control-label">Alert Type <span class="text-danger">*</span></label>
+                                <ng-select placeholder="Select Type" (change)="onSelectAlert($event)" [clearable]="false"
+                                    formControlName="alert_type" [clearable]="false">
+                                    <ng-option *ngFor="let item of alertTypes" [value]="item.id">{{ item.name }}</ng-option>
+                                </ng-select>
+                                <div class="text-danger"
+                                    *ngIf="alertFilterForm.controls['alert_type'].hasError('required') && alertFilterForm.controls['alert_type'].dirty">
+                                    Please select alert type
+                                </div>
+                            </div>
+            
+                            <div fxFlex="18.5" class="form-group">
+                                <label class="control-label">Building</label>
+                                <ng-select placeholder="Select building" (change)="onSelectBuilding($event)"
+                                    formControlName="building">
+                                    <ng-option *ngFor="let item of buildings" [value]="item.id">{{ item.name }}
+                                    </ng-option>
+                                </ng-select>
+                            </div>
+            
+                            <div fxFlex="18.5" class="form-group">
+                                <label class="control-label">Type</label>
+                                <ng-select placeholder="By Floor" (change)="onAreaSelect($event)" [clearable]="false"
+                                    formControlName="area_type">
+                                    <ng-option *ngFor="let item of areaTypes" [value]="item.id">{{ item.name }}
+                                    </ng-option>
+                                </ng-select>
+                            </div>
+            
+                            <ng-container *ngIf="alertFilterForm.controls['area_type'].value === 'floor'">
+                                <div fxFlex="18.5" class="form-group">
+                                    <label class="control-label">Floor</label>
+                                    <ng-select placeholder="Select Floor" (change)="onSelectFloor($event)" formControlName="floor">
+                                        <ng-option *ngFor="let item of floors" [value]="item.id">{{ item.name }}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+            
+                                <div fxFlex="18.5" class="form-group">
+                                    <label for="">Space</label>
+                                    <ng-select placeholder="Select Space" (change)="onSelectSpace($event)" formControlName="space">
+                                        <ng-option *ngFor="let item of spaces" [value]="item.id">{{ item.name }}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+            
+                                <div fxFlex="18.5" class="form-group">
+                                    <label for="">Room</label>
+                                    <ng-select placeholder="Select Room" (change)="onSelectRoom($event)" formControlName="room">
+                                        <ng-option *ngFor="let item of rooms" [value]="item.id">{{ item.name }}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </ng-container>
+            
+                            <ng-container *ngIf="alertFilterForm.controls['area_type'].value === 'open_area'">
+                                <div fxFlex="18.5" class="form-group">
+                                    <label for="">Open Area</label>
+                                    <ng-select placeholder="Select Open Area" formControlName="open_area"
+                                        (change)="onSelectOpenArea($event)">
+                                        <ng-option *ngFor="let oArea of openAreas" [value]="oArea.id">{{ oArea.name }}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </ng-container>
+            
+                            <div fxFlex="18.5" class="form-group">
+                                <label class="control-label">Device Id <span class="text-danger">*</span></label>
+                                <ng-select placeholder="Select Device" (change)="onDeviceSelect($event)" [clearable]="false"
+                                    formControlName="device" [clearable]="false">
+                                    <ng-option *ngFor="let item of devices" [value]="item.device">{{ item.device + ' - ' +
+                                        item.device_type }}
+                                    </ng-option>
+                                </ng-select>
+                            </div>
+                        </div>
+
+                        <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between start">
+                            <div fxFlex="15">
+                                <button fxLayoutAlign="center" class="btn btn-danger btn-round w-100-p" style="display: flex;"
+                                    (click)="onAddAlert()">
+                                    <i class="ri-add-circle"></i>&nbsp;
+                                    <span>Create New</span>
+                                </button>
+                            </div>
+
+                            <div fxFlex fxLayoutGap="8px" fxLayoutAlign="end start">
+                                <button fxFlex="18" fxLayoutAlign="center" class="btn btn-default btn-round" (click)="onSubmit()">Show List</button>
+                            </div>
+                            <div fxFlex fxLayoutGap="8px" fxLayoutAlign="end start">
+                                <button fxFlex="18" fxLayoutAlign="center" class="btn btn-default btn-round" (click)="onReset()">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+
+            </ngb-panel>
+        </ngb-accordion>
+    </div>
+
+    <div class="w-100-p panel panel-default card mb-0">
+        <div class="panel-heading">
+            <h3 class="panel-title fw-600 mb-0">
+                Listing
+                <span class="fw-200 ml-10 grey-400">
+                    <i class="ri-question-line" tooltipPosition="right" ngbTooltip="some info goes here"></i>
+                </span>
+            </h3>
+        </div>
+
+        <div class="panel-body p-16">
+            <div class="col-md-12">
+                <!-- <button fxLayoutAlign="center center" class="btn btn-danger btn-round w-15-p pos-absolute right-14 top-4" (click)="onAddAlert()">
+                    <i class="ri-add-circle"></i>&nbsp;
+                    <span>Create New</span>
+                </button> -->
+
+                <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs pb-6">
+                    <li style="border-bottom: 2px solid #e60000;" class="mr-12" ngbNavItem="smoke" (click)="onSelectTab('smoke')">
+                        <a ngbNavLink>Smoke</a>
+                        <ng-template ngbNavContent>
+                            <general-table style="height: 100%" [config]="smokeConfig" [actions]="actions"
+                                (signals)="onTableSignals($event)" [urlFilters]="smokeFilters">
+                            </general-table>
+                        </ng-template>
+                    </li>
+                    <li class="mr-12 tab-border-bottom" ngbNavItem="water-leakage" (click)="onSelectTab('water-leakage')">
+                        <a ngbNavLink>Water Leakage</a>
+                        <ng-template ngbNavContent>
+                            <general-table style="height: 100%" [config]="waterLeakageConfig" [actions]="actions"
+                                (signals)="onTableSignals($event)" [urlFilters]="waterLeakageFilters">
+                            </general-table>
+                        </ng-template>
+                    </li>
+                    <li class="mr-12 tab-border-bottom" ngbNavItem="occupancy" (click)="onSelectTab('occupancy')">
+                        <a ngbNavLink>Occupancy</a>
+                        <ng-template ngbNavContent>
+                            <general-table style="height: 100%" [config]="occupancyConfig" [actions]="actions"
+                                (signals)="onTableSignals($event)" [urlFilters]="occupancyFilters">
+                            </general-table>
+                        </ng-template>
+                    </li>
+                    <li class="mr-12 tab-border-bottom" ngbNavItem="temperature" (click)="onSelectTab('temperature')">
+                        <a ngbNavLink>Temperature</a>
+                        <ng-template ngbNavContent>
+                            <general-table style="height: 100%" [config]="temperatureConfig" [actions]="actions"
+                                (signals)="onTableSignals($event)" [urlFilters]="temperatureFilters">
+                            </general-table>
+                        </ng-template>
+                    </li>
+                    <!-- <li class="mr-12 tab-border-bottom" ngbNavItem="geozone" (click)="onSelectTab('geozone')">
+                        <a ngbNavLink>Geo Zone</a>
+                        <ng-template ngbNavContent>
+                            <general-table style="height: 100%" [config]="geozoneConfig" [actions]="actions"
+                                (signals)="onTableSignals($event)" [urlFilters]="geozoneFilters">
+                            </general-table>
+                        </ng-template>
+                    </li> -->
+                    <li class="mr-12 tab-border-bottom" ngbNavItem="humidity" (click)="onSelectTab('humidity')">
+                        <a ngbNavLink>Humidity</a>
+                        <ng-template ngbNavContent>
+                            <general-table style="height: 100%" [config]="humidityConfig" [actions]="actions"
+                                (signals)="onTableSignals($event)" [urlFilters]="humidityFilters">
+                            </general-table>
+                        </ng-template>
+                    </li>
+                </ul>
+                <div [ngbNavOutlet]="nav" class="mt-2"></div>
+            </div>
+
+        </div>
+    </div>
+</div>

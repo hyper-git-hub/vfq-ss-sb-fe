@@ -1,0 +1,49 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+
+<img *ngIf="loading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" srcset="" width="150px"
+    height="150px">
+
+<div class="page-container w-100-p" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start start">
+    <div class="row mt-10 ml-0 w-100-p">
+        <div *ngFor="let card of cardsArray" class="pl-0"
+            [ngClass]="cardsArray.length == 4 ? 'col-md-3' : cardsArray.length == 2 ? 'col-md-6' : 'col-md-4'">
+            <app-stats-icon-card-smart [count]="card.data" [icon]="card.url" [label]="card.name">
+            </app-stats-icon-card-smart>
+        </div>
+    </div>
+
+    <div fxLayout="row" class="w-100-p card round p-12">
+        <ngb-accordion class="w-100-p calender-overflow" activeIds="search-filters">
+            <ngb-panel id="search-filters">
+                <ng-template ngbPanelHeader let-opened="opened">
+                    <button ngbPanelToggle class="w-100-p btn p-0" style="color: #37474f;">
+                        <div class="w-100-p" fxLayout="row" fxLayoutAlign="space-between">
+                            <span class="font-size-14 fw-600"> Choose Parameters </span>
+                            <span><i [ngClass]="opened ? 'ri-subtract-line' : 'ri-add-line'"></i></span>
+                        </div>
+                    </button>
+                </ng-template>
+
+                <ng-template ngbPanelContent>
+                    <app-device-filter (signals)="onFilterSignals($event)" [deviceType]="'bulb'"></app-device-filter>
+                </ng-template>
+            </ngb-panel>
+        </ngb-accordion>
+    </div>
+
+    <div class="w-100-p panel panel-default card ">
+        <div class="panel-heading">
+            <h3 class="panel-title fw-600 mb-0">List
+                <span class="fw-200 ml-10 grey-400">
+                    <i class="ri-question-line" tooltipPosition="right" ngbTooltip="some info goes here"></i>
+                </span>
+            </h3>
+        </div>
+
+        <div class="panel-body p-16">
+            <general-table style="height: 100%;" [count]="count" [config]="bulbTableConfig" [actions]="actions"
+                [dataSource]="bulbListingData" (signals)="onTableSignals($event)">
+            </general-table>
+        </div>
+    </div>
+</div>

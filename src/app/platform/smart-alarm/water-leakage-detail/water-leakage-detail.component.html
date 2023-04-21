@@ -1,0 +1,10 @@
+<app-list-detail [deviceTitle]="'Water Leakage Details'" [breadCrumbs]="breadCrumbs" [loading]="loading || loadingGraph" [table]="table"
+    [actions]="actions" [deviceDetail]="buildingDetails" [deviceUrl]="deviceDetailUrl"
+    [deviceImage]="'/assets/images/Smoke_detector.jpg'" (signals)="onDetailsSignals($event)">
+</app-list-detail>
+
+
+<div class="px-30 pb-30 w-100-p d-flex">
+    <app-gen-bar-chart class="w-100-p" graphTitle="Alerts" unit="" [graphID]="'alertGraph'" [graphData]="graphData"
+        [graphConfig]="alertGraphConfig" [showDaysDropdown]="false"></app-gen-bar-chart>
+</div>

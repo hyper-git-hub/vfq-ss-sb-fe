@@ -1,0 +1,175 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+
+<img *ngIf="loading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" width="150px" height="150px" />
+
+<div class="w-100-p p-30" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start start">
+  <div fxLayout="row" class="w-100-p card round p-12">
+    <ngb-accordion class="w-100-p accord-overflow" activeIds="search-filters">
+      <ngb-panel id="search-filters">
+        <ng-template ngbPanelHeader let-opened="opened">
+          <button ngbPanelToggle class="w-100-p btn p-0" style="color: #37474f">
+            <div class="w-100-p" fxLayout="row" fxLayoutAlign="space-between">
+              <span class="font-size-14 fw-600"> Choose Parameters </span>
+              <span><i [ngClass]="opened ? 'ri-subtract-line' : 'ri-add-line'"></i></span>
+            </div>
+          </button>
+        </ng-template>
+
+        <ng-template ngbPanelContent style="overflow: visible" class="pb-0">
+          <form [formGroup]="reportsForm">
+            <fieldset class="form-fieldset w-100-p mb-8">
+              <legend>Filters</legend>
+              <div class="w-100-p" fxLayoutAlign="start end" fxLayoutGap="16px" fxLayout="row wrap">
+                <!-- <ng-select class="w-15-p mb-16" placeholder="Select Class" [clearable]="false" formControlName="report_class" (change)="onSelectClass($event)">
+                <ng-option *ngFor="let item of reportClass" [value]="item.id">{{ item.name }}
+                </ng-option>
+              </ng-select> -->
+
+                <ng-select class="w-15-p mb-16" placeholder="Select report type" [clearable]="false"
+                  formControlName="report_type" (change)="onSelectType($event)">
+                  <ng-option *ngFor="let item of reportTypes" [value]="item.id">{{ item.name }}
+                  </ng-option>
+                </ng-select>
+
+                <ng-select class="w-15-p mb-16" placeholder="Select Device" (change)="onSelectDevice($event)"
+                  formControlName="device_id">
+                  <ng-option *ngFor="let item of devices" [value]="item.device_id">{{ item.name }}
+                  </ng-option>
+                </ng-select>
+
+                <ng-select class="w-15-p mb-16" placeholder="Building" (change)="onSelectBuilding($event)"
+                  formControlName="building_id">
+                  <ng-option *ngFor="let item of building" [value]="item.id">{{ item.name }}
+                  </ng-option>
+                </ng-select>
+
+                <ng-select class="w-15-p mb-16" placeholder="By Floor" (change)="onAreaSelect($event)"
+                  formControlName="by_floor">
+                  <ng-option *ngFor="let items of byFloor" [value]="items.id">{{ items.name }}
+                  </ng-option>
+                </ng-select>
+
+                <ng-container *ngIf="reportsForm.controls['by_floor'].value === 'floor'">
+                  <ng-select class="w-15-p mb-16" placeholder="Select Floor" (change)="onSelectFloor($event)"
+                    formControlName="floor_id">
+                    <ng-option *ngFor="let items of floor" [value]="items.id">{{ items.name }}
+                    </ng-option>
+                  </ng-select>
+
+                  <ng-select class="w-15-p mb-16" placeholder="Select Space" (change)="onSelectSpace($event)"
+                    formControlName="space_id">
+                    <ng-option *ngFor="let items of space" [value]="items.id">{{ items.name }}
+                    </ng-option>
+                  </ng-select>
+
+                  <ng-select class="w-15-p mb-16" placeholder="Select Room" (change)="onSelectRoom($event)"
+                    formControlName="room_id">
+                    <ng-option *ngFor="let items of room" [value]="items.id">{{ items.name }}
+                    </ng-option>
+                  </ng-select>
+                </ng-container>
+
+                <ng-container *ngIf="reportsForm.controls['by_floor'].value === 'openArea'">
+                  <ng-select class="w-15-p mb-16" placeholder="Select Open Area" formControlName="open_area_id"
+                    (change)="onSelectOpenArea($event)">
+                    <ng-option *ngFor="let oArea of openAreas" [value]="oArea.id">{{ oArea.name }}
+                    </ng-option>
+                  </ng-select>
+                </ng-container>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-fieldset w-100-p mb-8">
+              <legend>Time Interval</legend>
+              <div fxLayout="row" fxLayoutGap="8px">
+                <div class="form-group mb-10">
+                  <div fxLayout="row" fxLayoutGap="68px" class="mb-10">
+                    <div class="radio-custom fs-16">
+                      <input type="radio" id="444" value="today" formControlName="date_filter" name="date_filter"
+                        (change)="changeGender($event)">
+                      <label for="444">Current Day</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group mb-10">
+                  <div fxLayout="row" fxLayoutGap="68px" class="mb-10">
+                    <div class="radio-custom fs-16">
+                      <input type="radio" id="555" value="week" formControlName="date_filter" name="date_filter"
+                        (change)="changeGender($event)">
+                      <label for="555">Previous Week</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group mb-10">
+                  <div fxLayout="row" fxLayoutGap="68px" class="mb-10">
+                    <div class="radio-custom fs-16">
+                      <input type="radio" id="666" value="month" formControlName="date_filter" name="date_filter"
+                        (change)="changeGender($event)">
+                      <label for="666">Previous Month</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group mb-10">
+                  <div fxLayout="row" fxLayoutGap="68px" class="mb-10">
+                    <div class="radio-custom fs-16">
+                      <input type="radio"  id="666r"  name="date_filter">
+                      <label for="666r">Select a period</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayoutGap="8px">
+                <div class="form-group mb-10">
+                  <div fxLayout="row" fxLayoutGap="68px" class="mb-10">
+                    <p-calendar placeholder="Select Start Date" [(ngModel)]="contractStartDate" appendTo="body"
+                      (onSelect)="selectDateRange($event,'start')" [maxDate]="contractStartDate" [style]="{'width':'100%'}" id="fffl"
+                      formControlName="start_date" name="start_date"></p-calendar>
+                  </div>
+                </div>
+                <div class="form-group mb-10">
+                  <div fxLayout="row" fxLayoutGap="68px" class="mb-10">
+                    <p-calendar placeholder="Select End Date" [disabled]="!contractStartDate" appendTo="body"
+                      [minDate]="contractStartDate" (onSelect)="selectDateRange($event,'')" [style]="{'width':'100%'}"
+                      id="fffl" formControlName="end_date" name="end_date"></p-calendar>
+                  </div>
+                </div>
+
+              </div>
+              <!-- <app-general-forms class="w-100-p" [config]="reportFilterFormConfig" [actions]="actions"
+              (signals)="onGeneralFormSignal($event)"></app-general-forms> -->
+            </fieldset>
+          </form>
+
+          <div class="w-100-p" fxLayoutAlign="end end">
+            <div class="w-52-p" fxLayoutAlign="end end" fxLayoutGap="8px">
+              <button fxFlex="40%" type="button" class="btn btn-danger btn-block btn-round" (click)="showReport()">
+                Show Report
+              </button>
+
+              <button fxFlex="25%" type="button" class="btn btn-default btn-block btn-round" (click)="resetFilters()">
+                Reset
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+  </div>
+
+  <div class="w-100-p panel panel-default card mb-0">
+    <div class="panel-heading">
+      <h3 class="panel-title fw-600 mb-0">
+        Listing
+        <span class="fw-200 ml-10 grey-400">
+          <i class="ri-question-line" tooltipPosition="right" ngbTooltip="some info goes here"></i>
+        </span>
+      </h3>
+    </div>
+
+    <div class="panel-body p-16">
+      <general-table style="height: 100%" [count]="count" [config]="config" [actions]="actions"
+        [dataSource]="reportsListingData" [urlFilters]="reportsFilters" (signals)="onTableSignal($event)">
+      </general-table>
+    </div>
+  </div>
+</div>

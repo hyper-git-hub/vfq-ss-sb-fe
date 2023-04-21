@@ -1,0 +1,37 @@
+.confirm-wrapper {
+    position: relative!important;
+}
+
+.title {
+    font-size: 20px;
+    margin: 10px !important;
+    font-weight: 600;
+}
+
+.content p {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.close-btn  {
+        position: absolute;
+        top: 4px;
+        right: -10px;
+        padding: 12px 20px;
+        line-height: 14px;
+        min-width: auto;
+        font-size: 20px;
+        cursor: pointer;
+}
+
+.dialog-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px; 
+  
+}
+.imagepopup{
+    display: flex;
+    margin: auto;
+}

@@ -1,0 +1,214 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+    <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
+</div>
+
+<div class="modal-body">
+    <form [formGroup]="cameraForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+            <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="12px" class="pl-15">
+                <div fxFlex="23" class="mb-6">
+                    <div>
+                        <label class="control-label"> Camera Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="camera_name" maxLength="60"
+                            placeholder="Enter camera name" />
+
+                        <div *ngIf="cameraForm.controls['camera_name'].hasError('required') && cameraForm.controls['camera_name'].touched" class="text-danger">
+                            Please provide camera name
+                        </div>
+                    </div>
+                </div>
+
+                <div fxFlex="23" class="mb-6">
+                    <div>
+                        <label class="control-label"> Camera ID <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="camera_id" maxLength="60"
+                            placeholder="Enter camera Id" />
+
+                        <div *ngIf="cameraForm.controls['camera_id'].hasError('required') && cameraForm.controls['camera_id'].touched" class="text-danger">
+                            Please provide camera ID
+                        </div>
+                    </div>
+                </div>
+
+                <div fxFlex="23" class="mb-6">
+                    <label>Building <span class="text-danger">*</span></label>
+                    <ng-select placeholder="Select Building" [clearable]="false"
+                        (change)="onSelectBuilding($event)" formControlName="building">
+                        <ng-option *ngFor="let building of buildings" [value]="building.id">{{building.name}}
+                        </ng-option>
+                    </ng-select>
+                    <div *ngIf="cameraForm.controls['building'].hasError('required') && cameraForm.controls['building'].touched" class="text-danger">
+                        Please select a building
+                    </div>
+                </div>
+
+                <div fxFlex="23" class="mb-6">
+                    <label>Type</label>
+                    <ng-select placeholder="Select type" [clearable]="false"
+                        (change)="onAreaSelect($event)" formControlName="area">
+                        <ng-option *ngFor="let area of areas" [value]="area.id">{{area.name}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+
+                <ng-container *ngIf="cameraForm.controls['area'].value === 'floor' ">
+                    <div fxFlex="23">
+                        <label for="">Floor </label>
+                        <ng-select placeholder="Select Floor" formControlName="floor" [clearable]="false"
+                            (change)="onSelectFloor($event)">
+                            <ng-option *ngFor="let floor of floors" [value]="floor.id">{{floor.name}}</ng-option>
+                        </ng-select>
+                        <!-- <div *ngIf="cameraForm.controls['floor'].hasError('required')" class="text-danger">
+                            Please select a floor
+                        </div> -->
+                    </div>
+
+                    <div fxFlex="23">
+                        <label for="">Space </label>
+                        <ng-select placeholder="Select Space" formControlName="space"
+                            (change)="onSelectSpace($event)">
+                            <ng-option *ngFor="let space of spaces" [value]="space.id">{{space.name}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+
+                    <div fxFlex="23">
+                        <label for="">Room </label>
+                        <ng-select placeholder="Select room" formControlName="room"
+                            (change)="onSelectRoom($event)">
+                            <ng-option *ngFor="let room of rooms" [value]="room.id">{{room.name}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="cameraForm.controls['area'].value === 'openArea' ">
+                    <div fxFlex="23">
+                        <label for="">Open Area <span class="text-danger">*</span> </label>
+                        <ng-select placeholder="Select Open Area" formControlName="open_area"
+                            (change)="onSelectOpenArea($event)">
+                            <ng-option *ngFor="let oArea of openAreas" [value]="oArea.id">{{oArea.name}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </ng-container>
+            </div>
+
+            <div class="col-md-12 mt-8">
+                <div class="checkbox-custom checkbox-inline1 checkbox-warning">
+                    <input type="checkbox" id="occupancy" formControlName="occupancy" name="checkbox"
+                        (change)="onCheckOccupancy($event)">
+                    <label class="pl-10" for="occupancy">Occupancy</label>
+                </div>
+            </div>
+
+            <div class="col-md-12" *ngIf="requestOccupancy">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label"> Overflow In <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" formControlName="overflow" maxLength="60"
+                            placeholder="Enter overflow value" />
+                        <div *ngIf="cameraForm.controls['overflow'].hasError('required') && cameraForm.controls['overflow'].touched" class="text-danger">
+                            Please provide overflow in
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="control-label"> Underflow Out <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" formControlName="underflow" maxLength="60"
+                            placeholder="Enter underflow value" />
+                        <div *ngIf="cameraForm.controls['underflow'].hasError('required') && cameraForm.controls['underflow'].touched" class="text-danger">
+                            Please provide underflow in
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="checkbox-custom checkbox-inline1 checkbox-warning">
+                            <input type="checkbox" id="motion" formControlName="motion" (change)="onCheckMD($event)"
+                                name="checkbox">
+                            <label class="pl-10" for="motion">Motion Detection</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ng-container *ngIf="requestMotion">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="table-responsive" style="height:auto; margin-left: -12px;">
+                            <table class="table mb-0">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group mb-0">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Start Time</span>
+                                                    <input type="time" class="form-control" id="startTime"
+                                                        formControlName="start_time">
+                                                </div>
+                                                <div class="text-danger" *ngIf="cameraForm.controls['start_time'].hasError('required') && cameraForm.controls['start_time'].touched">
+                                                    Please set start time
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group margin-bottom-0">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">End Time</span>
+                                                    <input type="time" class="form-control" id="endTime"
+                                                        formControlName="end_time">
+                                                </div>
+                                                <div class="text-danger" *ngIf="cameraForm.controls['end_time'].hasError('required') && cameraForm.controls['end_time'].touched">
+                                                    Please set end time
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="mt-20 d-flex">
+                                                <input type="checkbox" id="repeat" formControlName="repeat" name="checkbox">
+                                                <label class="pl-10" for="repeat">All Select</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col-md-12">
+                    <div class="form-group mb-10 mt-10 ml-16">
+                        <div class="row">
+                            <ng-container *ngFor="let item of days; let idx=index">
+                                <div class="mr-8 d-flex pr-12">
+                                    <input type="checkbox" [id]="item.id" [(ngModel)]="item.select"
+                                        [ngModelOptions]="{standalone: true}" class="mr-6" (change)="onSelectDay(item)">
+                                    <label [for]="item.id">{{item.name}}</label>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="selectedDays.length === 0">
+                                <div class="text-danger">Select atleast one day.</div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="modal-footer">
+            <button [disabled]="!cameraForm.valid" type="submit" class="btn btn-success btn-round btn-block1">
+                <i class="ri-check-fill"></i>
+                {{!!data ? 'Update' : 'Save'}}
+            </button>
+            <button type="button" class="btn btn-default btn-round btn-block1" (click)="onCloseModel()">
+                <i class="ri-arrow-go-back-line"></i>
+                Back
+            </button>
+        </div>
+    </form>
+</div>

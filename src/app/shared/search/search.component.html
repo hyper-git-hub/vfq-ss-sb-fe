@@ -1,0 +1,55 @@
+<div fxLayout="row wrap" class="input-group dv" style="position: relative;">
+    <span class="input-group-text" for="ph" id="ph" style="border-right: none;" (click)="toggleSearchColumns()">
+        <!-- <i class="input-search-icon ri-search-line"></i> -->
+        <i class="ri-arrow-down-line"></i>
+    </span>
+    <input #search type="text" id="ph" class="form-control" [formControl]="searchControl" [placeholder]="placeholder">
+
+    <div id="sr-div" *ngIf="expandSearch" class="w-220 search-box">
+        <div fxFlex="100" fxLayout="row wrap">
+            <ng-container *ngFor="let column of data; let last=last; let idx=index">
+                <div fxFlex="100" fxLayoutGap="8px" fxLayoutAlign="start center" (click)="onSearch(search.value, idx)" class="h-32 search-item">
+                    <input type="checkbox" id="{{column.id}}" [value]="column.column" [(ngModel)]="column.checked">
+                    <label style="flex: 1; cursor: pointer;" class="mb-0" for="{{column.id}}">{{column.column | removeUnderScore | titlecase }}</label>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    
+    <div fxFlex="100" *ngIf="showFilters" fxLayout="row wrap" style="z-index: 1;">
+        <!-- <label for="{{column.id}}" class="mb-0">{{column.column | titlecase}}</label> -->
+        <!-- <input id="{{column.id}}" type="checkbox" [(ngModel)]="column.checked"> -->
+        <!-- <ng-container *ngFor="let column of data; let last=last">
+            <ng-container *ngIf="column.checked">
+                <div fxFlex="100" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center" class="h-32 search-item">
+
+                    <div class="input-group">
+                        <span class="input-group-text" style="background: #26c981;">
+                            <i class="ri-filter-line"></i>
+                        </span>
+                        <div class="form-control">{{column.column | titlecase}} contains {{search.value}}</div>
+                    </div>
+                </div>
+            </ng-container>
+            
+        </ng-container> -->
+        
+        <div fxLayout="row" fxLayoutGap="8px" class="h-32">
+            <div class="input-group">
+                <span class="input-group-text h-30" style="background: #26c981;">
+                    <i class="ri-filter-line"></i>
+                </span>
+                <div class="form-control h-30 lh-16">
+                    <span>Column </span>
+                    <ng-container *ngFor="let column of data; let last=last">
+                        <ng-container *ngIf="column.checked">
+                            "{{column.column | titlecase}}"<span *ngIf="!last">, </span>
+                        </ng-container>
+                    </ng-container>
+                    <span>contains "{{search.value}}"</span>
+                </div>
+                    
+            </div>
+        </div>
+    </div>
+</div>

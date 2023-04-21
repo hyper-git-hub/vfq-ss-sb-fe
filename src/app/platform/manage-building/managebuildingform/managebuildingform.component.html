@@ -1,0 +1,745 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{formTitle}}</h4>
+    <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
+</div>
+
+<img *ngIf="loading" src="/assets/images/block-loader.gif" alt="Loading" srcset="" width="150px" height="150px"
+    style="position: absolute; top: 40%; left: 42%; z-index: 1" />
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs pb-6">
+                <li style="border-bottom: 2px solid #e60000;" class="mr-12" [ngbNavItem]="1" [disabled]="disableTab.stepOne">
+                    <a ngbNavLink>Buildings</a>
+                    <ng-template ngbNavContent>
+                        <form [formGroup]="buildingForm" (ngSubmit)="onSubmit(buildingForm.value)">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Name<span class="text-danger2">*</span></label>
+                                            <div class="input-icon">
+                                                <input type="text" class="form-control" formControlName="name"
+                                                    maxLength="60" placeholder=" Enter Name" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Type<span class="text-danger2">*</span></label>
+                                            <ng-select placeholder="Select Type" [readonly]="buildingCreated" (change)="getSelectedType($event)" [clearable]="false"
+                                                formControlName="type">
+                                                <ng-option *ngFor="let items of type" [value]="items.id">
+                                                    {{items.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ng-container formArrayName="attributes">
+                                <ng-container *ngFor="let buildingForm of attributes.controls; let index = index">
+                                    <div class="row p-15">
+                                        <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.floors">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Floors<span class="text-danger2">*</span></label>
+                                                <div class="input-icon">
+                                                    <input type="number" [ngModel]="datafloor" [readonly]="buildingCreated" class="form-control" formControlName="floors"
+                                                        placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.appartments">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Appartments
+                                                    <!-- <span class="text-danger2">*</span> -->
+                                                </label>
+                                                <div class="input-icon">
+                                                    <input type="number" class="form-control"
+                                                        formControlName="appartments" placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.offices">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Offices
+                                                    <!-- <span class="text-danger2">*</span> -->
+                                                </label>
+                                                <div class="input-icon">
+                                                    <input type="number" class="form-control" formControlName="offices"
+                                                        placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.shops">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Shops
+                                                    <!-- <span class="text-danger2">*</span> -->
+                                                </label>
+                                                <div class="input-icon">
+                                                    <input type="number" class="form-control" formControlName="shops"
+                                                        placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.hallways">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Hallways
+                                                    <!-- <span class="text-danger2">*</span> -->
+                                                </label>
+                                                <div class="input-icon">
+                                                    <input type="number" class="form-control" formControlName="hallways"
+                                                        placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.lifts">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Lifts
+                                                    <!-- <span class="text-danger2">*</span> -->
+                                                </label>
+                                                <div class="input-icon">
+                                                    <input type="number" class="form-control" formControlName="lifts"
+                                                        placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.library">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Library
+                                                    <!-- <span class="text-danger2">*</span> -->
+                                                </label>
+                                                <div class="input-icon">
+                                                    <input type="number" class="form-control" formControlName="library"
+                                                        placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.labs">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Labs
+                                                    <!-- <span class="text-danger2">*</span> -->
+                                                </label>
+                                                <div class="input-icon">
+                                                    <input type="number" class="form-control" formControlName="labs"
+                                                        placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.canteen">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Canteen
+                                                    <!-- <span class="text-danger2">*</span> -->
+                                                </label>
+                                                <div class="input-icon">
+                                                    <input type="number" class="form-control" formControlName="canteen"
+                                                        placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.classRooms">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Class Rooms
+                                                    <!-- <span class="text-danger2">*</span> -->
+                                                </label>
+                                                <div class="input-icon">
+                                                    <input type="number" class="form-control"
+                                                        formControlName="classRooms" placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.wards">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Wards
+                                                    <!-- <span class="text-danger2">*</span> -->
+                                                </label>
+                                                <div class="input-icon">
+                                                    <input type="number" class="form-control" formControlName="wards"
+                                                        placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.stands">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Stands
+                                                    <!-- <span class="text-danger2">*</span> -->
+                                                </label>
+                                                <div class="input-icon">
+                                                    <input type="number" class="form-control" formControlName="stands"
+                                                        placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.gates">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Gates
+                                                    <!-- <span class="text-danger2">*</span> -->
+                                                </label>
+                                                <div class="input-icon">
+                                                    <input type="number" class="form-control" formControlName="gates"
+                                                        placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.rooms">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Rooms
+                                                    <!-- <span class="text-danger2">*</span> -->
+                                                </label>
+                                                <div class="input-icon">
+                                                    <input type="number" class="form-control" formControlName="rooms"
+                                                        placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </ng-container>
+                            </ng-container>
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6" *ngIf="fieldToDisplay.address">
+                                        <div class="form-group">
+                                            <label class="control-label">Address</label>
+                                            <div class="input-icon">
+                                                <input type="text" class="form-control" formControlName="address"
+                                                    placeholder="..." />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" *ngIf="buildingForm.get('type').value !== 6">
+                                <h4 class="fw-500 fs-12  text-uppercase bg-blue-100 p-1">
+                                    OPEN AREAS
+                                </h4>
+                            </div>
+                            <div class="col-md-12" *ngIf="buildingForm.get('type').value !== 6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">No. of Areas
+                                                <!-- <span class="text-danger2">*</span> [readonly]="buildingCreated" -->
+                                            </label>
+                                            <div class="input-icon">
+                                                <input type="number" class="form-control" min="0" formControlName="no_of_area"
+                                                    oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"
+                                                    placeholder="..." />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success btn-round btn-block1" *ngIf="buildingForm.get('type').value !== 6"><i
+                                    class="ri-arrow-right-line"></i>Next</button>
+                                <button type="submit" class="btn btn-success btn-round btn-block1" *ngIf="buildingForm.get('type').value === 6"><i
+                                        class="ri-check-fill"></i>Save</button>
+                            </div>
+
+                        </form>
+                    </ng-template>
+                </li>
+
+                <li class="mr-12 tab-border-bottom" [ngbNavItem]="2" [disabled]="disableTab.stepTwo" *ngIf="buildingForm.get('type').value !== 6">
+                    <a ngbNavLink>Floors/Open Areas</a>
+                    <ng-template ngbNavContent>
+                        <form [formGroup]="floorForm" (ngSubmit)="onSubmitFloor(floorForm.value)">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <!-- <div class="col-md-6">
+                                        <div class="form-group margin-bottom-10">
+                                            <label class="control-label">Floors<span
+                                                    class="text-danger2">*</span></label>
+                                            <ng-select placeholder="Select Floors" formControlName="floors">
+                                                <ng-option *ngFor="let items of floor" [value]="items.id">
+                                                    {{items.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                        </div>
+                                    </div> -->
+                                    <div class="col-md-3">
+                                        <div class="form-group d-flex">
+
+                                            <input type="checkbox" id="add_floor" name="check"
+                                                (change)="onCheckrequest($event)">
+                                            <label for="add_floor" class="control-label ml-10">Add New Floor</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group d-flex">
+
+                                            <input type="checkbox" id="del_floor" name="check"
+                                                (change)="onCheckrequest1($event)">
+                                            <label for="del_floor" class="control-label ml-10">Delete Floor</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="row" *ngIf="requestFloor">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">By Floor/Open Area</label>
+                                                    <ng-select [clearable]="false" formControlName="areaFloor"
+                                                        (change)="byFloorOrAreaChange($event)" placeholder="Select Type">
+                                                        <ng-option *ngFor="let items of byFloorOrArea" [value]="items.id">
+                                                            {{items.name}}
+                                                        </ng-option>
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">{{floorArea == 1 ? 'Floor Name' : 'Open Area Name'}}<span
+                                                            class="text-danger2">*</span></label>
+                                                    <div class="input-icon">
+                                                        <input type="text" class="form-control" maxLength="60" formControlName="floorName"
+                                                            placeholder=" Enter Name" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4" style="margin-top: 22px;">
+                                                <div class="form-group">
+                                                    <button type="button" (click)="addFloorName()"
+                                                        class="btn btn-success btn-round btn-block1"><i
+                                                            class="ri-check-fill"></i>Add</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-12">
+                                        <div class="row" *ngIf="reqFloorDel">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">By Floor/Open Area</label>
+                                                    <ng-select [clearable]="false" formControlName="areaFloor"
+                                                        (change)="delByFloorOrAreaChange($event)" placeholder="Select Type">
+                                                        <ng-option *ngFor="let items of byFloorOrArea" [value]="items.id">
+                                                            {{items.name}}
+                                                        </ng-option>
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">Floors
+                                                        <span class="text-danger2">*</span>
+                                                    </label>
+                                                    <ng-select placeholder="Select Type"
+                                                        (change)="getSelectedTypeDelete($event)">
+                                                        <ng-option *ngFor="let items of floorForDelete" [value]="items.id">
+                                                            {{items.name}}
+                                                        </ng-option>
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4" style="margin-top: 22px;">
+                                                <div class="form-group">
+                                                    <button type="button" (click)="deleteFloorName()"
+                                                        class="btn btn-success btn-round btn-block1"><i
+                                                            class="ri-check-fill"></i>Delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Floors<span
+                                                    class="text-danger2">*</span></label>
+                                            <ng-select placeholder="Select Type" [clearable]="false"
+                                                (change)="getSelectedType($event)"
+                                                formControlName="floor">
+                                                <ng-option *ngFor="let items of floor" [value]="items.id">
+                                                    {{items.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <ng-container formArrayName="attributes">
+                                        <ng-container *ngFor="let floorForm of floorAttri.controls; let index = index">
+                                            <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.appartments">
+                                                <div class="form-group">
+                                                    <label class="control-label">No. of Appartments
+                                                        <!-- <span class="text-danger2">*</span> -->
+                                                    </label>
+                                                    <div class="input-icon">
+                                                        <input type="number" class="form-control"
+                                                            formControlName="appartments" placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.offices">
+                                                <div class="form-group">
+                                                    <label class="control-label">No. of Offices
+                                                        <!-- <span class="text-danger2">*</span> -->
+                                                    </label>
+                                                    <div class="input-icon">
+                                                        <input type="number" class="form-control" formControlName="offices"
+                                                            placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.shops">
+                                                <div class="form-group">
+                                                    <label class="control-label">No. of Shops
+                                                        <!-- <span class="text-danger2">*</span> -->
+                                                    </label>
+                                                    <div class="input-icon">
+                                                        <input type="number" class="form-control" formControlName="shops"
+                                                            placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.hallways">
+                                                <div class="form-group">
+                                                    <label class="control-label">No. of Hallways
+                                                        <!-- <span class="text-danger2">*</span> -->
+                                                    </label>
+                                                    <div class="input-icon">
+                                                        <input type="number" class="form-control" formControlName="hallways"
+                                                            placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.lifts">
+                                                <div class="form-group">
+                                                    <label class="control-label">No. of Lifts
+                                                        <!-- <span class="text-danger2">*</span> -->
+                                                    </label>
+                                                    <div class="input-icon">
+                                                        <input type="number" class="form-control" formControlName="lifts"
+                                                            placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.library">
+                                                <div class="form-group">
+                                                    <label class="control-label">No. of Library
+                                                        <!-- <span class="text-danger2">*</span> -->
+                                                    </label>
+                                                    <div class="input-icon">
+                                                        <input type="number" class="form-control" formControlName="library"
+                                                            placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.labs">
+                                                <div class="form-group">
+                                                    <label class="control-label">No. of Labs
+                                                        <!-- <span class="text-danger2">*</span> -->
+                                                    </label>
+                                                    <div class="input-icon">
+                                                        <input type="number" class="form-control" formControlName="labs"
+                                                            placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.canteen">
+                                                <div class="form-group">
+                                                    <label class="control-label">No. of Canteen
+                                                        <!-- <span class="text-danger2">*</span> -->
+                                                    </label>
+                                                    <div class="input-icon">
+                                                        <input type="number" class="form-control" formControlName="canteen"
+                                                            placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.classRooms">
+                                                <div class="form-group">
+                                                    <label class="control-label">No. of Class Rooms
+                                                        <!-- <span class="text-danger2">*</span> -->
+                                                    </label>
+                                                    <div class="input-icon">
+                                                        <input type="number" class="form-control"
+                                                            formControlName="classRooms" placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.wards">
+                                                <div class="form-group">
+                                                    <label class="control-label">No. of Wards
+                                                        <!-- <span class="text-danger2">*</span> -->
+                                                    </label>
+                                                    <div class="input-icon">
+                                                        <input type="number" class="form-control" formControlName="wards"
+                                                            placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.stands">
+                                                <div class="form-group">
+                                                    <label class="control-label">No. of Stands
+                                                        <!-- <span class="text-danger2">*</span> -->
+                                                    </label>
+                                                    <div class="input-icon">
+                                                        <input type="number" class="form-control" formControlName="stands"
+                                                            placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.gates">
+                                                <div class="form-group">
+                                                    <label class="control-label">No. of Gates
+                                                        <!-- <span class="text-danger2">*</span> -->
+                                                    </label>
+                                                    <div class="input-icon">
+                                                        <input type="number" class="form-control" formControlName="gates"
+                                                            placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.rooms">
+                                                <div class="form-group">
+                                                    <label class="control-label">No. of Rooms
+                                                        <!-- <span class="text-danger2">*</span> -->
+                                                    </label>
+                                                    <div class="input-icon">
+                                                        <input type="number" class="form-control" formControlName="rooms"
+                                                            placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" [formGroupName]="index" *ngIf="fieldToDisplay.other">
+                                                <div class="form-group">
+                                                    <label class="control-label">Others
+                                                        <!-- <span class="text-danger2">*</span> -->
+                                                    </label>
+                                                    <div class="input-icon">
+                                                        <input type="number" class="form-control" formControlName="other"
+                                                            placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </ng-container>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default btn-round"  [disabled]="disableTab.stepOne" (click)="goToPrevStep(1)"><i
+                                        class="ri-arrow-go-back-line"></i>
+                                    Back</button>
+                                <button type="submit" class="btn btn-success btn-round btn-block1"><i
+                                    class="ri-arrow-right-line"></i>Next</button>
+                                <!-- <button type="button" class="btn btn-success btn-round btn-block1" (click)="goToNextStep(3)"><i
+                                    class="ri-arrow-right-line"></i>Next</button> -->
+                            </div>
+
+                            <div class="col-md-12">
+                                <h4 class="fw-500 fs-12  text-uppercase bg-blue-100 p-1">
+                                    Floors
+                                </h4>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <ng-select placeholder="By Floor" [clearable]="false"
+                                                        (change)="getSelectedFilter($event)" formControlName="tableFilter">
+                                                        <ng-option *ngFor="let items of filterFloor" [value]="items.id">
+                                                            {{items.name}}
+                                                        </ng-option>
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <ng-select placeholder="Select Option" 
+                                                        (change)="getSelectedFilterFloor(floorForm.value.tableFilter, $event)" 
+                                                        formControlName="tableFloor">
+                                                        <ng-option *ngFor="let items of floorValue" [value]="items.id">
+                                                            {{items.name}}
+                                                        </ng-option>
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" *ngIf="floorForm.value.tableFilter === 3">
+                                                <div class="form-group">
+                                                    <ng-select placeholder="Select Option" 
+                                                        formControlName="tableSpaces" (change)="getSelectedFilterSpace($event)">
+                                                        <ng-option *ngFor="let items of floorSpaces" [value]="items.id">
+                                                            {{items.name}}
+                                                        </ng-option>
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="w-100-p" style="height: calc(100% - 16px);">
+                                            <general-table [config]="configbuilding" [actions]="actions"
+                                                [dataSource]="consumersbuild" (signals)="onTableSignals($event)">
+                                            </general-table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-template>
+                </li>
+
+                <li class="mr-12 tab-border-bottom" [ngbNavItem]="3" [disabled]="disableTab.stepThree" *ngIf="buildingForm.get('type').value !== 6">
+                    <a ngbNavLink>Spaces</a>
+                    <ng-template ngbNavContent>
+                        <form [formGroup]="spaceForm" (ngSubmit)="onSubmitSpace(spaceForm.value)">
+                            <div class="col-md-12">
+                                <div class="form-group d-flex">
+                                    <input type="checkbox" id="add_space" name="check"
+                                        (change)="onCheckSpace($event)">
+                                    <label for="add_space" class="control-label ml-10">Add New Space</label>
+                                </div>
+                                <div class="row" *ngIf="requestSpace">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Floor</label>
+                                            <ng-select [clearable]="false" formControlName="floor" [clearable]="false"
+                                                (change)="byFloorOrAreaChange($event)" placeholder="Select Type">
+                                                <ng-option *ngFor="let items of floor" [value]="items.id">
+                                                    {{items.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Space</label>
+                                            <ng-select [clearable]="false" formControlName="spaceparent" [clearable]="false"
+                                                (change)="byFloorOrAreaChange($event)" placeholder="Select Type">
+                                                <ng-option *ngFor="let items of spaces" [value]="items.id">
+                                                    {{items.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Space Name<span
+                                                    class="text-danger2">*</span></label>
+                                            <div class="input-icon">
+                                                <input type="text" class="form-control" maxLength="60" formControlName="name"
+                                                    placeholder=" Enter Name" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="margin-top: 22px;">
+                                        <div class="form-group">
+                                            <button type="button" (click)="addSpaceName()"
+                                                class="btn btn-success btn-round btn-block1"><i
+                                                    class="ri-check-fill"></i>Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Floors<span
+                                                    class="text-danger2">*</span></label>
+                                            <ng-select placeholder="Select Type" (change)="getSelectedFloor($event)"
+                                                formControlName="floor" [clearable]="false">
+                                                <ng-option *ngFor="let items of floor" [value]="items.id">
+                                                    {{items.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Spaces<span
+                                                    class="text-danger2">*</span></label>
+                                            <ng-select placeholder="Select Type" (change)="getSelectedSpaceAttr($event)"
+                                                formControlName="space" [clearable]="false">
+                                                <ng-option *ngFor="let items of floorSpaces" [value]="items.id">
+                                                    {{items.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ng-container formArrayName="attributes">
+                                <ng-container *ngFor="let spaceForm of spaceAttri.controls; let index = index">
+                                    <div class="row p-15">
+                                        <div class="col-md-6" [formGroupName]="index">
+                                            <div class="form-group">
+                                                <label class="control-label">No. of Rooms
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="input-icon">
+                                                    <input type="number" class="form-control" formControlName="rooms"
+                                                        placeholder="..." min="0" oninput="this.value = isNaN(this.value) ? 0 : Math.abs(this.value) ? Math.abs(this.value) : 0"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default btn-round btn-block1" [disabled]="disableTab.stepTwo" 
+                                    (click)="goToPrevStep(2)">
+                                    <i class="ri-arrow-go-back-line"></i>Back
+                                </button>
+                                <button type="submit" class="btn btn-success btn-round btn-block1">
+                                    <i class="ri-check-fill"></i>Save
+                                </button>
+                            </div>
+
+                            <div class="col-md-12">
+                                <h4 class="fw-500 fs-12  text-uppercase bg-blue-100 p-1">
+                                    ROOMS
+                                </h4>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <ng-select placeholder="Select Floor" (change)="getSelectedFloorTable($event)"
+                                                formControlName="floorTable" [clearable]="false">
+                                                <ng-option *ngFor="let items of floorTable" [value]="items.id">
+                                                    {{items.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <ng-select placeholder="Select Space" (change)="getSelectedSpaceAttrTable($event)"
+                                                formControlName="spaceTable" [clearable]="false">
+                                                <ng-option *ngFor="let items of floorSpacesTable" [value]="items.id">
+                                                    {{items.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="w-100-p">
+                                            <general-table [config]="configspace" [actions]="actions"
+                                                [dataSource]="consumersspace" (signals)="onTableSignals($event)">
+                                            </general-table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-template>
+                </li>
+            </ul>
+            <div [ngbNavOutlet]="nav" class="mt-2"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+:host {
+    position: relative;
+}
+.btn-round {
+    border-radius: 1000px !important;
+}
+
+.loader {
+    position: absolute;
+    top: 8%;
+    left: 38%;
+    z-index: 1;
+}

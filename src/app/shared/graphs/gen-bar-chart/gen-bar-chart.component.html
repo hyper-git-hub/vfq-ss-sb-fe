@@ -1,0 +1,31 @@
+<div class="w-100-p panel panel-default card mb-0 round shadow">
+    <div class="panel-heading">
+        <h3 class="panel-title fw-600 mb-0"> {{graphTitle}}
+            <span class="fw-200 ml-10 grey-400">
+                <i class="ri-question-line" container="body" tooltipPosition="top" [ngbTooltip]="tooltipInfo"></i>
+            </span>
+        </h3>
+    </div>
+
+    <div class="panel-body p-16">
+        <div *ngIf="showDaysDropdown || unit" class="mb-10 pb-10" style="border-bottom: 1px solid #eee;">
+            <div *ngIf="showDaysDropdown" class="inline-block">
+                <select class="form-control input-xs" [formControl]="days">
+                    <option value="today">Today</option>
+                    <option value="yesterday">Yesterday</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="yearly">yearly</option>
+                </select>
+            </div>
+
+            <div *ngIf="!!unit" class="inline-block" style="float:right;">
+                <div class="fs-14 fw-100"> {{unit}} </div>
+            </div>
+        </div>
+
+        <div class="chartbox">
+            <div [id]="graphID ? graphID : 'chart-div'" [style.height]="graphHeight"></div>
+        </div>
+    </div>
+</div>

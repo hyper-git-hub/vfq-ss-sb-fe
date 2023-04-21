@@ -1,0 +1,11 @@
+<app-list-detail [deviceTitle]="'Smoke Details'" [breadCrumbs]="breadCrumbs" [loading]="loading" [table]="table"
+    [actions]="actions" [deviceDetail]="buildingDetails" [deviceUrl]="deviceDetailUrl"
+    [deviceImage]="'/assets/images/Smoke_detector.jpg'">
+</app-list-detail>
+
+<div class="px-30 pb-30 d-flex">
+    <div style="flex: 1;">
+        <app-gen-bar-chart graphTitle="Alerts & Status Summary" unit="" [showDaysDropdown]="false" [graphID]="'alertGraph'" [graphData]="graphData"
+            [graphConfig]="alertGraphConfig"></app-gen-bar-chart>
+    </div>
+</div>

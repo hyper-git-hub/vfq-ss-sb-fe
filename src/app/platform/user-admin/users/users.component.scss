@@ -1,0 +1,23 @@
+.TimeIntervalLegend {
+    width: 50px !important;
+    font-size: 14px;
+    color: #777;
+    font-weight: 700;
+}
+.TimeIntervalLegend1 {
+    width: 80px !important;
+    font-size: 14px;
+    color: #777;
+    font-weight: 700;
+}
+
+.loader {
+    position: absolute;
+    top: 32%;
+    left: 42%;
+    z-index: 1;
+}
+
+::ng-deep .calender-overflow.accordion>.card {
+    overflow: visible !important;
+}

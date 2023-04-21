@@ -1,0 +1,127 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import "~bootstrap/scss/bootstrap";
+@import "assets/styles/bootstrap-extend.scss";
+@import "assets/styles/breakpoints.scss";
+// @import 'assets/styles/colors.scss';
+@import 'assets/styles/fonts.scss';
+@import "assets/styles/global.scss";
+@import "assets/styles/helpers.scss";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+html,
+body {
+  height: 100%;
+}
+
+.login-bg {
+  padding: inherit;
+}
+
+.login-bg .pic {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  // background-image: url("./assets/images/bg-login.jpg");
+  background-image: url("../src/assets/images/vodafone-background.jpg");
+  background-size: cover;
+  height: 100%;
+}
+
+body {
+  font-family: "Vodafone Rg" !important;
+  font-size: 14px;
+  height: 100%;
+}
+
+.onoffswitch {
+  position: relative;
+  width: 50px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.onoffswitch-checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.onoffswitch-label {
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  height: 24px;
+  padding: 0;
+  line-height: 24px;
+  border: 2px solid #e3e3e3;
+  border-radius: 24px;
+  background-color: #cccccc;
+  transition: background-color 0.3s ease-in;
+}
+
+.onoffswitch-label:before {
+  content: "";
+  display: block;
+  width: 24px;
+  height: 24px;
+  margin: 0px;
+  background: #ffffff;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 24px;
+  border: 2px solid #e3e3e3;
+  border-radius: 24px;
+  transition: all 0.3s ease-in 0s;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label {
+  background-color: #49e845;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label,
+.onoffswitch-checkbox:checked + .onoffswitch-label:before {
+  border-color: #49e845;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label:before {
+  right: 0px;
+}
+.onoffswitch-inner:before {
+  content: "";
+  background-color: #49e845;
+}
+
+.breadcrumb-box {
+  outline: none;
+}
+
+.breadcrumb-box .breadcrumb {
+  position: relative;
+  z-index: auto;
+  border-bottom: 1px solid #E5E5E5;
+  background-color: #fff;
+  border-radius: 0;
+  padding: 5px 15px;
+  border-top: 1px solid #E5E5E5;
+  margin: 0;
+  font-size: 12px;
+}
+
+.breadcrumb-box .breadcrumb li .icon:before {
+  margin-right: 5px;
+}
+
+.breadcrumb-box .breadcrumb li a {
+  color: #555;
+}
+
+.breadcrumb-arrow > li + li:before {
+  content: "\00bb\00a0" !important;
+}

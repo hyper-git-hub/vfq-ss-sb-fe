@@ -1,0 +1,216 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+
+<img *ngIf="loading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" width="150px" height="150px">
+
+<div class="page-container w-100-p" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start start">
+    <div fxLayout="row" class="w-100-p card round p-12">
+
+        <ngb-accordion class="w-100-p calender-overflow" [activeIds]="'pb-filters'">
+            <ngb-panel id="pb-filters">
+                <ng-template ngbPanelHeader let-opened="opened">
+                    <button ngbPanelToggle class="w-100-p btn p-0" style="color: #37474f;">
+                        <div class="w-100-p" fxLayout="row" fxLayoutAlign="space-between">
+                            <span class="font-size-14 fw-600"> Choose Parameters </span>
+                            <span><i [ngClass]="opened ? 'ri-subtract-line' : 'ri-add-line'"></i></span>
+                        </div>
+                    </button>
+                </ng-template>
+
+                <ng-template ngbPanelContent>
+                    <div [formGroup]="pbFilterForm" (ngSubmit)="onSubmitFilter()" fxLayout="row wrap">
+                        <fieldset class="form-fieldset w-100-p">
+                            <legend class="TimeIntervalLegend1">Filters</legend>
+
+                            <div class=" w-100-p" fxLayout="row wrap" fxLayoutGap="8px">
+                                <div fxFlex="18.5" class="mb-6">
+                                    <!-- <label>Building <span class="text-danger">*</span></label> -->
+                                    <ng-select placeholder="Select Building" [clearable]="false"
+                                        (change)="onSelectBuilding($event)" formControlName="building">
+                                        <ng-option *ngFor="let building of buildings" [value]="building.id">{{building.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                    <div *ngIf="pbFilterForm.controls['building'].hasError('required') && pbFilterForm.controls['building'].touched" class="text-danger">
+                                        Please select a building
+                                    </div>
+                                </div>
+                
+                                <div fxFlex="18.5" class="mb-6">
+                                    <!-- <label>Type <span class="text-danger">*</span></label> -->
+                                    <ng-select placeholder="Select type" [clearable]="false"
+                                        (change)="onAreaSelect($event)" formControlName="area">
+                                        <ng-option *ngFor="let area of areas" [value]="area.id">{{area.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                
+                                <ng-container *ngIf="pbFilterForm.controls['area'].value === 'floor' ">
+                                    <div fxFlex="18.5">
+                                        <!-- <label for="">Floor <span class="text-danger">*</span> </label> -->
+                                        <ng-select placeholder="Select Floor" formControlName="floor" [clearable]="false"
+                                            (change)="onSelectFloor($event)">
+                                            <ng-option *ngFor="let floor of floors" [value]="floor.id">{{floor.name}}</ng-option>
+                                        </ng-select>
+                                        <!-- <div *ngIf="cameraForm.controls['floor'].hasError('required')" class="text-danger">
+                                            Please select a floor
+                                        </div> -->
+                                    </div>
+                
+                                    <div fxFlex="18.5">
+                                        <!-- <label for="">Space <span class="text-danger">*</span> </label> -->
+                                        <ng-select placeholder="Select Space" formControlName="space"
+                                            (change)="onSelectSpace($event)">
+                                            <ng-option *ngFor="let space of spaces" [value]="space.id">{{space.name}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                
+                                    <div fxFlex="18.5">
+                                        <!-- <label for="">Room </label> -->
+                                        <ng-select placeholder="Select room" formControlName="room"
+                                            (change)="onSelectRoom($event)">
+                                            <ng-option *ngFor="let room of rooms" [value]="room.id">{{room.name}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                </ng-container>
+                
+                                <ng-container *ngIf="pbFilterForm.controls['area'].value === 'openArea' ">
+                                    <div fxFlex="18.5">
+                                        <!-- <label for="">Open Area <span class="text-danger">*</span> </label> -->
+                                        <ng-select placeholder="Select Open Area" formControlName="open_area"
+                                            (change)="onSelectOpenArea($event)">
+                                            <ng-option *ngFor="let oArea of openAreas" [value]="oArea.id">{{oArea.name}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                </ng-container>
+
+                                <div fxFlex="18.5">
+                                    <!-- <label for="">Camera <span class="text-danger">*</span> </label> -->
+                                    <ng-select placeholder="Select Camera" formControlName="device"
+                                        (change)="onSelectDevice($event)">
+                                        <ng-option *ngFor="let device of devices" [value]="device.device">{{device.device_name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="form-fieldset w-100-p">
+                            <legend class="TimeIntervalLegend1">Time Interval</legend>
+
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div class="form-group mb-10">
+                                    <div class="radio-custom fs-16">
+                                      <input type="radio" id="today" value="today" formControlName="date_filter" name="date_filter"
+                                        (change)="onChangePeriod($event)">
+                                      <label for="today">Current Day</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-10">
+                                    <div class="radio-custom fs-16">
+                                      <input type="radio" id="week" value="week" formControlName="date_filter" name="date_filter"
+                                        (change)="onChangePeriod($event)">
+                                      <label for="week">Previous Week</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-10">
+                                    <div class="radio-custom fs-16">
+                                      <input type="radio" id="month" value="month" formControlName="date_filter" name="date_filter"
+                                        (change)="onChangePeriod($event)">
+                                      <label for="month">Previous Month</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-10">
+                                    <div class="radio-custom fs-16">
+                                        <input type="radio"  id="range" value="range" formControlName="date_filter" name="date_filter"
+                                            (change)="onChangePeriod($event)">
+                                        <label for="range">Select a period</label>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="form-group mb-10" fxLayout="row" fxLayoutGap="8px">
+                                <p-calendar placeholder="Select Start Date" appendTo="body" formControlName="start_date"
+                                    (onSelect)="onSelectDateRange($event,'start')" [maxDate]="maxStartDate" [style]="{'width':'100%'}"
+                                    id="sd" name="start_date" [showTime]="true">
+                                </p-calendar>
+
+                                <p-calendar placeholder="Select End Date" appendTo="body" formControlName="end_date"
+                                    [minDate]="maxStartDate" (onSelect)="onSelectDateRange($event,'end')" [style]="{'width':'100%'}"
+                                    id="ed" name="end_date" [showTime]="true">
+                                </p-calendar>
+                              </div>
+
+                              <div class="form-group mb-10">
+                              </div>
+                            <!-- <app-general-forms class="w-100-p" [config]="formConfig1" [actions]="actions"
+                                (signals)="onGeneralFormSignal($event)"></app-general-forms> -->
+                        </fieldset>
+
+                        <div class="w-100-p" fxLayoutAlign="end end">
+                            <div class="w-60-p " fxLayoutAlign="end end" fxLayoutGap="8px">
+
+                                <!-- <button fxFlex="25%" (click)="onSubmit()" type="button"
+                                    class="btn btn-danger btn-block btn-round">
+                                    Submit</button>   
+                                    <button fxFlex="25%"  (click)="onDonwload()" class="btn btn-default btn-block btn-round">
+                                    Download Video</button> -->
+
+                                <button fxFlex="25%" type="submit" [disabled]="!pbFilterForm.valid" class="btn btn-danger btn-block btn-round">
+                                    Submit
+                                </button>
+                                <button [disabled]="!recordedVedio" fxFlex="25%" type="button" (click)="onDonwload()"
+                                    [hidden]="downloadHiddenOne" class="btn btn-default btn-block btn-round">
+                                    Download Video
+                                </button>
+                                <!-- <button #download fxFlex="25%" [hidden]="downloadHiddenTwo"
+                                 fileSaver [method]="'GET'" [fileName]="'videoName.mp4'"
+                                    [url]="downloadVideo"
+                                    class="btn btn-default btn-block btn-round">
+                                    Download Video</button> -->
+                                <a #download fxFlex="25%" [hidden]="downloadHiddenTwo" [href]="downloadVideo"
+                                    target="_blank" class="btn btn-default btn-block btn-round">
+                                    Download Video</a>
+
+                                <!-- <button  type="button" > -->
+                                <a [class.disabled]="!recordedVedio" class="btn btn-default btn-block btn-round"
+                                    fxFlex="25%" style="text-decoration:none; color: black; font-size: 16px;"
+                                    [href]="destination" target="_blank">
+                                    Get link</a>
+                                <!-- </button> -->
+                                <button fxFlex="25%" type="button" (click)="onReset()"
+                                    class="btn btn-default btn-block btn-round">
+                                    Reset</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </ng-template>
+            </ngb-panel>
+        </ngb-accordion>
+
+    </div>
+
+    <div class="w-100-p panel panel-default card ">
+        <div class="panel-heading">
+            <h3 class="panel-title fw-600 mb-0">Camera</h3>
+        </div>
+
+        <div class="panel-body p-10">
+            <canvas id="65" style="width: 100%; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"> </canvas>
+            <div *ngIf="recordedVedio" class="player-wrapper" style="width: 500px;height: 195px;">
+
+                <vg-player>
+                    <video #myMedia [vgHls]="recordedVedio" id="my-video" type="video/mp4" controls>
+                    </video>
+                </vg-player>
+
+            </div>
+        </div>
+    </div>
+
+</div>

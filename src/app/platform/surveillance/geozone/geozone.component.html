@@ -1,0 +1,217 @@
+<div class="breadcrumb-box">
+  <ol class="breadcrumb breadcrumb-arrow">
+    <li><a> Geo Zone</a></li>
+  </ol>
+</div>
+
+<div class="page-container">
+  <div class="row card-group-row">
+    <!-- <div class="col-lg-4">
+      <div class="panel panel-default card">
+        <div class="panel-heading margin-bottom-0">
+          <h3 class="panel-title font-weight-600">Select Parameters</h3>
+          <div class="panel-actions">
+            <a></a>
+          </div>
+        </div>
+        <div class="panel-body padding-15">
+          <div class="form-group margin-bottom-10">
+            <a
+              class="btn btn-success fs-14 btn-block bg-theme btn-round"
+              (click)="onAddgeozone()"
+            >
+              <i class="ri-add-circle-fill"></i>Add New GeoZone</a
+            >
+          </div>
+
+          <div class="form-group margin-bottom-10">
+            <fieldset class="form-fieldset">
+              <form [formGroup]="searchForm">
+                <legend class="SearchLegend" style="width: 48px !important">
+                  Search
+                </legend>
+                <div class="form-group margin-bottom-10">
+                  <div class="input-search">
+                    <i class="input-search-icon ri-search-line"></i>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="search"
+                      name=""
+                      placeholder="Search..."
+                    />
+                    <button
+                      type="button"
+                      class="input-search-close icon"
+                      data-toggle="popover"
+                      data-original-title=""
+                      data-trigger="hover"
+                      data-container="body"
+                      data-placement="top"
+                      data-html="true"
+                      id="help2"
+                    >
+                      <i
+                        class="ri-question-line"
+                        pTooltip="Search functionality lets the user find Customers on the system. The user can type the Name of the customer in the search bar and the details will be displayed on the list"
+                        tooltipPosition="right"
+                      ></i>
+                    </button>
+                    <div id="popover-content-help2" class="hide">
+                      Some help information goes here
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group margin-bottom-0 text-center">
+                  <a href="" class="btn btn-success btn-round fs-14">
+                    <i class="ri-search-line"></i> Search</a
+                  >
+                  <a href=" " class="btn btn-default btn-round fs-14">
+                    <i class="ri-refresh-line"></i>
+                    Clear
+                  </a>
+                </div>
+              </form>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="col-lg-12 ">
+      <div class="panel panel-default card">
+        <div class="panel-heading margin-bottom-0">
+          <h3 class="panel-title font-weight-600">
+            List
+            <a data-toggle="popover" class="font-weight-200 m-12 grey-400" data-original-title="" data-trigger="hover"
+              data-container="body" data-placement="top" data-html="true" href="#" id="help1">
+              <i class="ri-information-line"></i>
+            </a>
+          </h3>
+          <div class="panel-actions">
+            <a></a>
+          </div>
+        </div>
+        <!-- <div class="form-group ml-10 mt-14">
+                    <div class="input-search" style="width: max-content;">
+                        <i class="input-search-icon ri-search-line"></i>
+                        <input type="text" class=" form-control" name=""
+                            placeholder="Search...">
+                        <button type="button" class="input-search-close icon " data-toggle="popover"
+                            data-original-title="" data-trigger="hover" data-container="body" data-placement="top"
+                            data-html="true" id="help2">
+                            <i class="ri-question-line"
+                                pTooltip='Search functionality lets the user find Customers on the system. The user can type the Name of the customer in the search bar and the details will be displayed on the list'
+                                tooltipPosition="right"></i>
+                        </button>
+                        <div id="popover-content-help2" class="hide">
+                            Some help information goes here
+                        </div>
+                    </div>
+                </div> -->
+        <div class="panel-body padding-15">
+          <div class="w-100-p" style="height: calc(100% - 68px)">
+            <general-table [config]="config" [actions]="actions" [urlFilters]="geozoneFilters"
+              [dataSource]="geozoneListingData" (signals)="onTableSignals($event)"></general-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--now change geozone form so its close (use for future purpose [Array form])-->
+
+<!-- <ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{formTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="geozoneform" (ngSubmit)="onSubmit(geozoneform.value)">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group margin-bottom-10">
+                                <ng-select placeholder="Select Building" formControlName="building">
+                                    <ng-option *ngFor="let items of building" [value]="items.id">{{items.name}}
+                                    </ng-option>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group margin-bottom-10" >
+                                <ng-select placeholder="Select Camera" formControlName="camera">
+                                    <ng-option *ngFor="let items of camera" [value]="items.id">{{items.name}}
+                                    </ng-option>
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-12">
+                    <h4 class="fw-500 fs-12  text-uppercase bg-blue-100 p-1">
+                        Set Time &amp; Date
+                    </h4>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group margin-bottom-10">
+                                <label>Start Time</label>
+                                <input type="time" class="form-control" value="" placeholder="Range">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group margin-bottom-10">
+                                <label>End Time</label>
+                                <input type="time" class="form-control" value="" placeholder="Range">
+                            </div>
+
+                        </div>
+                        <div class="col-md-2">
+                            <a style=" padding: 0px 5px;margin-top: 30px;" (click)="addmoretime()"
+                                class="btn btn-success  bg-theme"> <i class="ri-add-fill"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <ng-container formArrayName="time" *ngFor="let addtime of time.controls; let i=index">
+                    <div class="col-md-12" [formGroupName]="i">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="time" formControlName="starttime" class="form-control" value="Start"
+                                        placeholder="Range">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="time" formControlName="endtime" class="form-control" value="End"
+                                        placeholder="Range">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <a style=" padding: 0px 5px;" (click)="removeGroup(i)"
+                                    class="btn btn-success  bg-theme"> <i class="ri-close-line"></i></a>
+                            </div>
+                        </div>
+
+                    </div>
+                </ng-container>
+
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success btn-round btn-block1"><i class="ri-check-fill"></i>Save</button>
+        <button type="button" class="btn btn-default btn-round btn-block1"><i class="ri-arrow-go-back-line"></i>
+            Back</button>
+    </div>
+</ng-template> -->

@@ -1,0 +1,28 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+    <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
+</div>
+
+<div class="modal-body h-430 pos-relative">
+    <iframe *ngIf="rtsp" [src]="rtsp" height="100%" width="100%" frameborder="0" scrolling='no'
+        allowfullscreen='allowfullscreen'>
+    </iframe>
+
+    <div class="w-126 h-126 pos-absolute bottom-16 right-16" style="background: #282828">
+        <div class="white px-6 py-0">
+            <label for="zoom" class="mb-0">Zoom</label>
+            <input type="range" id="zoom" min="0" max="2" value="1" class="slider">
+        </div>
+        <div class="w-72 h-72" fxLayout="row wrap">
+            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-left-up-fill"></i></div>
+            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-up-fill"></i></div>
+            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-right-up-fill"></i></div>
+            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-left-fill"></i></div>
+            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"></div>
+            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-right-fill"></i></div>
+            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-left-down-fill"></i></div>
+            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-down-fill"></i></div>
+            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-right-down-fill"></i></div>
+        </div>
+    </div>
+</div>

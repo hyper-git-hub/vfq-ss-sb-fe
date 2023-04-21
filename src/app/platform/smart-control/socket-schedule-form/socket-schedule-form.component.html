@@ -1,0 +1,110 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+    <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
+</div>
+<img *ngIf="loading" src="/assets/images/block-loader.gif" alt="Loading" class="loading" width="150px" height="150px">
+
+<div class="modal-body">
+    <form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="fw-600 fs-12 text-uppercase bg-blue-100 mb-0" style="padding: 5px;"> Schedule Now </h4>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group mb-10">
+                            <label>Scheduls Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" formControlName="schedule_name" maxLength="60"
+                                placeholder="Enter Schedule Name" />
+                            <div class="text-danger" *ngIf="scheduleForm.controls['schedule_name'].hasError('required')">
+                                Please provide schedule name
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group mb-10">
+                            <label>Action <span class="text-danger">*</span></label>
+                            <ng-select placeholder="Choose Action" formControlName="state" [clearable]="false">
+                                <ng-option [value]="true"> On </ng-option>
+                                <ng-option [value]="false"> Off </ng-option>
+                            </ng-select>
+                            <div class="text-danger" *ngIf="scheduleForm.controls['state'].hasError('required')">
+                                Please select schedule state
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="table-responsive" style="height:auto; margin-left: -12px;">
+                        <table class="table mb-0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="form-group mb-0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Start Time</span>
+                                                <input type="time" class="form-control" formControlName="start_time">
+                                            </div>
+                                            <div class="text-danger" *ngIf="scheduleForm.controls['start_time'].hasError('required')">
+                                                Please set start time
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group margin-bottom-0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">End Time</span>
+                                                <input type="time" class="form-control" formControlName="end_time">
+                                            </div>
+                                            <div class="text-danger" *ngIf="scheduleForm.controls['end_time'].hasError('required')">
+                                                Please set end time
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="mt-20 d-flex">
+                                            <input type="checkbox" id="repeat" formControlName="repeat" name="checkbox">
+                                            <label class="pl-10" for="repeat">Repeat</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group mb-10 mt-10 ml-16">
+                    <div class="row">
+                        <ng-container *ngFor="let item of start_date; let idx=index">
+                            <div class="mr-8 d-flex pr-12">
+                                <input type="checkbox" [id]="item.id" [(ngModel)]="item.select"
+                                    [ngModelOptions]="{standalone: true}" class="mr-6" (change)="onSelectDay(item)">
+                                <label [for]="item.id">{{item.name}}</label>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class="text-danger" *ngIf="days.length === 0">
+                        Please select atleast one day
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success btn-round" [disabled]="scheduleForm.invalid || days.length === 0 ">
+                <i class="ri-check-fill"></i>
+                <span>{{!!data ? 'Update' : 'Save'}}</span>
+            </button>
+            <button type="button" class="btn btn-default btn-round" (click)="onCloseModel()">
+                <i class="ri-arrow-go-back-line"></i>
+                Back
+            </button>
+        </div>
+    </form>
+</div>

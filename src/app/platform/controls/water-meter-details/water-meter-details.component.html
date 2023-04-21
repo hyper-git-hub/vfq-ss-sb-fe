@@ -1,0 +1,11 @@
+<app-list-detail [deviceTitle]="'Water Meter Details'" [breadCrumbs]="breadCrumbs" [loading]="loading || graphLoading" [table]="table"
+    [actions]="actions" [deviceDetail]="buildingDetails" [deviceUrl]="deviceDetailUrl"
+    [deviceImage]="'/assets/images/water-meter.jpg'" (signals)="onDetailsSignals($event)">
+</app-list-detail>
+
+<div class="px-30 pb-30 d-flex">
+    <div style="flex: 1;">
+        <app-gen-line-chart graphTitle="Flow Rate" unit="" [graphID]="'wmGraph'" [graphData]="graphData" [showDaysDropdown]="true"
+            [graphConfig]="wmGraphConfig" (signals)="onCurrGraphSignals($event)"></app-gen-line-chart>
+    </div>
+</div>

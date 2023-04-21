@@ -1,0 +1,224 @@
+<div class="card w-100-p" style="border: none; height: 100%">
+  <img *ngIf="loading" src="/assets/images/block-loader.gif" alt="Loading" srcset="" width="150px" height="150px"
+    style="position: absolute; top: 30%; left: 42%" />
+
+  <div class="w-100-p" fxLayout="row wrap" style="height: 100%">
+    <div *ngIf="config.showHeader" fxFlex="100" fxLayout="row" fxLayoutAlign="space-between start" class="h-48 mb-10">
+      <!---SEARCH MOD-->
+      <div fxFlex="55">
+        <app-search *ngIf="config.showSearch" #searchControl fxFlex="50" [cols]="config.searchOptions"
+          [showFilters]="config.showSearchFilters" (signal)="onSearch($event.target)"></app-search>
+      </div>
+      <!---ADD NEW MOD-->
+      <div fxLayout="row" fxLayoutAlign="end start" fxFlex fxLayoutGap="8px">
+        <div class="w-180">
+          <button *ngIf="config.showAdd && !readonly" fxFlex class="btn btn-success btn-round fs-14 fw-300"
+            style="border-radius: 20px !important" (click)="onAddNew()">
+            <i class="ri-add-circle-fill"></i>
+            {{ config.addBtnText }}
+          </button>
+        </div>
+        <button *ngIf="config.showOptionalBtn && !readonly" class="btn btn-success btn-round fs-14 fw-300"
+          (click)="onOptionalBtn()" style="height: 37px !important">
+          <i [ngClass]="config.optionalBtnIcon"></i>
+          {{ config.optionalBtnText }}
+        </button>
+        <button *ngIf="config.showDownload" fxFlex class="btn btn-success tn-round fs-14 fw-300"
+          style="border-radius: 20px !important" (click)="onDownload()">
+          <i class="ri-download-fill"></i>
+          Download
+        </button>
+      </div>
+    </div>
+    <!---DOWNLOAD MOD-->
+
+    <div fxFlex="100" fxLayout="row" *ngIf="config.showSubHeader" class="h-48 mb-6">
+      <div fxFlex="60" *ngIf="config.showCSVTool">
+        <app-export-csv [slug]="!!urlFilters ? exportUrl : slug" [exportOutside]="config.exportOutside"
+          [fileName]="config.title + ' List'" (signals)="onDownloadSignal($event)"></app-export-csv>
+      </div>
+
+      <div fxFlex *ngIf="config.search" fxLayoutAlign="end start">
+        <div class="w-210">
+          <div fxLayoutAlign="flex-start">
+            <label class="pt-2 pr-2">Search:</label>
+            <input type="text" class="form-control form-control-sm" [formControl]="searchCon" placeholder=""
+              aria-controls="ppp" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="config.showTable" class="w-100-p" [style.height]="config.showHeader ? 'calc(100% - 54px)' : '100%'">
+      <div style="display: flex; flex-direction: row; height: auto; max-height: calc(100% - 46px);">
+        <div style="overflow: auto; flex: 1">
+          <div fxFlex>
+            <table class="table" style="min-width: calc(100% - 1px); width: max-content">
+              <thead style="position: sticky; top: -1px">
+                <tr>
+                  <ng-container *ngIf="config.selectionEnabeled">
+                    <th class="w-38 text-center" style="padding: 0 !important">
+                      <input type="checkbox" [(ngModel)]="allSelected" (change)="onMasterToggle()" />
+                      <!-- <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+                      </mat-checkbox> -->
+                    </th>
+                  </ng-container>
+                  <ng-container *ngFor="let column of config.columns">
+                    <ng-container *ngIf="column.visible">
+                      <th *ngIf="!column.sortable" scope="col">
+                        {{ column.title | uppercase }}
+                      </th>
+                      <th *ngIf="column.sortable" scope="col" sortable="{{
+                          !!column.sortColumn ? column.sortColumn : column.name
+                        }}" (sort)="onSort($event, column)">
+                        {{ column.title | uppercase }}
+                      </th>
+                    </ng-container>
+                  </ng-container>
+
+                  <th scope="col" [width]="config.acColumnWidth" style="min-width: 98px"
+                    *ngIf="config.showRowActions && config.rowActions.length > 0 && !readonly">
+                    <span class="text-uppercase"> Actions </span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody style="height: calc(100% - 30px); border: 1px solid #e4eaec">
+                <ng-container *ngIf="dataSource?.length > 0">
+                  <tr role="row" *ngFor="let element of dataSource; let even = even; let idx = index"
+                    [class.even-row]="even">
+                    <ng-container *ngIf="config.selectionEnabeled">
+                      <td class="text-center">
+                        <input type="checkbox" [(ngModel)]="element.selected" [checked]="element.selected"
+                          (change)="onSelectDevice(element)" />
+                        <!-- <mat-checkbox (click)="$event.stopPropagation(); onSelect(element, idx)"
+                          (change)="$event ? selection.toggle(element) : null"
+                          [checked]="selection.isSelected(element)">
+                        </mat-checkbox> -->
+                      </td>
+                    </ng-container>
+
+                    <ng-container *ngFor="let column of config.columns">
+                      <td [width]="column.width || '200px'" *ngIf="column.visible">
+                        <ng-container *ngIf="column.showImage && (!!column.imageUrl || !!element[column.imageUrl])">
+                          <div class="media" *ngIf="!!element[column.imageUrl] || column.imageUrl"
+                            style="display: contents !important">
+                            <img [src]="element[column.imageUrl] ? element[column.imageUrl] : column.imageUrl"
+                              class="img-bordered mr-6" width="30px" />
+                          </div>
+
+                          <span *ngIf="!element[column.imageUrl] && !column.imageUrl">-</span>
+                        </ng-container>
+
+                        <ng-container *ngIf="column.condition != null ? column.condition(element, column) : true">
+                          <ng-container *ngIf="column.clickable">
+                            <span *ngIf="!element[column.name]">-</span>
+
+                            <a *ngIf="element[column.name]" (click)="onCellClick(element, column)"
+                              class="text-overflow pointer" style="cursor: pointer">
+                              {{column.value ? (element[column.name] = column.value) : element[column.name] ?
+                              element[column.name] : "-"}}
+                            </a>
+                          </ng-container>
+                        </ng-container>
+
+                        <ng-container *ngIf="!column.clickable">
+                          <span *ngIf="!column.isLoop && column.showValue"
+                            [innerHtml]="cellValue(column, element)"></span>
+
+                          <div *ngIf="column.isLoop && element[column.name]">
+                            <ng-container *ngFor="let item of element[column.name]; let last = last">
+                              <span *ngIf="column.condition ? column.condition(item, column) : true"
+                                [class.make-oval]="column.makeOvals">
+                                {{item[column.item_name] ? item[column.item_name] : item}}
+                                <span *ngIf="!last && !column.makeOvals">,</span>
+                              </span>
+                            </ng-container>
+                          </div>
+                          <!-- <div *ngIf="column.makeOvals && element[column.name]">
+                            <ng-container *ngFor="let item of element[column.name]">
+                              <span *ngIf="item.sensor_flag" class="make-oval">{{item.name}}</span>
+                            </ng-container>
+                          </div> -->
+                        </ng-container>
+
+                        <ng-container *ngIf="column.statusButton">
+                          <div class="">
+                            <div class="onoffswitch">
+                              <input type="checkbox" class="onoffswitch-checkbox" (change)="
+                                  onCheckStatus($event, column, element)
+                                " [id]="column.name + idx" [checked]="element[column.name]"
+                                [(ngModel)]="element[column.name]" />
+                              <label class="onoffswitch-label" [for]="column.name + idx">
+                                <span class="onoffswitch-inner"></span>
+                                <!-- <span class="onoffswitch-switch"></span> -->
+                              </label>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </td>
+                    </ng-container>
+
+                    <td fxLayoutGap="8px" *ngIf="
+                        config.showRowActions &&
+                        config.rowActions.length > 0 &&
+                        !readonly
+                      ">
+                      <ng-container *ngFor="let ac of config.rowActions; let last = last">
+                        <ng-container *ngIf="ac.conditional">
+                          <ng-container *ngIf="
+                              ac.condition != null
+                                ? ac.condition(element, ac.action)
+                                : true
+                            ">
+                            <a *ngIf="ac.type === 'icon'" type="button" [ngClass]="ac.btnColor" [class.mr-0]="last"
+                              class="btn btn-icon btn-xs" [style.width]="ac.width" (click)="onRowAction(ac, element)"
+                              [ngbTooltip]="ac.tooltip">
+                              <i class="{{ ac.icon }}"></i>
+                            </a>
+
+                            <a *ngIf="ac.type === 'button'" type="button" [ngClass]="ac.btnColor" [class.mr-0]="last"
+                              class="btn" [style.width]="ac.width" (click)="onRowAction(ac, element)"
+                              [ngbTooltip]="ac.tooltip">
+                              {{ ac.tooltip }}
+                            </a>
+                          </ng-container>
+                        </ng-container>
+
+                        <ng-container *ngIf="!ac.conditional">
+                          <a *ngIf="ac.type === 'icon'" type="button" [ngClass]="ac.btnColor" [class.mr-0]="last"
+                            class="btn btn-icon btn-xs" [style.width]="ac.width" (click)="onRowAction(ac, element)"
+                            [ngbTooltip]="ac.tooltip">
+                            <i class="{{ ac.icon }}"></i>
+                          </a>
+
+                          <a *ngIf="ac.type === 'button'" type="button" [ngClass]="ac.btnColor" [class.mr-0]="last"
+                            class="btn" [style.width]="ac.width" (click)="onRowAction(ac, element)"
+                            [ngbTooltip]="ac.tooltip">
+                            {{ ac.tooltip }}
+                          </a>
+                        </ng-container>
+                      </ng-container>
+                    </td>
+                  </tr>
+                </ng-container>
+
+                <ng-container *ngIf="!loading && dataSource?.length === 0">
+                  <tr class="p-4">
+                    <td [colSpan]="config.columns.length + 1" class="m-0">
+                      No record found
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <app-pagination *ngIf="config.showPagination && dataSource?.length > 0" [length]="count" [pageInfo]="pageInfo"
+        (pageChange)="onPageChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

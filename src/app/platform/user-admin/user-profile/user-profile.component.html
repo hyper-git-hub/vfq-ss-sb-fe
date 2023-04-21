@@ -1,0 +1,328 @@
+<div class="card w-100-p p-20" style="border: none;">
+    <h3 class="fs-14 fw-600 pt-10 pb-10 mb-0" style="border-bottom: 1px solid #ececec;">My Profile</h3>
+
+    <!-- <div [hidden]="!isAuthorized"> -->
+    <div class="pt-16 w-100-p" fxLayout="row wrap" style="height: calc(100% - 40px);">
+        <div class="w-100-p pr-16" fxLayout="row" fxLayoutAlign="space-between start">
+            <form [formGroup]="profileForm" id="profileFormID" (ngSubmit)="onSubmit(profileForm.value)" fxFlex
+                fxLayout="row wrap" fxLayoutAlign="space-between start">
+                <div fxFlex="75" fxLayout="row wrap" fxLayoutAlign="space-between start">
+                    <div fxFlex="30">
+                        <div class="form-group margin-bottom-10">
+                            <label>First Name<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" formControlName="first_name"
+                                placeholder="First Name">
+                            <span class="error-message"
+                                *ngIf="profileForm.get('first_name').getError('isAlphabetsAndSpace')">Choose only
+                                alphabets </span>
+                            <span class="error-message"
+                                *ngIf="profileForm.get('first_name').getError('required') && profileSubmitted">First
+                                Name is
+                                required
+                            </span>
+                        </div>
+                    </div>
+
+                    <div fxFlex="30" class="mr-0">
+                        <div class="form-group margin-bottom-10">
+                            <label>Last Name<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" formControlName="last_name" placeholder="Last Name">
+                            <span class="error-message"
+                                *ngIf="profileForm.get('last_name').getError('required') && profileSubmitted">Last Name
+                                is required
+                            </span>
+                            <span class="error-message"
+                                *ngIf="profileForm.get('last_name').getError('isAlphabetsAndSpace')">Choose only
+                                alphabets
+                             </span>
+                        </div>
+                    </div>
+
+                    <div fxFlex="30" class="mr-0">
+                        <div class="form-group margin-bottom-10">
+                            <label>Group<span class="text-danger"></span></label>
+                            <input type="text" class="form-control"  [readonly]="true" formControlName="role"
+                                placeholder="Group">
+                        </div>
+                    </div>
+
+                    <div fxFlex="30" class="mr-0">
+                        <div class="form-group margin-bottom-10">
+                            <label>Customer<span class="text-danger"></span></label>
+                            <input type="text" class="form-control" [readonly]="true" formControlName="customer" 
+                                placeholder="Customer">
+                        </div>
+
+                    </div>
+
+                    <div fxFlex="30" class="">
+                        <div class="form-group margin-bottom-10">
+                            <label>Contact Number<span class="text-danger">*</span></label>
+                            
+                            <div class="input-group">
+                                <span class="input-group-text" for="ph" style="border-right: none;">974</span>
+                                <input type="text" autocomplete="off" id="ph" maxlength="8"
+                                    class="form-control" formControlName="phone" placeholder="Phone Number">
+                            </div>
+                            <span class="error-message"
+                                *ngIf="profileForm.get('phone').getError('required') && profileSubmitted">Contact
+                                Number is required
+                            </span>
+                            <div class="error-message" *ngIf="profileForm.controls['phone'].hasError('minlength')">
+                                Phone no must be of 8 digits
+                            </div>
+                            <div class="error-message" *ngIf="profileForm.controls['phone'].hasError('whitespace')">
+                                Avoid white spaces
+                            </div>
+                        </div>
+                    </div>
+
+                    <div fxFlex="30">
+                        <div class="form-group margin-bottom-10">
+                            <label>Date of Joining</label>
+                            <div class="input-group">
+                                <input class="form-control" placeholder="YYYY-MM-DD" ngbDatepicker
+                                    formControlName="date_joined" name="date_joined" #d="ngbDatepicker"
+                                    placement="bottom" (click)="d.toggle()" >
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary btn-icon" (click)="d.toggle()"
+                                        type="button"
+                                        style="padding: 0 8px; border-radius: 0px; border-color: #ced4da;">
+                                        <i class="ri-calendar-2-line"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div fxFlex="30">
+
+                        <div class="form-group margin-bottom-10">
+                            <label>Preferred Module</label>
+                            <input type="text" [readonly]="true" formControlName="preferred_module"
+                                class="form-control" />
+                            <input *ngIf="restrictedForm" type="text" class="form-control"
+                                formControlName="preferred_module" />
+                        </div>
+                    </div>
+
+                    <div fxFlex="30" class="mr-0">
+                        <div class="form-group margin-bottom-10">
+                            <label>Department<span class="text-danger"></span></label>
+                            <input type="text" class="form-control" formControlName="department"
+                                placeholder="Department">
+                        </div>
+                    </div>
+
+                    <div fxFlex="30" class="mr-0">
+                        <div class="form-group margin-bottom-10">
+                            <label>Work Location<span class="text-danger"></span></label>
+                            <input type="text" class="form-control" formControlName="work_location"
+                                placeholder="Work Location">
+                        </div>
+                    </div>
+
+                    <div fxFlex="30" class="mr-0">
+
+                        <div class="form-group margin-bottom-10">
+                            <label>Role<span class="text-danger"></span></label>
+                            <input type="text" class="form-control" formControlName="internal_role" placeholder="Role">
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div fxFlex="20">
+                    <!-- <div class="padding-20 padding-bottom-0 padding-top-0"> -->
+                    <div>
+                        <div class="form-group">
+                            <div class="input-icon">
+                                <div class="margin-bottom-10" id="preview">
+                                    <div class="container1">
+                                        <img #img
+                                            [src]="avatar_url? avatar_url : 'assets/images/driver_placeholder.png'"
+                                            class="image img-rounded img-bordered img-bordered-green" width="150px"
+                                            height="150px">
+                                        <div class="middle col-md-7">
+                                            <button Style="  margin: -90px 25px; position: absolute; "
+                                             *ngIf="avatar_url" type="button" class="btn btn-sm btn-primary"
+                                                (click)="removeImage()">Remove</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input *ngIf="!avatar_url" #myInput type="file" (change)="fileChange($event)"
+                                    class="btn btn-default btn-block" accept="image/*">
+                            </div>
+                            <span>
+                                <div *ngIf="notImage" [hidden]="!showAlert" class="alert alert-warning">
+                                    <a href="#" class="close font-weight-600" style="margin-top:-4px"
+                                        (click)="showAlert = false" aria-label="close" title="close">×</a>
+                                    Please choose only (jpg, png images).
+                                </div>
+                            </span>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                </div>
+
+
+                <hr fxFlex="100">
+
+                <div class="col-lg-12">
+                    <h4>Package Selected</h4>
+                </div>
+                <div fxFlex="30" class="mr-0">
+                    <div class="form-group margin-bottom-10">
+                        <input [readonly]="true" type="text" [value]="SSIsEnabled?.package.name"
+                            class="form-control" />
+                    </div>
+                </div>
+                <hr fxFlex="100">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h4>Change Password</h4>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label">Email</label>
+                            <input [readonly]="true" type="text" formControlName="email" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label">Password</label>
+                            <div class="input-group">
+                                <input readonly type="password" [readOnly]="true" value="*******"
+                                    class="form-control" />
+                                <span class="input-group-text" (click)="resetPasswordform(); onAddresetForm(content)" tooltip="Reset Password"
+                                    data-target="#content" data-toggle="modal">
+                                <i class="ri-rotate-lock-fill"></i>
+                              </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr fxFlex="100">
+                <div class="modal-footer" style="border: 0;">
+                    <button type="submit"
+                        [disabled]="!profileForm.valid && profileForm.get('phone').value?.length <= 11 && btnLoading"
+                        form="profileFormID" class="btn btn-success btn-round btn-block1"><i class="ri-check-fill"></i>
+                        Save</button>
+                    <button type="button" class="btn btn-default btn-round btn-block1" (click)="backClicked()"><i
+                            class="ri-arrow-go-back-line"></i>
+                        Back</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- </div> -->
+
+
+
+
+
+<!--Reset Password Section-->
+<ng-template #content let-modal>
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Reset Password</h4>
+        <button type="button" class="close"  (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+            <div class="modal-body">
+                <form id="formID" [formGroup]="resetPasswordForm" (ngSubmit)="onSubmitResetPassword(resetPasswordForm.value, modal)">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password </label>
+                        <div class="input-group">
+                            <input *ngIf="showCurrentPassword; else hideOldPassword" type="text" class="form-control"
+                              formControlName="oldPassword" placeholder="Current password" maxlength="25"
+                            >
+                            <span *ngIf="showCurrentPassword" class="input-group-addon" id="basic-addon2"
+                              (click)="showCurrentPassword = !showCurrentPassword"><i class="ri-eye-line"></i></span>
+      
+                            <ng-template #hideOldPassword>
+                              <input type="password" autocomplete="new-password" class="form-control"
+                                formControlName="oldPassword" placeholder="Current password" maxlength="25"
+                               >
+                              <span class="input-group-addon" id="basic-addon2" (click)="toggleOldPassword(resetPasswordForm.value)"><i
+                                  class="ri-eye-off-line"></i></span>
+                            </ng-template>
+                          </div>
+                    </div>
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="confirmPassword">New Password</label>
+                            <div class="input-group">
+                                <input *ngIf="showPassword; else hideNewPassword" type="text" class="form-control"
+                                    formControlName="password" placeholder="New password" maxlength="25"
+                                   >
+                                <span *ngIf="showPassword" class="input-group-addon" id="basic-addon2"
+                                    (click)="showPassword = !showPassword"><i class="ri-eye-line"></i></span>
+
+                                <ng-template #hideNewPassword>
+                                    <input type="password" autocomplete="new-password" class="form-control"
+                                        formControlName="password" placeholder="New password" maxlength="25"
+                                       >
+                                    <span class="input-group-addon" id="basic-addon2"
+                                        (click)="toggleNewPassword(resetPasswordForm.value)"><i
+                                            class="ri-eye-off-line"></i></span>
+                                </ng-template>
+                            </div>
+
+                             <app-password-strength [passwordToCheck]="resetPasswordForm.value.password"
+                                (passwordStrength)="passwordValid($event)">
+                            </app-password-strength> 
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <div class="input-group">
+                                <input *ngIf="showConfirmPassword; else hideConfirmPassword" type="text"
+                                    class="form-control" formControlName="confirmPassword"
+                                    placeholder="Confirm password" maxlength="25"
+                                   >
+                                <span *ngIf="showConfirmPassword" class="input-group-addon" id="basic-addon2"
+                                    (click)="showConfirmPassword = !showConfirmPassword"><i class="ri-eye-line"></i></span>
+
+                                <ng-template #hideConfirmPassword>
+                                    <input type="password" autocomplete="new-password" class="form-control"
+                                        formControlName="confirmPassword" placeholder="Confirm password" maxlength="25"
+                                      >
+                                    <span class="input-group-addon" id="basic-addon2"
+                                        (click)="toggleConfirmPassword(resetPasswordForm.value)"><i
+                                            class="ri-eye-off-line"></i></span>
+                                </ng-template>
+                            </div>
+
+                            <div class="error-message" *ngIf="resetPasswordForm.getError('mismatch')">
+                                Password does not match
+                            </div>
+
+                        </div>
+
+                    </fieldset>
+
+
+                    <div class="alert alert-danger alert-dismissible margin-top-10"
+                        *ngIf="resetPasswordForm.getError('same')" aria-label="Close">
+                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        Choose a different password
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" [disabled]="resetPasswordForm.invalid" form="formID"
+                    class="btn btn-success btn-round btn-block1"><i class="ri-check-fill"></i>
+                    Save</button>
+                <button type="button" class="btn btn-default btn-round btn-block1" (click)="modal.close()" data-dismiss="modal"><i
+                        class="ri-arrow-go-back-line"></i>
+                    Back</button>
+            </div>
+</ng-template>
+            
+      

@@ -1,0 +1,116 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+
+<div class="p-30">
+    <div class="card p-16">
+
+        <ul ngbNav #nav="ngbNav" [activeId]="'preference'" class="nav-tabs pb-6">
+            <li style="border-bottom: 2px solid #e60000;" class="mr-12" ngbNavItem="preference">
+                <a ngbNavLink>User Preference</a>
+                <ng-template ngbNavContent>
+                    <div class="w-100-p" fxLayout="row wrap">
+                        <form class="w-80-p" fxLayoutGap="8px" fxLayoutAlign="start start">
+                            <div class="form-group">
+                                <ng-select formControlName="type" placeholder="By Group">
+                                    <ng-option *ngFor="let type of types"
+                                        [value]="type.type_key">{{type.type_name}}</ng-option>
+                                </ng-select>
+                            </div>
+                            <div class="form-group">
+                                <ng-select formControlName="action" placeholder="Group 1">
+                                    <ng-option *ngFor="let action of types"
+                                        [value]="action.id">{{action.name}}</ng-option>
+                                </ng-select>
+                            </div>
+                        </form>
+
+
+                        <div class="w-20-p " fxLayoutAlign="end end">
+                            <button class="btn btn-info" (click)="onSubmit()">Save</button>
+                        </div>
+
+                    </div>
+
+
+                    <h4 class="fw-600 fs-12 bg-blue-100 blue-grey-700 p-1 mt-8"> ALERTS PREFERENCE </h4>
+                    <div fxLayout="row wrap" class="w-100-p p-8">
+                        <div fxLayout="row" class="w-100-p">
+                            <div class="w-18-p">Notifications</div>
+                            <div class="onoffswitch">
+                                <input type="checkbox" class="onoffswitch-checkbox" id="notif">
+                                <label class="onoffswitch-label" for="notif">
+                                    <span class="onoffswitch-inner"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div fxLayout="row" class="w-100-p">
+                            <div class="w-18-p">Email</div>
+                            <div class="onoffswitch">
+                                <input type="checkbox" class="onoffswitch-checkbox" id="email">
+                                <label class="onoffswitch-label" for="email">
+                                    <span class="onoffswitch-inner"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div fxLayout="row" class="w-100-p">
+                            <div class="w-18-p">SMS</div>
+                            <div class="onoffswitch">
+                                <input type="checkbox" class="onoffswitch-checkbox" id="sms">
+                                <label class="onoffswitch-label" for="sms">
+                                    <span class="onoffswitch-inner"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="fw-600 fs-12 bg-blue-100 blue-grey-700 p-1 mt-8"> NOTIFICATION PREFERENCE
+                    </h4>
+                    <div fxLayout="row wrap" class="w-100-p p-8">
+                        <div fxLayout="row" class="w-100-p">
+                            <div class="w-18-p">Occupancy Overflow</div>
+                            <div class="onoffswitch">
+                                <input type="checkbox" class="onoffswitch-checkbox" id="o_flow">
+                                <label class="onoffswitch-label" for="o_flow">
+                                    <span class="onoffswitch-inner"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div fxLayout="row" class="w-100-p">
+                            <div class="w-18-p">Occupancy Underflow </div>
+                            <div class="onoffswitch">
+                                <input type="checkbox" class="onoffswitch-checkbox" id="u_flow">
+                                <label class="onoffswitch-label" for="u_flow">
+                                    <span class="onoffswitch-inner"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div fxLayout="row" class="w-100-p">
+                            <div class="w-18-p">Motion Alert
+                            </div>
+                            <div class="onoffswitch">
+                                <input type="checkbox" class="onoffswitch-checkbox" id="u_flow">
+                                <label class="onoffswitch-label" for="u_flow">
+                                    <span class="onoffswitch-inner"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <h4 class="fw-600 fs-12 bg-blue-100 blue-grey-700 p-1 mt-8"> USER INERACTION
+                    </h4>
+                    <div fxLayout="row wrap" class="w-100-p p-8">
+
+                        <label class="control-label">Auto Logout
+                            <i class="ri-question-line"></i>
+                            <div class="input-group">
+                                <input type="number" placeholder="0" min="0" class="form-control" />
+                                <span class="input-group-text" data-toggle="modal">[Min]
+                                </span>
+                            </div>
+                        </label>
+
+                    </div>
+                </ng-template>
+            </li>
+        </ul>
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    </div>
+</div>

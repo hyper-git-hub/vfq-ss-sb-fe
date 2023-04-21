@@ -1,0 +1,178 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+
+<img *ngIf="loading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" width="150px" height="150px">
+
+<div class="page-container w-100-p">
+    <div fxLayout="row">
+        <div class="panel panel-default round shadow card" style="width:1300px">
+            <div class="panel-heading margin-bottom-0 ">
+                <h3 class="panel-title font-weight-600 bg-teal-8001 white1 ">Bulb Details</h3>
+                <div class="panel-actions">
+                    <a class="btn btn-success fs-14 btn-round h-32 white d-flex" (click)="onAddbulb()">
+                        <i class="ri-add-circle-fill"></i>Add Schedule</a>
+                </div>
+            </div>
+
+            <div class="panel-body padding-15">
+                <div class="col-md-12">
+                    <div class="margin-bottom-25">
+                        <div class="form-group margin-bottom-0 text-center" style="margin-left: 48%;">
+                            <span style="vertical-align: inherit;">
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6 left">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group margin-bottom-10 text-center ">
+                                            <button [disabled]="!deviceInfo || !deviceInfo?.current_device_state || loading"
+                                                style="border: none; background: transparent;" (click)="warmLight('WARM_LIGHT' )">
+                                                <img class="zoom" [src]="warmOn ? '/assets/images/warm-on.png' : '/assets/images/warm-off.png'">
+                                            </button>
+                                        </div>
+                                        <div class="form-group margin-bottom-10 text-center ">
+                                            <button [disabled]="!deviceInfo?.current_device_state || loading"
+                                                style="border: none; background: transparent;"
+                                                (click)="whiteLight('WHITE_LIGHT')">
+                                                <img [class.disabled]="deviceInfo?.current_device_state" class="zoom"
+                                                    [src]=" coolOn ? '/assets/images/cool-on.png' : '/assets/images/cool-off.png'">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="allignment" style="height: 125px;">
+                                            <div id="bulb" class="center" [ngStyle]="{filter: saturaion}"
+                                                [ngStyle]="{filter: brightnessfinal}" [style.background]="colorName">
+                                            </div>
+                                            <div class="form-group mb-10 text-center" style="position: absolute;">
+                                                <img src="./../../../../assets/images/bulb1.jpg" style="height: 110px;">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group margin-bottom-10 text-center">
+                                            <div class="font-size-24 font-weight-200 margin-bottom-0 grey-800">
+                                                {{DeviceDetails?.device_name ? DeviceDetails?.device_name :
+                                                DeviceDetails?.device }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 left">
+                                <div class="form-group">
+
+                                    <label for="input" class="control-label margin-top-10">RGB:</label>
+
+                                    <input type="color" [formControl]="BulbRGB" class="form-control" min="0" max="360"
+                                        [disabled]="!deviceInfo?.current_device_state">
+
+                                    <label for="input" class=" control-label"
+                                        style="margin-top: 6px;">Saturation:</label>
+
+                                    <input type="range" class="input10 form-control" min="0" max="30" value="0"
+                                        (change)="saturation()" id="saturate"
+                                        [disabled]="!deviceInfo?.current_device_state"
+                                        style="-webkit-appearance: slider-horizontal; appearance: slider-horizontal">
+
+                                    <!-- <input type="range" (change)="saturation()"  min="0"
+                                            max="100" style="-webkit-appearance: slider-horizontal;"> -->
+
+                                    <!-- <img src="https://www.w3schools.com/images/picture.jpg" [ngStyle]="{filter: saturaion}"> -->
+
+
+                                    <label for="input" class="control-label"
+                                        style="margin-top: 6px;">Brightness:</label>
+
+                                    <input type="range" class="input11 form-control" min="0" id="bright" max="30"
+                                        value="0" style="-webkit-appearance: slider-horizontal; appearance: slider-horizontal;"
+                                        [disabled]="!deviceInfo?.current_device_state" (change)="brightness()">
+                                </div>
+                                <button type="submit" [disabled]="!deviceInfo?.current_device_state || loading"
+                                    class="btn btn-success btn-round btn-block1" (click)="postDeviceAction()">
+                                    <i class=""></i>
+                                    <span>Save Actions</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row pl-16 pr-16">
+                        <div class="col-md-6">
+                            <div class="form-group margin-bottom-10">
+                                <table class="table margin-bottom-0 table-bordered1 table-condensed">
+                                    <tbody>
+                                        <tr>
+                                            <th> <b>ON/OFF </b> </th>
+                                            <td>
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" [(ngModel)]="turnOffBulb"
+                                                        (change)="setOnOff($event)" [disabled]="loading"
+                                                        [checked]="deviceInfo?.current_device_state"
+                                                        class="onoffswitch-checkbox" id="onoffswitch">
+                                                    <label class="onoffswitch-label mb-0" for="onoffswitch">
+                                                        <span class="onoffswitch-inner"></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th> <b>Connectivity Status </b> </th>
+                                            <td>{{deviceInfo?.connectivity_status ? 'On' : 'Off'}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th> <b>Floor</b> </th>
+                                            <td>{{buildingDetails?.floor_name || '-'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group margin-bottom-10">
+                                <table class="table margin-bottom-0 table-bordered1 table-condensed   ">
+                                    <tbody>
+                                        <tr>
+                                            <th> <b>Building </b> </th>
+                                            <td> {{buildingDetails?.building_name || '-'}}</td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <th> <b> Space</b> </th>
+                                            <td> {{buildingDetails?.space_name || '-'}} </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="w-100-p panel panel-default shadow card mb-0">
+        <div class="panel-heading">
+            <h3 class="panel-title fw-600 mb-0">Bulb Schedules
+
+                <span class="fw-200 ml-10 grey-400">
+                    <i class="ri-question-line" tooltipPosition="right" ngbTooltip="some info goes here"></i>
+                </span>
+            </h3>
+        </div>
+
+        <div class="panel-body p-16">
+            <general-table style="height: 100%;" [count]="count" [config]="bulbDetailTableConfig" [actions]="actions"
+                [dataSource]="scheduleListing" (signals)="onTableSignals($event)">
+            </general-table>
+        </div>
+    </div>
+</div>

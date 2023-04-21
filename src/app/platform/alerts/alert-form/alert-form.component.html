@@ -1,0 +1,196 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+    <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
+</div>
+<div class="modal-body">
+    <div [formGroup]="alertForm" id="alert-form">
+        <div class="w-100-p" fxLayoutAlign="start start" fxLayoutGap="8px" fxLayout="row wrap">
+
+            <ng-container *ngIf="data">
+                <div fxFlex="23.5" class="form-group">
+                    <label class="control-label">Building Name</label>
+                    <input type="text"[readOnly]="true" name="building" class="form-control" formControlName="building">
+                </div>
+                <div fxFlex="23.5" class="form-group">
+                    <label class="control-label">Alert Type</label>
+                    <input type="text" [readOnly]="true" name="alert_type" class="form-control" formControlName="alert_type">
+                </div>
+                <div fxFlex="23.5" class="form-group">
+                    <label class="control-label">Device Id <span class="text-danger">*</span></label>
+                    <input type="text" [readOnly]="true" name="device" class="form-control" formControlName="device">
+                </div>
+                <ng-container *ngIf="alertForm.controls['floor'].value" >
+                    <div fxFlex="23.5" class="form-group">
+                        <label class="control-label">Floor</label>
+                        <input type="text" [readOnly]="true" name="floor" class="form-control" formControlName="floor">
+                    </div>
+                    <div fxFlex="23.5" class="form-group">
+                        <label class="control-label">Space</label>
+                        <input type="text" [readOnly]="true" name="space" class="form-control" formControlName="space">
+                    </div>
+                    <div fxFlex="23.5" class="form-group">
+                        <label class="control-label">Room</label>
+                        <input type="text"  [readOnly]="true"name="room" class="form-control" formControlName="room">
+                    </div>
+                </ng-container>
+                <ng-container  *ngIf="alertForm.controls['open_area'].value" >
+                    <div fxFlex="23.5" class="form-group">
+                        <label class="control-label">Open Area</label>
+                        <input type="text" [readOnly]="true" name="open_area" class="form-control" formControlName="open_area">
+                    </div>
+                </ng-container>
+            </ng-container>
+
+
+            <ng-container *ngIf="!data">
+                <div fxFlex="23.5" class="form-group">
+                    <label class="control-label">Alert Type <span class="text-danger">*</span></label>
+                    <ng-select placeholder="Select Type" (change)="onSelectAlert($event)" [clearable]="false"
+                        formControlName="alert_type" [clearable]="false">
+                        <ng-option *ngFor="let item of alertType" [value]="item.id">{{ item.name }}</ng-option>
+                    </ng-select>
+                    <div class="text-danger"
+                        *ngIf="alertForm.controls['alert_type'].hasError('required') && alertForm.controls['alert_type'].dirty">
+                        Please select alert type
+                    </div>
+                </div>
+
+                <div fxFlex="23.5" class="form-group">
+                    <label class="control-label">Building</label>
+                    <ng-select placeholder="Select building" (change)="onSelectBuilding($event)" [clearable]="false"
+                        formControlName="building">
+                        <ng-option *ngFor="let item of buildings" [value]="item.id">{{ item.name }}
+                        </ng-option>
+                    </ng-select>
+                </div>
+
+                <div fxFlex="23.5" class="form-group">
+                    <label class="control-label">Type</label>
+                    <ng-select placeholder="By Floor" (change)="onAreaSelect($event)" [clearable]="false"
+                        formControlName="area_type">
+                        <ng-option *ngFor="let item of areaTypes" [value]="item.id">{{ item.name }}
+                        </ng-option>
+                    </ng-select>
+                </div>
+
+                <ng-container *ngIf="alertForm.controls['area_type'].value === 'floor'">
+                    <div fxFlex="23.5" class="form-group">
+                        <label class="control-label">Floor</label>
+                        <ng-select placeholder="Select Floor" (change)="onSelectFloor($event)" formControlName="floor">
+                            <ng-option *ngFor="let item of floors" [value]="item.id">{{ item.name }}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+
+                    <div fxFlex="23.5" class="form-group">
+                        <label for="">Space</label>
+                        <ng-select placeholder="Select Space" (change)="onSelectSpace($event)" formControlName="space">
+                            <ng-option *ngFor="let item of spaces" [value]="item.id">{{ item.name }}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+
+                    <div fxFlex="23.5" class="form-group">
+                        <label for="">Room</label>
+                        <ng-select placeholder="Select Room" (change)="onSelectRoom($event)" formControlName="room">
+                            <ng-option *ngFor="let item of rooms" [value]="item.id">{{ item.name }}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="alertForm.controls['area_type'].value === 'open_area'">
+                    <div fxFlex="23.5" class="form-group">
+                        <label for="">Open Area</label>
+                        <ng-select placeholder="Select Open Area" formControlName="open_area"
+                            (change)="onSelectOpenArea($event)">
+                            <ng-option *ngFor="let oArea of openAreas" [value]="oArea.id">{{ oArea.name }}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </ng-container>
+
+                <div fxFlex="23.5" class="form-group">
+                    <label class="control-label">Device Id <span class="text-danger">*</span></label>
+                    <ng-select placeholder="Select Device" (change)="onDeviceSelect($event)" [clearable]="false"
+                        formControlName="device" [clearable]="false">
+                        <ng-option *ngFor="let item of devices" [value]="item.device">{{ item.device + ' - ' +
+                            item.device_type }}
+                        </ng-option>
+                    </ng-select>
+                    <div class="text-danger"
+                        *ngIf="alertForm.controls['device'].hasError('required') && alertForm.controls['device'].dirty">
+                        Please select device ID
+                    </div>
+                </div>
+            </ng-container>
+
+            <div fxFlex="23.5" class="form-group">
+                <label class="control-label">Alert Name <span class="text-danger">*</span></label>
+                <input type="text" name="alert_name" class="form-control" formControlName="alert_name">
+                <div class="text-danger"
+                    *ngIf="alertForm.controls['alert_name'].hasError('required') && alertForm.controls['alert_name'].dirty">
+                    Please provide alert name
+                </div>
+            </div>
+
+            <!-- <div fxFlex="23.5" class="form-group">
+                <label class="control-label">Packet Key <span class="text-danger">*</span></label>
+                <input type="text" name="packet_key" class="form-control"
+                formControlName="packet_key">
+                <div class="text-danger" *ngIf="alertForm.controls['packet_key'].hasError('required') && alertForm.controls['packet_key'].dirty">
+                    Please provide packet key
+                </div>
+            </div> -->
+
+            <div fxFlex="100" class="form-group">
+                <label class="control-label">Alert Body</label>
+                <textarea type="text" name="alert_name" class="form-control" formControlName="alert_body"></textarea>
+            </div>
+
+            <ng-container *ngIf="enableThreshold">
+                <div class="w-100-p mt-8">
+                    <h4 class="fw-600 fs-12 bg-blue-100 p-1">THRESHOLD</h4>
+                </div>
+
+                <div fxFlex="23.5" class="form-group">
+                    <label for="">Upper Threshold <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <input type="number" min="0" class="form-control" formControlName="upper_threshold"
+                            placeholder="Enter threshold">
+                        <!-- <div class="input-group-text">[volt]</div> -->
+                    </div>
+                    <div class="text-danger"
+                        *ngIf="alertForm.controls['upper_threshold'].hasError('required') && alertForm.controls['upper_threshold'].dirty">
+                        Please provide upper threshold
+                    </div>
+                </div>
+
+                <div fxFlex="23.5" class="form-group">
+                    <label for="">Lower Threshold <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <input type="number" min="0" class="form-control" formControlName="lower_threshold"
+                            placeholder="Enter threshold">
+                        <!-- <div class="input-group-text">[volt]</div> -->
+                    </div>
+                    <div class="text-danger"
+                        *ngIf="alertForm.controls['lower_threshold'].hasError('required') && alertForm.controls['lower_threshold'].dirty">
+                        Please provide lower threshold
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="modal-footer">
+            <button [disabled]="alertForm.invalid" type="submit" (click)="onSubmit()" form="alert-form"
+                [disabled]="alertForm.invalid" class="btn btn-success btn-round">
+                <i class="ri-check-fill"></i>
+                <span>{{!!data ? 'Update' : 'Save'}}</span>
+            </button>
+            <button type="button" class="btn btn-default btn-round" (click)="onCloseModel()">
+                <i class="ri-arrow-go-back-line"></i>
+                <span>Back</span>
+            </button>
+        </div>
+    </div>
+</div>

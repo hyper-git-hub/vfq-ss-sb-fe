@@ -1,0 +1,43 @@
+.loader {
+    position: absolute;
+    top: 35%;
+    left: 44%;
+    z-index: 1;
+}
+
+.input-group-addon {
+    padding: 9px 15px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    color: #76838f;
+    text-align: center;
+    background-color: #f3f7f9;
+    border: 1px solid #e4eaec;
+    border-radius: 3px;
+}
+
+.input-group-addon {
+    height: 36px!important;
+    border-radius: 0!important;
+}
+
+.recaptcha {
+    margin-top: -18px;
+    /* width: 300px; */
+    /* border-radius: 4px; */
+    /* border-right: 1px solid #d8d8d8; */
+    /* overflow: hidden; */
+    transform: scale(0.80);
+    -webkit-transform: scale(0.80);
+    transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+}
+.colour {
+    color: #62a8ea !important;
+}
+
+.captchaAdded {
+    height: 520px!important;
+}
+

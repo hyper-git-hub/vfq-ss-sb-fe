@@ -1,0 +1,153 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+<img *ngIf="loading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" width="150px" height="150px" />
+
+<div class="py-15 px-25 pos-relative" style="border-bottom: 1px solid #e2e2e2;">
+    <h1 class="my-0 fs-20">Graphs Settings</h1>
+    <div class="pos-absolute right-30 top-12">
+        <a onclick="window.history.go(-1); return false;" class="btn btn-sm btn-default btn-round">
+            Back
+        </a>
+    </div>
+</div>
+
+<div class=" page-container">
+    <div class="row" style="display: flex; flex-wrap: wrap;align-items: center;justify-content: left;">
+        <div class="col-sm-12">
+
+            <!-- <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px', 'margin-bottom': '8px'}"
+                mode="indeterminate">
+            </p-progressBar> -->
+
+            <div class="panel panel-dark" style="min-height: 300px;">
+                <div class="panel-heading theme-color" style="border-radius: 5px;">
+                    <h3 class="panel-title font-weight-600 "> Overall Dashboard </h3>
+                    <div class="panel-actions"></div>
+                </div>
+                <div class="panel-body padding-0">
+                    <div class="margin-bottom-0 clearfix">
+                    </div>
+
+                    <div class="table-responsive" style="border: 1px solid #ebebeb;">
+                        <table class="table mb-0 text-wrap">
+                            <thead>
+                                <tr class="blue-grey-600" style="background-color: rgba(0, 0, 0, .075);">
+                                    <th class="col-md-10">Preview</th>
+                                    <th class="col-md-2">Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody *ngIf="graphs.length>0">
+                                <ng-container *ngFor="let graph of graphs; let i = index">
+                                    <tr [attr.data-index]="i">
+                                        <td class="col-md-10 text-left">
+
+                                            <!------------- Device Status ---------->
+                                            <div class="chartbox" style="width: 60%;"
+                                                *ngIf="graph?.code === 'DS'">
+                                                <span>
+                                                    <p><b>{{graph.name}}:</b></p>
+                                                </span>
+                                                <app-pie-chart [chartOptions]="graph?.data"></app-pie-chart>
+                                            </div>
+                                            <!------------- Device Status ---------->
+
+                                            <!----------- Device Distribution ------------>
+                                            <div class="chartbox" style="width: 60%;"
+                                                *ngIf="graph?.code === 'DD'">
+                                                <span>
+                                                    <p><b>{{graph.name}}:</b></p>
+                                                </span>
+                                                <app-simple-pie-chart [chartOptions]="graph?.data"></app-simple-pie-chart>
+                                            </div>
+                                            <!----------- Device Distribution ------------>
+
+
+                                            <!----------- Most Occupied Areas ------------>
+                                            <div class="chartbox" style="width: 60%;" *ngIf="graph?.code === 'MOA'">
+                                                <span>
+                                                    <p><b>{{graph.name}}:</b></p>
+                                                </span>
+                                                <app-funnel [chartOptions]="graph?.data"></app-funnel>
+                                            </div>
+                                            <!----------- Most Occupied Areas ------------>
+
+
+                                            <!-----------Highest Temperature ------------>
+                                            <div class="chartbox" style="width: 60%;"
+                                                *ngIf=" graph.code === 'HT'">
+                                                <span>
+                                                    <p><b>{{graph.name}}:</b></p>
+                                                </span>
+                                                <app-column-rotated [chartOptions]="graph?.data"></app-column-rotated>
+                                            </div>
+                                            <!-----------Highest Temperature------------>
+
+                                            <!-----------Highest water consumption------------>
+                                            <div class="chartbox" style="width: 60%"
+                                                *ngIf="graph.code === 'HWC'">
+                                                <span>
+                                                    <p><b>{{graph.name}}: </b></p>
+                                                </span>
+                                                <app-custom-pictorial-chart [chartOptions]="graph?.data"></app-custom-pictorial-chart>
+                                            </div>
+                                            <!-----------Highest water consumption------------>
+
+                                            <!-----------Total Cameras------------>
+                                            <div class="chartbox" style="width: 60%;"
+                                                *ngIf="graph.code === 'TC'">
+                                                <span>
+                                                    <p><b>{{graph.name}}:</b></p>
+                                                </span>
+                                                <app-simple-treemap [chartOptions]="graph?.data"></app-simple-treemap>
+                                            </div>
+                                            <!-----------Total Cameras------------>
+
+                                            <!-----------Occupancy Analysis------------>
+                                            <div class="chartbox" style="width: 60%;"
+                                                *ngIf="graph.code === 'COA'">
+                                                <span>
+                                                    <p><b>{{graph.name}}:</b></p>
+                                                </span>
+                                                <app-stack-column-chart [chartOptions]="graph?.data"></app-stack-column-chart>
+                                            </div>
+                                            <!-----------Occupancy Analysis------------>
+
+                                        </td>
+
+                                        <td class="col-md-2" style="vertical-align: inherit; width: 50%">
+                                            <div class="onoffswitch ">
+                                                <input type="checkbox" [(ngModel)]="graph.switch" name="onoffswitch{{i}}"
+                                                    class="onoffswitch-checkbox" id="onoffswitch{{i}}" [checked]="graph.switch">
+                                                <label class="onoffswitch-label" for="onoffswitch{{i}}">
+                                                    <span class="onoffswitch-inner"></span>
+                                                </label>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Update Graph button -->
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <hr />
+                    <div class="form-group1" *ngIf="loggedInUser?.write == true">
+                        <button type="button" [disabled]="graphs?.length === 0"
+                         (click)="saveGraphSettings()"
+                            class="btn btn-success pull-right btn-round">
+                            Submit Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+<form [formGroup]="filterForm" fxLayout="row wrap">
+    <fieldset [class.form-fieldset]="showFieldset" class="w-100-p mb-8">
+        <legend *ngIf="showFieldset">Filters</legend>
+        <div class="w-100-p" fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="8px">
+            <ng-select *ngIf="showDeviceTypes" class="mb-12" fxFlex="20" placeholder="Select Device Type"
+                formControlName="device_type" [clearable]="deviceTypeClearable">
+                <ng-option *ngFor="let device of deviceTypes" [value]="device.id">{{device.title}}
+                </ng-option>
+            </ng-select>
+
+            <ng-select *ngIf="showBuildingTypes" class="mb-12" fxFlex="20" placeholder="Select Building Type"
+                formControlName="building_type" (change)="onSelectBuildingType($event)">
+                <ng-option *ngFor="let building of buildingTypes" [value]="building.id">{{building.title}}
+                </ng-option>
+            </ng-select>
+
+            <ng-select fxFlex="20" placeholder="Select Building" class="mb-12" (change)="onSelectBuilding($event)"
+                formControlName="building">
+                <ng-option *ngFor="let building of buildings"
+                    [value]="building.id">{{building.name}}
+                </ng-option>
+            </ng-select>
+
+            <ng-select fxFlex="20" placeholder="Select Area" (change)="onAreaSelect($event)"
+                formControlName="area">
+                <ng-option *ngFor="let area of areas" [value]="area.id">{{area.name}}
+                </ng-option>
+            </ng-select>
+
+            <ng-container *ngIf="filterForm.controls['area'].value === 'floor' ">
+                <ng-select fxFlex="20" placeholder="Select Floor" formControlName="floor"
+                    (change)="onSelectFloor($event)">
+                    <ng-option *ngFor="let floor of floors" [value]="floor.id">{{floor.name}}
+                    </ng-option>
+                </ng-select>
+
+                <ng-select fxFlex="20" placeholder="Select Space" formControlName="space"
+                    (change)="onSelectSpace($event)">
+                    <ng-option *ngFor="let space of spaces" [value]="space.id">{{space.name}}
+                    </ng-option>
+                </ng-select>
+
+                <ng-select fxFlex="20" placeholder="Select room" formControlName="room"
+                    (change)="onSelectRoom($event)">
+                    <ng-option *ngFor="let room of rooms" [value]="room.id">{{room.name}}
+                    </ng-option>
+                </ng-select>
+            </ng-container>
+
+            <ng-container *ngIf="filterForm.controls['area'].value === 'openArea' ">
+                <ng-select fxFlex="20" placeholder="Select Open Area" formControlName="open_area"
+                    (change)="onSelectOpenArea($event)">
+                    <ng-option *ngFor="let oArea of openAreas" [value]="oArea.id">{{oArea.name}}
+                    </ng-option>
+                </ng-select>
+            </ng-container>
+
+            <div *ngIf="showDevices" fxFlex="20">
+                <ng-select placeholder="Select Device ID" formControlName="device" [required]="deviceRequired"
+                    (change)="onSelectDevice($event)" [clearable]="!deviceRequired">
+                    <ng-option *ngFor="let device of devices" [value]="device.device">{{device.device}}
+                    </ng-option>
+                </ng-select>
+                
+                <div class="text-danger" *ngIf="filterForm.controls['device'].hasError('required')">
+                    Please select device
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <div *ngIf="showReset" class="w-100-p" fxLayoutAlign="end end" fxLayoutGap="8px">
+        <button [disabled]="!filterForm.dirty" fxFlex="20" type="button" (click)="onResetFilters()" class="btn btn-default btn-round">
+            Reset
+        </button>
+    </div>
+
+</form>

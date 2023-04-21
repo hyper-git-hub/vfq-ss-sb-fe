@@ -1,0 +1,9 @@
+<div class="breadcrumb-box">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li *ngFor="let breadcrumb of breadCrumbs; let last=last;" style="display: flex !important;">
+            <i [ngClass]="breadcrumb.icon ? breadcrumb.icon : ''" style="margin-right: 4px !important;"></i>
+            <a [class.without-underline]="last"
+                [routerLink]="breadcrumb.url ? breadcrumb.url : null">{{breadcrumb.name}}</a>
+        </li>
+    </ol>
+</div>

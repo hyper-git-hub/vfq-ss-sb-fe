@@ -1,0 +1,81 @@
+<div fxLayout="row wrap" class="h-100-p"
+    style="background-image: url(assets/images/vodafone-background.jpg); background-size: cover;">
+
+    <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center"
+        style="height: calc(100% - 36px); position: relative;">
+        <!-- <img class="loader" src="/assets/images/block-loader.gif" alt="Loading" width="150px" height="150px"> -->
+
+        <div class="w-314 h-500" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="8px">
+            <img src="assets/images/vf-bz-logo.png" class="w-200 h-66" alt="Logo">
+
+            <div class="w-100-p p-20 card text-center" style="height: calc(100% - 74px);">
+                <i class="fs-40 icofont-lock h-62"></i>
+                <h4 class="fs-18 fw-600 mb-16 green-800">RESET PASSWORD</h4>
+
+                <form [formGroup]="resetPassowordForm" (ngSubmit)="onSubmitReset(resetPassowordForm.value)">
+                    <div class="form-group">
+                        <div class="input-group mb-12">
+                            <label class="sr-only">Current Password</label>
+                            <input [type]="show_currpassword ? 'text' : 'password'" formControlName="oldPassword"
+                                class="form-control" maxlength="50" placeholder="Current Password" required
+                                id="curr-password">
+
+                            <span class="input-group-addon" id="basic-addon2"
+                                (click)="show_currpassword = !show_currpassword">
+                                <i [class]="show_currpassword ? 'ri-eye-off-line' : 'ri-eye-line'"></i>
+                            </span>
+                        </div>
+                        <div class="text-danger w-100-p"
+                            *ngIf="resetPassowordForm.controls.oldPassword.hasError('required') && resetPassowordForm.controls.oldPassword.touched">
+                            Please provide current password
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group mb-12">
+                            <label class="sr-only">New Password</label>
+                            <input [type]="show_newpassword ? 'text' : 'password'" formControlName="password"
+                                class="form-control" maxlength="50" placeholder="New Password" required
+                                id="new-password">
+                            <span class="input-group-addon" id="basic-addon2"
+                                (click)="show_newpassword = !show_newpassword">
+                                <i [class]="show_newpassword ? 'ri-eye-off-line' : 'ri-eye-line'"></i>
+                            </span>
+                        </div>
+                        <app-password-strength [passwordToCheck]="resetPassowordForm.value.password"
+                            (passwordStrength)="passwordValid($event)">
+                        </app-password-strength>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group mb-12 mt-20">
+                            <label class="sr-only">Confirm Password</label>
+                            <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword"
+                                maxlength="50" class="form-control" placeholder="Confirm Password" required
+                                id="conf-password">
+                            <span class="input-group-addon" id="basic-addon2"
+                                (click)="showConfirmPassword = !showConfirmPassword">
+                                <i [class]="showConfirmPassword ? 'ri-eye-off-line' : 'ri-eye-line'"></i>
+                            </span>
+                        </div>
+                        <span class="errorMessageColor fs-12" *ngIf="resetPassowordForm.getError('same')">
+                            Choose a different password
+                        </span>
+
+                        <span class="errorMessageColor fs-12" *ngIf="resetPassowordForm.getError('mismatch')">
+                            <br *ngIf="resetPassowordForm.getError('same')">Password does not match
+                        </span>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger bg-theme mr-8" [disabled]="resetPassowordForm.invalid ">
+                        Reset Password
+                    </button>
+
+                    <button type="button" class="btn btn-danger bg-theme" (click)="skipForNow()">
+                        Skip for now
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

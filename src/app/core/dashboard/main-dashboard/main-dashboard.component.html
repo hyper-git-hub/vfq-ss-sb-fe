@@ -1,0 +1,8 @@
+<app-header class="h-66 w-100-p" (signal)="onToggleMenu($event)"></app-header>
+<div fxLayout="row" fxFlex="100" style="height: calc(100% - 66px);" autoscroll="false">
+    <app-sidebar [@searchContainerState]="toggleMenu ? 'expanded' : 'collapsed'" [isCollapsed]="toggleMenu"
+        class="sidebar" style="padding-right: 3px; overflow: auto; overflow-x: hidden;"></app-sidebar>
+    <div [style.width]="toggleMenu ? 'calc(100% - 220px)' : 'calc(100% - 90px)' " class="pg">
+        <router-outlet></router-outlet>
+    </div>
+</div>

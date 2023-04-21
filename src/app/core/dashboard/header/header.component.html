@@ -1,0 +1,150 @@
+<nav class="site-navbar navbar navbar-default h-66 p-0">
+    <div class="w-100-p h-100-p white" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+        <div fxLayout="row" class="h-100-p" fxLayoutAlign="start center" fxLayoutGap="8px">
+
+
+            <div *ngIf="toggleMenu" style="max-width: 220px;     padding: 15px 17px 25px;" fxLayout="row" fxHide.lt-md>
+                <span fxLayout="row" class="navbar-brand-text mt-10 ml-0" (click)="redirectToHome()">
+                    <img src="assets/images/logo-vodafone-white-icon1.png" class="navbar-brand-logo pr-8 h-42" alt="">
+                    <img src="assets/images/logo-vodafone-white-text1.png" class="navbar-brand-logo pr-20 h-42" alt="">
+                </span>
+            </div>
+
+            <div *ngIf="!toggleMenu" fxHide.lt-md class="w-72 pt-10" (click)="redirectToHome()"
+                style="padding: 15px 17px 10px;">
+                <img src="assets/images/logo-vodafone-white-icon1.png" class="navbar-brand-logo pr-16 h-42" alt="">
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="center center" (click)="onToggleMenu()"
+                class="h-100-p w-50 mr-0 sign-in">
+                <i class="ri-menu-line fs-24"></i>
+            </div>
+
+
+            <!-- <div>
+                <app-global-search-bar></app-global-search-bar>
+            </div> -->
+
+            <!-- <span class="material-icons ml-8 fs-28">
+                menu
+                [href]="'https://fms.dev.iot.vodafone.com.qa/verify-token?token='+token"
+            </span> -->
+        </div>
+
+        <div class="h-100-p" fxLayout="row" fxLayoutAlign="end center">
+
+            <div ngbDropdown class="d-inline-block h-100-p pt-14 sign-in">
+                <button class="btn" style="box-shadow: none;" id="dropdownBasic1" ngbDropdownToggle>
+                    <span class="fa fa-laptop" style=" color :white; font-size: 14px;"> Smart Surveillance </span>
+                </button>
+                <div ngbDropdownMenu style="margin-left: 100px;" class="Sosdropdown" aria-labelledby="dropdownBasic1"
+                    *ngIf="fmsIsEnabled || ATIsEnabled">
+                    <button ngbDropdownItem *ngIf="fmsIsEnabled">
+                        <a style="text-decoration:none; color: #76838f; font-size: 12px;"
+                            [href]="'https://app-dev-fmsnewpackage.azurewebsites.net/verify-token?token='+token"
+                            target="_blank">
+                            Fleet Management System</a>
+                    </button>
+                    <button ngbDropdownItem *ngIf="ATIsEnabled">
+                        <a style="text-decoration:none; color: #76838f; font-size: 12px;"
+                            [href]="'https://at.dev.iot.vodafone.com.qa/verify-token?token='+token" target="_blank">
+                            Asset Tracking System</a>
+                    </button>
+                </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="center center" class="sign-in h-100-p p-6">
+                <button class="btn" style="color: white;">
+                    <span class="fa fa-question-circle-o" placement="bottom" ngbTooltip="Help"></span>
+                </button>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center" class="sign-in h-100-p p-6">
+                <button class="btn" style="color: white;" (click)="navigateToSetting()">
+                    <span class="fa fa-cog" placement="bottom" ngbTooltip="Setting"></span>
+                </button>
+            </div>
+            <!-- notification start -->
+            <div [autoClose]="true" ngbDropdown #myDrop="ngbDropdown" class=" d-inline-block h-100-p pt-14 sign-in">
+                <button class="btn" style="box-shadow: none;" id="dropdownBasic" ngbDropdownToggle
+                    (click)="btnClick(myDrop)">
+                    <span class="fa fa-bell fs-14" style="color :white;" placement="bottom"
+                        ngbTooltip="Notifications"></span>
+                    <span class="badge badge-danger top-nve-10">{{alert_count || 0}}</span>
+                </button>
+
+                <div id="caseCodeDropdown" ngbDropdownMenu aria-labelledby="dropdownBasic">
+                    <div class="dropdown-menu-header">
+                        <span class="fs-14 pl-12">NOTIFICATIONS / ALERTS</span>
+                        <!-- <span class="label label-round label-danger pos-absolute right-8">{{alert_count}}</span> -->
+                        <span class="pos-absolute right-8">
+                            <a class="ri-refresh-line" (click)="refreshNotifications()" ngbTooltip="Refresh"
+                                tooltipPosition="top">
+                            </a>
+                        </span>
+                    </div>
+                    <hr>
+
+                    <div *ngIf="notifications_list.length == 0" class="media fs-14 pl-12 pb-8"> No Notifications </div>
+
+                    <div style="overflow: scroll;  max-height: 200px;">
+                        <ng-container *ngFor="let alert of notifications_list">
+                            <div class="list-group-item b-0" data-dismiss="dropdown" href="javascript:void(0)"
+                                ngClass="{{alert.is_viewed ? 'viewed' : 'unviewed' }}">
+                                <div class="media">
+                                    <div class="media-left padding-right-4">
+                                        <i class="fa fa-bell" style="color: #3193c7; font-size: 25px;"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <span class="label label-outline label-primary margin-right-5 fs-10">
+                                            {{alert['notf_title']}}
+                                        </span>
+                                        <span class="pull-right fs-10 ">{{alert['notf_created_at'] | date: 'yyyy-MM-dd hh:mm a'}}
+                                        </span>
+                                        <h6 class="media-heading margin-top-10">
+                                            {{alert['notf_body']}}
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <div style="background-color: rgb(0,176,202) !important ; padding: 8px;"
+                        class="dropdown-menu-footer text-center bg-blue-700 font-size-12">
+                        <span (click)="navigate(myDrop)" style="text-decoration: none;" style="padding: 8px 20px !important;"
+                            class="notification-hover">
+                            <span class="white"> See All Notifications </span>
+                        </span>
+                    </div>
+
+                </div>
+                <!-- notification end -->
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="center center" class="sign-in h-100-p p-12">
+                <span>Signed in as &nbsp;<b>{{useremail}}</b></span>
+            </div>
+
+            <div ngbDropdown class="d-inline-block h-100-p pt-10 sign-in">
+                <button class="btn" style="box-shadow: none;" id="dropdownBasic1" ngbDropdownToggle>
+                    <span class="avatar avatar-online">
+
+                        <img style="height:30px !important; width: 30px !important; border-radius: 20px;"
+                            [src]="user?.image? user?.image : '../../../../assets/images/default_user.png'" alt="...">
+
+                        <i></i>
+                    </span>
+                </button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="profiledropdown">
+                    <button ngbDropdownItem (click)="navigateToProfile()" style="color: #76838F; font-size: 14px;"><i
+                            class="fa fa-user pr-10"></i> Profile Setting</button>
+                    <hr class="mt-8 mb-8">
+                    <button ngbDropdownItem (click)="logout()" style="color: #76838F;  font-size: 14px;"><i
+                            class="fa fa-power-off  pr-10" aria-hidden="true"></i> Logout</button>
+                    <!-- <button ngbDropdownItem>Something else is here</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,434 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+
+<div class="p-30">
+    <div class="row ml-0 mb-16">
+        
+        <div *ngIf="showDevicesCard" class="col-md-6 pl-0">
+            <div class="row no-space bgcolor round">
+                <div class="col-md-6">
+                    <div class="p-30 h-150" fxLayout="row" fxLayoutAlign="space-between center">
+                        <div class="pull-left margin-top-10 margin-left-10">
+                            <i> <img src="./../../../assets/images/building-1.png" alt="img" height="60"> </i>
+                        </div>
+                        <div class="counter counter-md counter text-right pull-right margin-right-20">
+                            <div class="counter-label margin-bottom-0 clearfix margin-top-10">
+                                <span class="font-size-16 ">
+                                    Total Buildings
+                                </span>
+                            </div>
+                            <div class="counter-number-group text-center">
+                                <span class="counter-number" style="color: #e60000;">{{cardDetails['total_building'] || '0'}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="vertical-align text-center relative h-150 bg-white">
+                        <div class="vertical-align-middle">
+                            <div class="counter-label mb-0">
+                                <span class="fs-16 ">
+                                    Total Devices
+                                </span>
+                            </div>
+                            <span class="fs-30" style="color: #e60000;">
+                                {{cardDetails['total_devices'] || '0'}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="vertical-align text-center relative h-150 bg-white">
+                        <div class="vertical-align-middle">
+                            <div class="counter-label mb-0">
+                                <span class="fs-16">
+                                    Online Devices
+                                </span>
+                            </div>
+                            <span class="fs-30" style="color: #e60000;">
+                                {{cardDetails['online_devices'] || '0'}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div *ngIf="showBuildingCard" class="col-md-6" [class.pl-0]="!showDevicesCard">
+            <div class="row no-space">
+                <div class="col-md-3" style="margin-bottom: 10px;">
+                    <div class="vertical-align text-center relative h-150 bg-white">
+                        <div class="vertical-align-middle">
+                            <div class="counter-label mb-0">
+                                <ng-select placeholder="Building" (change)="getDashboardSliderCards($event)" [clearable]="false"
+                                    [formControl]="selectedBuilding">
+                                    <ng-option *ngFor="let item of building" [value]="item.id">{{item.name}}
+                                    </ng-option>
+                                </ng-select>
+                            </div>
+                            <span class="fs-30" style="color: #e60000;">
+                                {{totalFloors}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-9 h-150 pl-8 bg-white round">
+                    <div class="scrl-div h-120">
+                        <div *ngIf="cardsArray.length >= 3" class="bttn-left">
+                            <button class="btn btn-icon btn-sm btn-danger btn-round white lh-18 h-28 w-28"
+                                (click)="scrollLeft(widget)" style="padding: 4px;">
+                                <i class="ri-arrow-left-s-line"></i>
+                            </button>
+                        </div>
+
+                        <div #widget class="w-100-p margin building-cards" style="display: -webkit-box !important;">
+                            <ng-container *ngFor="let card of sliderArray; let idx=index; let last=last">
+                                <div class="card round h-120 mr-12 ml-12 w-198" style="background-color: #e60000;">
+                                    <h3 class="fs-10 fw-400 text-center white" style="padding: 10px;"></h3>
+                                    <h5 class="fs-17 fw-550 text-center white mt-ve-24" style="padding: 10px; margin-top: -24px;">{{card?.device_type}}</h5>
+
+                                    <div class="h-80 p-16 pt-0" fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="space-between center">
+                                        <div fxFlex fxLayout="column" class="text-center">
+                                            <div class="fs-24 fw-550 text-center white" style="margin-top: -18px;">{{card?.device_type__count}}</div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="h-24 p-16 pt-0" fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="space-between center">
+                                        <div fxFlex fxLayout="column" class="text-center">
+                                            <div class="fs-12 fw-550 text-center white" style="margin-top: -16px; background: #B90303 !important;">25 Online</div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </ng-container>
+                        </div>
+
+                        <div *ngIf="sliderArray.length >= 4" class="bttn-right">
+                            <button class="btn btn-icon btn-sm btn-danger btn-round white lh-18 h-28 w-28"
+                                (click)="scrollRight(widget)" style="padding: 4px;">
+                                <i class="ri-arrow-right-s-line"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-lg-12 p-0">
+        <div class="panel panel-default card round shadow fs-12">
+            <div class="panel-heading">
+                <h3 class="panel-title fw-600 mb-0">Recently Viewed</h3>
+            </div>
+            <div class="panel-body p-15 w-100-p" fxLayout="row" fxLayoutGap="8px">
+                <ng-container *ngIf="devices?.length > 0">
+                    <div class="w-33-p mb-10 pos-relative" *ngFor="let cam of devices; let i=index ">
+                        <ng-container *ngIf="i < 3">
+                            <div class="h-252">
+                                <canvas [id]="cam.id" style="width: 100%; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"> </canvas>
+                                <!-- <vg-player>
+                                    <vg-controls style="width: 320px;">
+                                        <vg-fullscreen></vg-fullscreen>
+                                    </vg-controls>
+
+                                    <video #myMedia preload="auto" autoplay="true" [vgHls]="cam.url" id="my-video"
+                                        type="video/mp4">
+                                    </video>
+                                </vg-player> -->
+                            </div>
+
+                            <div class="video-filters">
+                                <ul style="list-style: none;display: flex;">
+                                    <!-- <li style="padding-right: 8px;">
+                                        <a [ngbPopover]="settingPopUp" [popoverTitle]="" placement="bottom"
+                                            [autoClose]="false">
+                                            <i class="ri-settings-5-fill"
+                                                style="background-color: #ca090970; color: white; padding: 7px;  border-radius: 5px;">
+                                            </i>
+                                        </a>
+                                        <ng-template #settingPopUp>
+                                        <div class="w-150" fxLayoutAlign="space-between center">
+                                            <ng-select placeholder="Building" class="w-100-p">
+                                                <ng-option *ngFor="let items of building" [value]="items.id">
+                                                    {{items.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                        </div>
+                                        <div class="w-150" fxLayoutAlign="space-between center">
+                                            <ng-select placeholder="Camera" class="w-100-p pt-12">
+                                                <ng-option *ngFor="let items of camera" [value]="items.id">
+                                                    {{items.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                        </div>
+                                        <div class="pt-12">
+                                            <button type="button" class="btn btn-danger btn-block btn-round">
+                                                Show Fotage</button>
+                                        </div>
+                                    </ng-template>
+                                    </li> -->
+    
+                                    <!-- <li class="pr-8">
+                                        <a [ngbPopover]="popContent" [popoverTitle]="popTitle" popoverClass="pb" placement="bottom">
+                                            <i class="ri-download-fill download">
+                                                <span style="margin-bottom: 20px;">&nbsp;{{item.downloads['count']}}</span>
+                                            </i>
+                                        </a>
+                                        <ng-template #popTitle>
+                                            <div class="w-100" fxLayoutAlign="space-between center">
+                                                <div>Download</div>
+                                                <div class="download-title">{{item.downloads['count']}}</div>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template #popContent>
+                                            <div class="w-100-p fs-12">
+                                                <ng-container *ngFor="let item of item.downloads?.data let last=last">
+                                                    <div class="item">{{item.user__first_name}}</div>
+                                                    <hr *ngIf="!last" style="margin: 2px 0; padding: 0 4px;">
+                                                </ng-container>
+                                            </div>
+                                        </ng-template>
+                                    </li> -->
+    
+                                    <li>
+                                        <!-- [ngbPopover]="popContent1" [popoverTitle]="popTitle1" -->
+                                        <a popoverClass="pb" placement="bottom">
+                                            <i class="ri-eye-fill eye">&nbsp;{{cam['views_count']}}</i>
+                                        </a>
+    
+                                        <!-- <ng-template #popTitle1>
+                                            <div class="w-100" fxLayoutAlign="space-between center">
+                                                <div>View</div>
+                                                <div class="eye-count">{{item['views_count']}}</div>
+                                            </div>
+                                        </ng-template>
+    
+                                        <ng-template #popContent1>
+                                            <div class="w-100-p fs-12">
+                                                <ng-container *ngFor="let item of item.views?.data; let last=last">
+                                                    <div class="item">
+                                                        {{item.user__first_name}}
+                                                    </div>
+                                                    <hr *ngIf="!last" style="margin: 2px 0; padding: 0 4px;">
+                                                </ng-container>
+                                            </div>
+                                        </ng-template> -->
+                                    </li>
+                                </ul>
+                            </div>
+    
+                            <!-- (click)="openSingleCamera(cam)" -->
+                            <div class="camera-name">
+                                {{cam.device_name ? cam.device_name : cam.device}}
+                            </div>
+
+                            <div class="w-104 h-142 pos-absolute bottom-4 right-4 control-center">
+                                <div class="w-100-p h-100-p controls round" style="background: #282828">
+                                    <div class="white px-6 py-0">
+                                        <label for="zoom" class="mb-0">Zoom {{zoomLevel == '1' ? 'In' : 'Out'}}</label>
+                                        <input type="range" id="zoom" min="1" max="2" value="1" class="slider" (change)="onZoomCamera($event, cam.device)">
+                                    </div>
+                                    <div class="w-96 h-96 white" fxLayout="row wrap" style="margin-left: 4px">
+                                        <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('5', cam.device)" fxLayoutAlign="center center"><i class="ri-arrow-left-up-fill"></i></div>
+                                        <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('1', cam.device)" fxLayoutAlign="center center"><i class="ri-arrow-up-fill"></i></div>
+                                        <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('7', cam.device)" fxLayoutAlign="center center"><i class="ri-arrow-right-up-fill"></i></div>
+                                        <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('3', cam.device)" fxLayoutAlign="center center"><i class="ri-arrow-left-fill"></i></div>
+                                        <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"></div>
+                                        <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('4', cam.device)" fxLayoutAlign="center center"><i class="ri-arrow-right-fill"></i></div>
+                                        <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('6', cam.device)" fxLayoutAlign="center center"><i class="ri-arrow-left-down-fill"></i></div>
+                                        <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('2', cam.device)" fxLayoutAlign="center center"><i class="ri-arrow-down-fill"></i></div>
+                                        <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('8', cam.device)" fxLayoutAlign="center center"><i class="ri-arrow-right-down-fill"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="devices?.length === 0">
+                    <div style="display: flex; justify-content: center;">
+                        <img src="./../../../../assets/images/no-video.png" alt="No camera" width="150px">
+                    </div>
+                </ng-container>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Graphs -->
+    <div class="row flex-row ">
+        <ng-container *ngFor="let graph of row1; let i = index">
+            <div class="col-lg-4 card-group-row__col display-flex">
+                <div class="panel panel-default card round shadow">
+                    <div class="panel-heading">
+                        <h3 class="panel-title font-weight-600 bg-theme1 white1 mb-0"> {{graph?.name}}
+                            <span class="font-weight-200 grey-400">
+                                <i class="ri-question-line ml-10" tooltipPosition="right"
+                                    [ngbTooltip]="graph?.toolTip"></i>
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <!-- <div class="filters ">
+                            <div class="inline-block mr-6 ml-6">
+                                <div class="form-group ">
+                                    <ng-select placeholder="Building">
+                                        <ng-option *ngFor="let items of building" [value]="items.id">{{items.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="inline-block mr-6">
+                                <div class="form-group ">
+                                    <ng-select placeholder="Floor">
+                                        <ng-option *ngFor="let items of floor" [value]="items.id">{{items.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="inline-block mr-6">
+                                <div class="form-group ">
+                                    <ng-select placeholder="Duration">
+                                        <ng-option *ngFor="let items of durationOptions" [value]="items.id">
+                                            {{items.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="chartbox" *ngIf="graph?.code == 'DS'">
+                            <app-pie-chart [chartOptions]="graph?.data"></app-pie-chart>
+                        </div>
+                        <div class="chartbox" *ngIf="graph?.code == 'DD'">
+                            <app-simple-pie-chart [chartOptions]="graph?.data"></app-simple-pie-chart>
+                        </div>
+                        <div class="chartbox" *ngIf="graph?.code == 'MOA'">
+                            <app-funnel [chartOptions]="graph?.data"></app-funnel>
+                        </div>
+                        <!-- <div class="chartbox" *ngIf="graph?.id == 4">
+                            <app-custom-pictorial-chart></app-custom-pictorial-chart>
+                        </div>
+                        <div class="chartbox" *ngIf="graph?.id == 5">
+                            <app-stack-column-chart [chartOptions]="graph?.data"></app-stack-column-chart>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+    <div class="row flex-row">
+        <ng-container *ngFor="let graph of row2; let i = index">
+            <div [ngClass]="{'col-lg-8': i === 0, 'col-lg-4' : i === 1 }" class="card-group-row__col display-flex">
+                <div class="panel panel-default card round shadow">
+                    <div class="panel-heading">
+                        <h3 class="panel-title font-weight-600 bg-theme1 white1 mb-0"> {{graph?.name}}
+                            <span class="font-weight-200 grey-400">
+                                <i class="ri-question-line ml-10" tooltipPosition="right"
+                                    [ngbTooltip]="graph?.toolTip"></i>
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="panel-body ">
+                        <!-- <div class="filters ">
+                            <div class="inline-block mr-6 ml-6 ">
+                                <div class="form-group ">
+                                    <ng-select placeholder="Building">
+                                        <ng-option *ngFor="let items of building" [value]="items.id">{{items.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="inline-block mr-6">
+                                <div class="form-group ">
+                                    <ng-select placeholder="Floor">
+                                        <ng-option *ngFor="let items of floor" [value]="items.id">{{items.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="inline-block mr-6">
+                                <div class="form-group ">
+                                    <ng-select placeholder="Duration">
+                                        <ng-option *ngFor="let items of durationOptions" [value]="items.id">
+                                            {{items.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="chartbox" *ngIf="graph?.code == 'HT'">
+                            <app-column-rotated [chartOptions]="graph?.data"></app-column-rotated>
+                        </div>
+                        <div class="chartbox" *ngIf="graph?.code == 'HWC'">
+                            <app-custom-pictorial-chart [chartOptions]="graph?.data"></app-custom-pictorial-chart>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <div class="row flex-row">
+        <ng-container *ngFor="let graph of row3; let i = index">
+            <div class="col-lg-6  card-group-row__col display-flex">
+                <div class="panel panel-default card round shadow">
+                    <div class="panel-heading">
+                        <h3 class="panel-title font-weight-600 bg-theme1 white1 mb-0"> {{graph?.name}}
+                            <span class="font-weight-200 grey-400">
+                                <i class="ri-question-line ml-10" tooltipPosition="right"
+                                    [ngbTooltip]="graph?.toolTip"></i>
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="panel-body ">
+                        <!-- <div class="filters ">
+                            <div class="inline-block mr-6 ml-6 ">
+                                <div class="form-group ">
+                                    <ng-select placeholder="Building">
+                                        <ng-option *ngFor="let items of building" [value]="items.id">{{items.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="inline-block mr-6">
+                                <div class="form-group ">
+                                    <ng-select placeholder="Floor">
+                                        <ng-option *ngFor="let items of floor" [value]="items.id">{{items.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="inline-block mr-6">
+                                <div class="form-group ">
+                                    <ng-select placeholder="Duration">
+                                        <ng-option *ngFor="let items of durationOptions" [value]="items.id">
+                                            {{items.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="chartbox" *ngIf="graph?.code == 'TC'">
+                            <app-simple-treemap [chartOptions]="graph?.data"></app-simple-treemap>
+                        </div>
+                        <div class="chartbox" *ngIf="graph?.code == 'COA'">
+                            <app-stack-column-chart [chartOptions]="graph?.data"></app-stack-column-chart>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>

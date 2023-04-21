@@ -1,0 +1,99 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+    <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
+</div>
+
+<div class="modal-body">
+    <form [formGroup]="socketform" (ngSubmit)="onSubmit()">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Device Name<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" formControlName="device_name"
+                                placeholder="Selected Device Name">
+                            <ng-container *ngIf="socketform.controls['device_name'].dirty">
+                                <span class="text-danger" *ngIf="socketform.controls['device_name'].hasError('required')">
+                                    Please provide device name
+                                </span>
+                                <span class="text-danger" *ngIf="socketform.controls['device_name'].hasError('maxlength')">
+                                    Device name must be of less than 60 characters
+                                </span>
+                                <span class="text-danger"
+                                    *ngIf="socketform.controls['device_name'].hasError('whitespace')">
+                                    Avoid white spaces
+                                </span>
+                            </ng-container>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Building<span class="text-danger2"></span></label>
+                            <ng-select placeholder="Select Building" formControlName="building">
+                                <ng-option *ngFor="let items of building" [value]="items.id">{{items.name}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">By Floor/Open Area<span class="text-danger2"></span></label>
+                            <ng-select placeholder="By FLooor" formControlName="open_area">
+                                <ng-option *ngFor="let items of area" [value]="items.id">{{items.name}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Floor<span class="text-danger2"></span></label>
+                            <ng-select placeholder="Select FLooor" formControlName="floor">
+                                <ng-option *ngFor="let items of floor" [value]="items.id">{{items.name}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Space<span class="text-danger2"></span></label>
+                            <ng-select placeholder="Select Space" formControlName="space">
+                                <ng-option *ngFor="let items of space" [value]="items.id">{{items.name}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Room<span class="text-danger2"></span></label>
+                            <ng-select placeholder="Select Room" formControlName="room">
+                                <ng-option *ngFor="let items of room" [value]="items.id">{{items.name}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success btn-round btn-block1" >
+                <i class="ri-check-fill"></i>
+                <span>{{!!data ? 'Update' : 'Save'}}</span>
+            </button>
+            <button type="button" class="btn btn-default btn-round btn-block1" (click)="onCloseModel()"><i
+                    class="ri-arrow-go-back-line"></i>
+                Back</button>
+        </div>
+    </form>
+
+
+</div>

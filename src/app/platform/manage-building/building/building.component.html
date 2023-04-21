@@ -1,0 +1,73 @@
+<div class="breadcrumb-box">
+    <ol class="breadcrumb  breadcrumb-arrow">
+        <li><a> Building </a> </li>
+    </ol>
+</div>
+
+<div class="page-container w-100-p" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start start">
+    <div fxLayout="row" class="w-100-p card round p-12">
+        <div class="panel-heading mb-0"></div>
+
+        <ngb-accordion  class="w-100-p accord-overflow" [activeIds]="'search-filters'">
+            <ngb-panel id="search-filters">
+                <ng-template ngbPanelHeader let-opened="opened">
+                    <button ngbPanelToggle class="w-100-p btn p-0" style="color: #37474f;">
+                        <div class="w-100-p" fxLayout="row" fxLayoutAlign="space-between">
+                            <span class="font-size-14 fw-600"> Choose Parameters </span>
+                            <span><i [ngClass]="opened ? 'ri-subtract-line' : 'ri-add-line'"></i></span>
+                        </div>
+                    </button>
+                </ng-template>
+
+                <ng-template ngbPanelContent>
+                    <div fxLayout="row wrap">
+                        <fieldset  class="form-fieldset w-100-p mb-8">
+                            <legend class="TimeIntervalLegend">Filters</legend>
+                            <div [formGroup]="filtersForm"  class="w-100-p" fxLayoutAlign="start end" fxLayoutGap="16px" fxLayout="row wrap">
+                                <ng-select class="w-15-p mb-16" placeholder="Building Type" formControlName="type"  (change)="buildingTypeChange($event)">
+                                    <ng-option *ngFor="let item of type" [value]="item.id">{{ item.name }}
+                                    </ng-option>
+                                </ng-select>
+                                <ng-select class="w-15-p mb-16" placeholder="Select Building" formControlName="building"  (change)="buildingChange($event)">
+                                    <ng-option *ngFor="let item of buildingData" [value]="item.id">{{ item.name }}
+                                    </ng-option>
+                                </ng-select>
+                            </div>
+                        </fieldset>
+
+                        <div class="w-100-p" fxLayoutAlign="start start">
+                            <div class="w-48-p" fxLayoutAlign="start start"></div>
+
+                            <div class="w-52-p" fxLayoutAlign="end start" fxLayoutGap="8px">
+                                <button fxFlex="25" type="button" class="btn btn-danger btn-block btn-round"
+                                    (click)="onAddbuilding()">
+                                    <i class="ri-add-circle-fill"></i> New Building
+                                </button>
+
+                                <button fxFlex="25%" type="button" class="btn btn-default btn-round" (click)="onReset()">
+                                    Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngb-panel>
+        </ngb-accordion>
+    </div>
+
+    <div class="w-100-p panel panel-default card ">
+        <div class="panel-heading">
+            <h3 class="panel-title fw-600 mb-0">Listing
+                <span class="fw-200 ml-10 grey-400">
+                    <i class="ri-question-line" tooltipPosition="right" ngbTooltip="some info goes here"></i>
+                </span>
+            </h3>
+        </div>
+
+
+        <div class="panel-body p-16">
+            <general-table [config]="config" [actions]="actions" [dataSource]="buildings" [count]="count"
+                (signals)="onTableSignals($event)" [urlFilters]="buildingFilters"></general-table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+:host
+{
+    width: 100%;  
+}
+
+.pg-container
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    margin-top: 4px;
+    margin-bottom: 1px;
+}
+
+.ac-container
+{
+    height: 36px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 4px;
+    /* background: #c1c1c1; */
+}
+
+.ac {
+    padding: 8px 16px;
+    cursor: pointer;
+    border: 1px solid #e4eaec;
+}
+
+.p-ac {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.count {
+    color: #fff;
+    cursor: default;
+    background-color: #62a8ea;
+    border-color: #62a8ea;
+}
+
+.n-ac {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}

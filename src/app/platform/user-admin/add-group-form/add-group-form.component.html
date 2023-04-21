@@ -1,0 +1,117 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+    <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
+</div>
+
+
+<div class="modal-body">
+    <form [formGroup]="addGroupForm" (ngSubmit)="onSubmitAddGroup(addGroupForm.value)">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Group Name<span class="text-danger">*</span></label>
+                            <div class="input-icon">
+                                <input type="text" class="form-control" formControlName="name" maxLength="50"
+                                    placeholder="Group Name" />
+                                <span class="error-message"
+                                    *ngIf="addGroupForm.get('name').getError('required') && submitted">
+                                    Please provide name
+                                </span>
+                                <span class="error-message"
+                                    *ngIf="addGroupForm.get('name').getError('isAlphabetsAndSpace') && submitted">Enter
+                                    alphabets only
+                                </span>
+                                <span class="error-message"
+                                    *ngIf="addGroupForm.get('name').getError('pattern') && submitted">
+                                    Avoid white spaces
+                                </span>
+                                <span class="error-message"
+                                    *ngIf="addGroupForm.get('name').getError('isEmptyValue') && submitted">
+                                    Avoid white spaces
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Group Description <span class="text-danger">*</span></label>
+
+                            <div class="input-icon">
+                                <input type="text" class="form-control" formControlName="description" maxLength="60"
+                                    placeholder="..." />
+                                <span class="error-message"
+                                    *ngIf="addGroupForm.get('description').getError('required') && submitted">
+                                    Please provide description
+                                </span>
+
+                                <span class="error-message"
+                                    *ngIf="addGroupForm.get('description').getError('pattern') && submitted">
+                                    Avoid white spaces
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Access</label>
+                            <ng-select placeholder="Select Access" [clearable]="false" formControlName="permission">
+                                <ng-option *ngFor="let items of access" [value]="items.id">
+                                    {{items.name}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6"
+                    *ngIf="btnText == 'Update' && listOfAssociatedUsers.length > 0">
+                    <div class="form-group">
+                        <label class="control-label">Associated Users</label>
+                        <div class="input-icon">
+                            <ng-select placeholder="Select user" formControlName="associatedUsers" [multiple]="true"
+                                (onChange)="assetAssociateUserChanged($event)">
+                                <ng-option *ngFor="let items of listOfAssociatedUsers" [value]="items.user_guid">{{items.user_email}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group margin-bottom-10 margin-top-10">
+                            <h5><b>Choose Features for Group:</b></h5>
+                            <dual-list [source]="stations" [key]="key" [display]="display" [(destination)]="confirmed" [filter]="true"
+                                height="265px">
+                            </dual-list>
+                            <span class="error-message" *ngIf="confirmed?.length === 0 && submitted ">
+                                Please select features
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success btn-round btn-block1">
+                <i class="ri-check-fill"></i>
+                <span>{{btnText}}</span>
+            </button>
+            <button type="button" class="btn btn-default btn-round btn-block1" (click)="onCloseModel()"><i
+                    class="ri-arrow-go-back-line"></i>
+                Back</button>
+        </div>
+    </form>
+
+
+</div>

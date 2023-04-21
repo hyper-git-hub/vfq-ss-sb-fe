@@ -1,0 +1,59 @@
+.checkbox-custom {
+    padding-left: 20px;
+}
+
+
+.radio-custom, .checkbox-custom {
+    position: relative;
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.text-wrap {
+    white-space: nowrap;
+}
+.margin-bottom-0 {
+    margin-bottom: 0 !important;
+}
+
+.radio-custom input[type="radio"], .checkbox-custom input[type="checkbox"] {
+    position: absolute;
+    margin-top: 4px \9;
+    margin-left: -20px;
+}
+.input-group-addon:first-child {
+    border-right: 0;
+    padding: 9px;
+}
+
+.input-group-addon {
+    font-weight: 300;
+}
+
+.input-group-addon {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    color: #76838f;
+    text-align: center;
+    background-color: #f3f7f9;
+    border: 1px solid #e4eaec;
+    border-radius: 3px;
+}
+
+table {
+    border-spacing: 0;
+     border-collapse: collapse; 
+}
+.table td, .table th {
+    /* padding: 0.75rem; */
+    padding-top: 6px;
+    padding-bottom: 5px;
+    /* border-top: 1px solid #dee2e6; */
+}
+.table th, .table td {
+    
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}

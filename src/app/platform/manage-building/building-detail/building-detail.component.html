@@ -1,0 +1,132 @@
+<div class="breadcrumb-box">
+    <ol class="breadcrumb  breadcrumb-arrow">
+        <li><a> Building </a> </li>
+        <li><a> {{buildingDetails?.name}}</a> </li>
+    </ol>
+</div>
+
+<div class="page-container w-100-p" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start start">
+    <div fxLayout="row" class="w-100-p">
+        <div class="panel panel-default round shadow card w-100-p">
+            <div class="panel-heading margin-bottom-0 ">
+                <h3 class="panel-title font-weight-600 bg-teal-8001 white1 ">Building Details</h3>
+            </div>
+
+            <div class="panel-body padding-15">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="margin-bottom-25">
+                            <div class="form-group margin-bottom-10 text-center">
+                                <img src="assets/images/building.jpg"
+                                    style="height: 150px;border: 4px solid #f4f4f4;border-radius: 20px;box-shadow: 0 3px 8px rgb(0 0 0 / 15%) !important;">
+                            </div>
+
+                            <div class="form-group margin-bottom-10 text-center">
+                                <div class="font-size-24  margin-bottom-0 grey-800 " style="font-weight: 800;">
+                                    {{buildingDetails?.name}}
+                                </div>
+                            </div>
+                            <div class="form-group margin-bottom-0 text-center" style="margin-left: 48%;">
+                                <span style="vertical-align: inherit;">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group margin-bottom-10">
+                                    <table class="table margin-bottom-0 table-bordered1 table-condensed   ">
+                                        <tbody>
+
+                                            <tr>
+                                                <th> <b> Address</b> </th>
+                                                <td>{{ address || '-'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th> <b>Building Type</b> </th>
+                                                <td>{{ type || '-'}}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th> <b>Floor</b> </th>
+                                                <td>{{buildingDetails?.floors?.length || '-'}}</td>
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+
+
+
+                                </div>
+
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group margin-bottom-10">
+
+
+                                    <table class="table margin-bottom-0 table-bordered1     table-condensed   ">
+                                        <tbody>
+                                            <tr>
+                                                <th> <b>Status</b> </th>
+                                                <td>{{buildingDetails?.status == 1 ? 'Active' : 'In Active'}}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th> <b> Open Area</b> </th>
+                                                <td> {{buildingDetails?.no_of_area || '-'}} </td>
+                                            </tr>
+                                            <tr>
+                                                <th> <b>Hallways</b> </th>
+                                                <td>{{hallways|| '-'}}</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+
+
+
+                                </div>
+
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group margin-bottom-10">
+
+
+                                    <table class="table margin-bottom-0 table-bordered1     table-condensed   ">
+                                        <tbody>
+
+                                            <tr>
+                                                <th> <b>Appartments/Offices</b> </th>
+                                                <td>{{appartments}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th> <b> Shops</b> </th>
+                                                <td>{{shops}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th> <b> Lifts</b> </th>
+                                                <td>{{lifts}}</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+</div>

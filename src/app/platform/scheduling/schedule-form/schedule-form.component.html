@@ -1,0 +1,231 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+    <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
+</div>
+<img *ngIf="loading" src="/assets/images/block-loader.gif" alt="Loading" class="loading" width="150px" height="150px">
+
+<div class="modal-body" style="overflow-x: hidden;">
+    <form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+            <div class="col-lg-12 mb-8">
+                <h4 class="w-100-p fw-600 fs-12 bg-blue-100 mb-0" style="padding: 5px;"> CONFIGURATION TYPE </h4>
+            </div>
+
+            <!-- <div class="col-md-3">
+                <div class="form-group mb-10">
+                    <label>Device Type <span class="text-danger">*</span></label>
+                    <ng-select placeholder="Select device type" formControlName="device_type" [clearable]="false">
+                        <ng-container *ngFor="let item of deviceTypes">
+                            <ng-option [value]="item.value"> {{item.title}} </ng-option>
+                        </ng-container>                        
+                    </ng-select>
+                    <div class="text-danger" *ngIf="scheduleForm.controls['device_type'].hasError('required')">
+                        Please select device type
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group mb-10">
+                    <label>Device <span class="text-danger">*</span></label>
+                    <ng-select placeholder="Select device" formControlName="device" [clearable]="false">
+                        <ng-container *ngFor="let item of devices">
+                            <ng-option [value]="item.device"> {{item.device_name}} </ng-option>
+                        </ng-container>                        
+                    </ng-select>
+                    <div class="text-danger" *ngIf="scheduleForm.controls['device'].hasError('required')">
+                        Please select device
+                    </div>
+                </div>
+            </div> -->
+
+            <app-device-filter class="w-100-p px-16" [showReset]="false" [showFieldset]="false" [selectDT]="true" [showDevices]="true"
+                [actions]="actions" [showDeviceTypes]="true" [defaultType]="selectedDeviceType" [deviceTypes]="deviceTypes"
+                [deviceRequired]="true" [defaultDevice]="data?.device" (signals)="onFilterSignals($event)">
+            </app-device-filter>
+        </div>
+
+        <div class="row" *ngIf="scheduleForm.controls['device_type'].value === 'Bulb'">
+            <div class="col-lg-12 mb-8">
+                <h4 class="w-100-p fw-600 fs-12 bg-blue-100 mb-0" style="padding: 5px;">BULB CONFIGURATION</h4>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group margin-bottom-10 text-center">
+                            <button type="button" style="border: none; background: transparent;"
+                                (click)="warmLight()" [disabled]="!turnOnBulb">
+                                <img class="zoom" src="/assets/images/warm.png">
+                            </button>
+                        </div>
+                        <div class="form-group margin-bottom-10 text-center ">
+                            <button type="button" style="border: none; background: transparent;"
+                                (click)="whiteLight()" [disabled]="!turnOnBulb">
+                                <img class="zoom" src="/assets/images/cool.png">
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="allignment" style="height: 125px;">
+                            <div id="bulb" class="center" [style.opacity]="saturation"
+                                [ngStyle]="{filter: brightness}" [style.background]="colorName">
+                            </div>
+                            <div class="form-group mb-10 text-center" style="position: absolute;">
+                                <img src="/assets/images/bulb1.jpg" style="height: 110px;">
+                            </div>
+                        </div>
+
+                        <div class="form-group margin-bottom-10 text-center">
+                            <div class="font-size-24 font-weight-200 margin-bottom-0 grey-800">
+                                {{filters && filters.device_name ? filters.device_name : 'Bulb'}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="input" class="control-label margin-top-10">RGB:</label>
+                    <input type="color" formControlName="bulbRGB" class="form-control" min="0" max="360">
+
+                    <label for="sat" class="control-label" style="margin-top: 6px;">Saturation:</label>
+                    <input type="range" formControlName="saturation" class="form-control" min="1" max="100"
+                        id="sat" style="-webkit-appearance: slider-horizontal; appearance: slider-horizontal">
+
+                    <label for="bright" class="control-label" style="margin-top: 6px;">Brightness:</label>
+                    <input type="range" formControlName="brightness" class="form-control" id="bright" min="0" max="100"
+                        style="-webkit-appearance: slider-horizontal; appearance: slider-horizontal">
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group mb-10">
+                    <table class="table mb-0 table-bordered1 table-condensed">
+                        <tbody>
+                            <tr>
+                                <th> <b> ON/OFF</b> </th>
+                                <td>
+                                    <div class="w-100-p" style="margin-left: 48%;">
+                                        <div class="onoffswitch">
+                                            <input type="checkbox" (change)="setBulbOnOff($event)" [(ngModel)]="turnOnBulb"
+                                                class="onoffswitch-checkbox" id="onoffswitch1" [ngModelOptions]="{standalone: true}">
+                                            <label class="onoffswitch-label" for="onoffswitch1">
+                                                <span class="onoffswitch-inner"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="fw-600 fs-12 text-uppercase bg-blue-100 mb-0" style="padding: 5px;"> Schedule Now </h4>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-10">
+                            <label>Scheduel Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" formControlName="schedule_name" maxLength="60"
+                                placeholder="Enter Schedule Name" />
+                            <div class="text-danger" *ngIf="scheduleForm.controls['schedule_name'].hasError('required')">
+                                Please provide schedule name
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mb-10">
+                            <label>Action <span *ngIf="stateRequired" class="text-danger">*</span></label>
+                            <ng-select placeholder="Choose Action" formControlName="state" [clearable]="true" (change)="setOnOff($event)">
+                                <ng-option [value]="true"> ON </ng-option>
+                                <ng-option [value]="false"> OFF </ng-option>
+                            </ng-select>
+                            <div class="text-danger" *ngIf="scheduleForm.controls['state'].hasError('required')">
+                                Please select schedule state
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="table-responsive" style="height:auto; margin-left: -12px;">
+                        <table class="table mb-0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="form-group mb-0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Start Time</span>
+                                                <input type="time" class="form-control" formControlName="start_time">
+                                            </div>
+                                            <div class="text-danger" *ngIf="scheduleForm.controls['start_time'].hasError('required')">
+                                                Please set start time
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group margin-bottom-0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">End Time</span>
+                                                <input type="time" class="form-control" formControlName="end_time">
+                                            </div>
+                                            <div class="text-danger" *ngIf="scheduleForm.controls['end_time'].hasError('required')">
+                                                Please set end time
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="mt-20 d-flex">
+                                            <input type="checkbox" id="repeat" formControlName="repeat"
+                                                name="checkbox">
+                                            <label class="pl-10" for="repeat">Repeat</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group mb-10 mt-10 ml-16">
+                    <div class="row">
+                        <ng-container *ngFor="let item of start_days; let idx=index">
+                            <div class="mr-8 d-flex pr-12">
+                                <input type="checkbox" [id]="item.id" [(ngModel)]="item.select"
+                                    [ngModelOptions]="{standalone: true}" class="mr-6" (change)="onSelectDay(item)">
+                                <label [for]="item.id">{{item.name}}</label>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class="text-danger" *ngIf="days.length === 0">
+                        Please select atleast one day
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success btn-round" [disabled]="scheduleForm.invalid || days.length === 0 ">
+                <i class="ri-check-fill"></i>
+                <span>{{!!data ? 'Update' : 'Save'}}</span>
+            </button>
+            <button type="button" class="btn btn-default btn-round" (click)="onCloseModel()">
+                <i class="ri-arrow-go-back-line"></i>
+                Back
+            </button>
+        </div>
+    </form>
+
+</div>

@@ -1,0 +1,242 @@
+<div class="breadcrumb-box">
+    <ol class="breadcrumb  breadcrumb-arrow">
+        <li><a> Alerts </a> </li>
+    </ol>
+</div>
+
+<div class="page-container">
+    <div class="row card-group-row">
+        <div class="col-lg-4">
+            <div class="panel panel-default card ">
+                <div class="panel-heading margin-bottom-0">
+                    <h3 class="panel-title font-weight-600  ">Select Parameters</h3>
+                    <div class="panel-actions">
+                        <a></a>
+                    </div>
+                </div>
+                <div class="panel-body padding-15">
+                    <form [formGroup]="filterForm">
+                        <div class="form-group margin-bottom-10">
+                            <a class="btn btn-success fs-14 btn-block bg-theme btn-round" (click)="onAddshedule()">
+                                <i class="ri-add-circle-fill"></i>Shedule Alerts</a>
+                        </div>
+                        <hr>
+                        <div class="form-group margin-bottom-10">
+                            <fieldset class="form-fieldset">
+                                <legend class="FilterLegend">Filter</legend>
+                                <div class="form-group margin-bottom-10">
+                                    <ng-select placeholder="Select Building" formControlName="buildings">
+                                        <ng-option *ngFor="let items of building" [value]="items.id">{{items.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                                <div class="form-group margin-bottom-10">
+                                    <ng-select placeholder="Select Camera" formControlName="cameras">
+                                        <ng-option *ngFor="let items of camera" [value]="items.id">{{items.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+
+                                <div class="form-group margin-bottom-10">
+                                    <ng-select placeholder="Select Floor" formControlName="floors">
+                                        <ng-option *ngFor="let items of floor" [value]="items.id">{{items.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+
+                            </fieldset>
+                        </div>
+
+                        <div class="form-group margin-bottom-10">
+                            <fieldset class="form-fieldset">
+                                <legend class="TimeIntervalLegend">Time Interval</legend>
+                                <div class="form-group margin-bottom-10">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="radio-custom checkbox-inline1 radio-warning">
+                                                <input type="radio" id="444"value="today" 
+                                                formControlName="playBackTimeInterval" name="playBackTimeInterval">
+                                                <label for="444">Current Day</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="radio-custom checkbox-inline1 radio-warning">
+                                                <input type="radio" id="555" value="week" 
+                                                formControlName="playBackTimeInterval" name="playBackTimeInterval">
+                                                <label for="555">Previous Week </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="radio-custom checkbox-inline1 radio-warning">
+                                                <input type="radio" id="666"value="month" 
+                                                formControlName="playBackTimeInterval" name="playBackTimeInterval">
+                                                <label for="666">Previous Month </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="radio-custom checkbox-inline1 radio-warning">
+                                                <input type="radio" id="666r"
+                                                formControlName="playBackTimeInterval"  checked="">
+                                                <label for="666r">Select a Perioud </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group margin-bottom-10">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="START DATE"  ngbDatepicker
+                                        formControlName="startdate" name="startdate" #startdate="ngbDatepicker" placement="right"
+                                         (click)="startdate.toggle()">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary btn-icon" (click)="startdate.toggle()"
+                                                type="button"
+                                                style="padding: 0 8px; border-radius: 0px; border-color: #ced4da;">
+                                                <i class="ri-calendar-2-line"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group margin-bottom-10">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="END DATE"  ngbDatepicker
+                                        formControlName="enddate" name="enddate" #enddate="ngbDatepicker" placement="right"
+                                         (click)="enddate.toggle()">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary btn-icon" (click)="enddate.toggle()"
+                                                type="button"
+                                                style="padding: 0 8px; border-radius: 0px; border-color: #ced4da;">
+                                                <i class="ri-calendar-2-line"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="form-group margin-bottom-10">
+
+                            <fieldset class="form-fieldset">
+                                <legend class="SearchLegend">Search</legend>
+
+                                <div class="form-group margin-bottom-10">
+                                    <div class="input-search">
+                                        <i class="input-search-icon ri-search-line"></i>
+                                        <input type="text" class="form-control" formControlName="search" name=""
+                                            placeholder="Search...">
+                                        <button type="button" class="input-search-close icon " data-toggle="popover"
+                                            data-original-title="" data-trigger="hover" data-container="body"
+                                            data-placement="top" data-html="true" id="help2">
+                                            <i class="ri-question-line"
+                                                pTooltip='Search functionality lets the user find Customers on the system. The user can type the Name of the customer in the search bar and the details will be displayed on the list'
+                                                tooltipPosition="right"></i>
+                                        </button>
+                                        <div id="popover-content-help2" class="hide">
+                                            Some help information goes here
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group margin-bottom-0 text-center">
+                                    <a href="" class="btn btn-success btn-round  fs-14"> <i
+                                            class=" ri-search-line "></i>
+                                        Search</a>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="form-group margin-bottom-10">
+                            <a href="" class="btn btn-success btn-block bg-theme btn-round">Submit</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="panel panel-default card ">
+
+                <ul ngbNav #nav="ngbNav" [(activeId)]="active" class=" nav-tabs ">
+                    <li [ngbNavItem]="1">
+                        <a ngbNavLink>Occupancy</a>
+                        <ng-template ngbNavContent>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <!-- <div class="col-lg-8">
+                                        <app-export-csv></app-export-csv>
+                                    </div> -->
+
+                                    <!-- <div class="col-lg-4">
+                                        <div class="form-group ml-10" style="float: right;">
+                                            <div class="input-search" style="width: max-content;">
+                                                <i class="input-search-icon ri-search-line"></i>
+                                                <input type="text" class=" form-control" formControlName="search"
+                                                    name="" placeholder="Search...">
+                                                <button type="button" class="input-search-close icon "
+                                                    data-toggle="popover" data-original-title="" data-trigger="hover"
+                                                    data-container="body" data-placement="top" data-html="true"
+                                                    id="help2">
+                                                    <i class="ri-question-line"
+                                                        pTooltip='Search functionality lets the user find Customers on the system. The user can type the Name of the customer in the search bar and the details will be displayed on the list'
+                                                        tooltipPosition="right"></i>
+                                                </button>
+                                                <div id="popover-content-help2" class="hide">
+                                                    Some help information goes here
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                                <div class="w-100-p" style="height: calc(100% - 68px);">
+                                    <general-table [config]="config" [actions]="actions" [dataSource]="consumers"
+                                        (signals)="onTableSignals($event)">
+                                    </general-table>
+                                </div>
+                            </div>
+
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="2">
+                        <a ngbNavLink>Geo Zone Movement/Motion</a>
+                        <ng-template ngbNavContent>
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <!-- <div class="col-lg-8">
+                                        <app-export-csv></app-export-csv>
+                                    </div> -->
+
+                                    <!-- <div class="col-lg-4">
+                                        <div class="form-group ml-10" style="float: right;">
+                                            <div class="input-search" style="width: max-content;">
+                                                <i class="input-search-icon ri-search-line"></i>
+                                                <input type="text" class=" form-control" formControlName="search"
+                                                    name="" placeholder="Search...">
+                                                <button type="button" class="input-search-close icon "
+                                                    data-toggle="popover" data-original-title="" data-trigger="hover"
+                                                    data-container="body" data-placement="top" data-html="true"
+                                                    id="help2">
+                                                    <i class="ri-question-line"
+                                                        pTooltip='Search functionality lets the user find Customers on the system. The user can type the Name of the customer in the search bar and the details will be displayed on the list'
+                                                        tooltipPosition="right"></i>
+                                                </button>
+                                                <div id="popover-content-help2" class="hide">
+                                                    Some help information goes here
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                                <div class="w-100-p" style="height: calc(100% - 68px);">
+                                    <general-table [config]="config" [actions]="actions" [dataSource]="consumers"
+                                        (signals)="onTableSignals($event)">
+                                    </general-table>
+                                </div>
+                            </div>
+
+                        </ng-template>
+                    </li>
+                </ul>
+                <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

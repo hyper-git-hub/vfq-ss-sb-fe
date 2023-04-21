@@ -1,0 +1,226 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+    <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
+</div>
+
+<div class="modal-body">
+    <form [formGroup]="userform" (ngSubmit)="onSubmit()">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>First Name<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" formControlName="first_name"
+                                placeholder="First Name">
+                            <ng-container *ngIf="userform.controls['first_name'].dirty">
+                                <span class="text-danger" *ngIf="userform.controls['first_name'].hasError('required')">
+                                    Please provide first name
+                                </span>
+                                <span class="text-danger" *ngIf="userform.controls['first_name'].hasError('maxlength')">
+                                    First name must be of less than 60 characters
+                                </span>
+                                <span class="text-danger"
+                                    *ngIf="userform.controls['first_name'].hasError('whitespace')">
+                                    Avoid white spaces
+                                </span>
+                            </ng-container>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Last Name<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" formControlName="last_name" placeholder="Last Name">
+                            <ng-container *ngIf="userform.controls['last_name'].dirty">
+                                <span class="text-danger" *ngIf="userform.controls['last_name'].hasError('required')">
+                                    Please provide last name
+                                </span>
+                                <span class="text-danger" *ngIf="userform.controls['last_name'].hasError('maxlength')">
+                                    Last name must be of less than 60 characters
+                                </span>
+                                <span class="text-danger" *ngIf="userform.controls['last_name'].hasError('whitespace')">
+                                    Avoid white spaces
+                                </span>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Email<span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" [readonly]="data?.id" formControlName="email"
+                                value="" placeholder="Email">
+                            <ng-container
+                                *ngIf="userform.controls['email'].invalid && userform.controls['email'].dirty">
+                                <span class="text-danger" *ngIf="userform.controls['email'].hasError('required')">
+                                    Please provide email
+                                </span>
+                                <span class="text-danger" *ngIf="userform.controls['email'].getError('pattern')">
+                                    Please provide valid email
+                                </span>
+                                <span class="text-danger" *ngIf="userform.controls['email'].getError('whitespace')">
+                                    Avoid white spaces
+                                </span>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Contact Number<span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text" for="ph" style="border-right: none;">974</span>
+                                <input type="text" autocomplete="off" id="ph" maxlength="8" class="form-control"
+                                    formControlName="phone" placeholder="Contact Number">
+                            </div>
+                            <ng-container *ngIf="userform.controls['phone'].dirty">
+                                <span class="text-danger" *ngIf="userform.controls['phone'].hasError('required')">
+                                    Please provide Contact Number
+                                </span>
+                                <span class="text-danger" *ngIf="userform.controls['phone'].hasError('minlength')">
+                                    Contact Number no must be of 8 digits
+                                </span>
+                                <div class="text-danger" *ngIf="userform.controls['phone'].hasError('phoneonly')">
+                                    Contact Number no must be numeric
+                                </div>
+                            </ng-container>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Date of Joining</label>
+                            <div class="input-group">
+                                <input class="form-control" placeholder="YYYY-MM-DD" ngbDatepicker
+                                    formControlName="date_joined" name="date_joined" #d="ngbDatepicker"
+                                    placement="bottom" (click)="d.toggle()">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary btn-icon" (click)="d.toggle()"
+                                        type="button"
+                                        style="padding: 0 8px; border-radius: 0px; border-color: #ced4da;">
+                                        <i class="ri-calendar-2-line"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Department</label>
+                            <input type="text" class="form-control" formControlName="department"
+                                placeholder="Department">
+                            <span class="text-danger"
+                                *ngIf="userform.controls['department'].hasError('required') && userform.controls['department'].touched">
+                                Please provide department
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Role</label>
+                            <input type="text" class="form-control" formControlName="internal_role" placeholder="Role">
+                        </div>
+                    
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Work Location</label>
+                            <input type="text" class="form-control" formControlName="work_location" placeholder="Work Location">
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-md-12" *ngIf="loggedInUser.user_type != 2">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="checkbox-custom checkbox-inline1 checkbox-warning pl-20">
+                                <input type="checkbox" id="4446" formControlName="write" name="write">
+                                <label for="4446">Write</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div> -->
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div *ngIf="data"  fxFlex="100" class="form-group">
+                            <label>Status</label> <!-- <span class="text-danger">*</span> -->
+                            <ng-select   [clearable]="false"
+                                class="group-container" formControlName="status" style="max-width: 48.5%;">
+                                <ng-option value="1">Active</ng-option>
+                                <ng-option value="2">InActive</ng-option>
+                            </ng-select>
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div fxLayout="column" class="form-group text-center"
+                            style="margin-top: 20%; position: relative;">
+                            <img height="130px" [src]="selectedImage ? selectedImage : 'assets/images/default_user.png'"
+                                class="img-bordered" style="border-radius: 2%; position: relative;">
+
+                            <input type="file" id="fileInput" accept=".jpg, .png, .jpeg"
+                                (change)="onImageChanged($event)" style="display: none;">
+
+                            <button  type="button" class="btn btn-primary mt-10"
+                                (click)="chooseImage()">
+                                Upload Image
+                            </button>
+
+                            <div class="text-danger" *ngIf="!imageToSend">Profile picture
+                                must be uploaded
+                            </div>
+
+                            <img *ngIf="imageLoading" src="assets/images/new-loader.gif" alt="loader" width="60px"
+                                height="60px" style="position: absolute; top: 20%; left: 25%;">
+
+
+                            <span *ngIf="notImage">
+                                <div class="alert alert-warning">
+                                    Choose image only.
+                                </div>
+                            </span>
+
+                            <!-- <span *ngIf="uploadImage" class="text-danger">Please upload image first</span> -->
+                        </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success btn-round btn-block1" [disabled]="userform.invalid">
+                <i class="ri-check-fill"></i>
+                <span>{{!!data ? 'Update' : 'Save'}}</span>
+            </button>
+            <button type="button" class="btn btn-default btn-round btn-block1" (click)="onCloseModel()"><i
+                    class="ri-arrow-go-back-line"></i>
+                Back</button>
+        </div>
+    </form>
+
+
+</div>

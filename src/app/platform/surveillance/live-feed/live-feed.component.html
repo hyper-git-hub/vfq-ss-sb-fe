@@ -1,0 +1,283 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+<img *ngIf="loading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" width="150px" height="150px">
+
+<div class="page-container w-100-p" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start start">
+    <div class="w-100-p panel panel-default card round">
+        <div class="panel-heading">
+            <div fxFlex="20" fxLayout="row" fxLayoutGap="0px" fxLayoutAlign="start start">
+                <h3 class="panel-title fw-600 mb-0">Live Camera</h3>
+            </div>
+
+            <div fxFlex="80" fxLayout="row" fxLayoutGap="2px" fxLayoutAlign="end start">
+                <!-- <ng-select placeholder="Hallways">
+                    <ng-option *ngFor="let item of hallways" [value]="item.id">
+                        {{item.name}}
+                    </ng-option>
+                </ng-select>
+                <button type="button" class="btn btn-success btn-xs" (click)="onAddlivefeed()">Add</button> -->
+                <!-- <button type="button" class="btn btn-primary btn-xs" (click)="onEditlivefeed()">Edit</button> -->
+                <button type="button" (click)="updateLayout(2)" class="btn btn-info btn-xs">2x2</button>
+                <button type="button" (click)="updateLayout(3)" class="btn btn-info btn-xs">3x3</button>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="row">
+                    <div *ngFor="let item of devices" class="h-300 mb-8"
+                        [ngClass]="views.layout === 2 ? 'col-md-6' : views.layout === 3 ? 'col-md-4' : 'col-md-3'">
+
+                        <canvas [id]="item.id" style="width: 100%; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"> </canvas>
+
+                        <!-- <video *ngIf="rtsp" id="test_video" controls [autoplay]="true">
+                            <source [src]="rtsp">
+                        </video> -->
+                        <!-- <div class="fp-Video">
+                            <div id="myVideo" class="display"></div>
+                         </div> -->
+                        <!-- <iframe *ngIf="rtsp" [src]="rtsp" height="100%" width="100%" frameborder="0" scrolling='no'
+                            allowfullscreen='allowfullscreen'></iframe> -->
+
+                        <!-- <vg-player>
+                            <vg-controls style="width: 320px">
+                                <vg-fullscreen></vg-fullscreen>
+                            </vg-controls>
+                            <video #myMedia [autoplay]="true" [src]="rtsp" [id]="item.id"
+                                type="video/mp4">
+                            </video>
+                        </vg-player> -->
+
+                        <div class="map-filters">
+                            <ul style="list-style: none;display: flex;">
+                                <!-- <li style="padding-right: 8px;">
+                                    <a [ngbPopover]="settingPopUp" [popoverTitle]="" placement="bottom"
+                                        [autoClose]="false">
+                                        <i class="ri-settings-5-fill"
+                                            style="background-color: #ca090970; color: white; padding: 7px;  border-radius: 5px;">
+                                        </i>
+                                    </a>
+                                    <ng-template #settingPopUp>
+                                    <div class="w-150" fxLayoutAlign="space-between center">
+                                        <ng-select placeholder="Building" class="w-100-p">
+                                            <ng-option *ngFor="let items of building" [value]="items.id">
+                                                {{items.name}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                    <div class="w-150" fxLayoutAlign="space-between center">
+                                        <ng-select placeholder="Camera" class="w-100-p pt-12">
+                                            <ng-option *ngFor="let items of camera" [value]="items.id">
+                                                {{items.name}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                    <div class="pt-12">
+                                        <button type="button" class="btn btn-danger btn-block btn-round">
+                                            Show Fotage</button>
+                                    </div>
+                                </ng-template>
+                                </li> -->
+
+                                <!-- <li class="pr-8">
+                                    <a [ngbPopover]="popContent" [popoverTitle]="popTitle" popoverClass="pb" placement="bottom">
+                                        <i class="ri-download-fill download">
+                                            <span style="margin-bottom: 20px;">&nbsp;{{item.downloads['count']}}</span>
+                                        </i>
+                                    </a>
+                                    <ng-template #popTitle>
+                                        <div class="w-100" fxLayoutAlign="space-between center">
+                                            <div>Download</div>
+                                            <div class="download-title">{{item.downloads['count']}}</div>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #popContent>
+                                        <div class="w-100-p fs-12">
+                                            <ng-container *ngFor="let item of item.downloads?.data let last=last">
+                                                <div class="item">{{item.user__first_name}}</div>
+                                                <hr *ngIf="!last" style="margin: 2px 0; padding: 0 4px;">
+                                            </ng-container>
+                                        </div>
+                                    </ng-template>
+                                </li> -->
+
+                                <li>
+                                    <!-- [ngbPopover]="popContent1" [popoverTitle]="popTitle1" -->
+                                    <a popoverClass="pb" placement="bottom">
+                                        <i class="ri-eye-fill eye">&nbsp;{{item['views_count']}}</i>
+                                    </a>
+
+                                    <!-- <ng-template #popTitle1>
+                                        <div class="w-100" fxLayoutAlign="space-between center">
+                                            <div>View</div>
+                                            <div class="eye-count">{{item['views_count']}}</div>
+                                        </div>
+                                    </ng-template>
+
+                                    <ng-template #popContent1>
+                                        <div class="w-100-p fs-12">
+                                            <ng-container *ngFor="let item of item.views?.data; let last=last">
+                                                <div class="item">
+                                                    {{item.user__first_name}}
+                                                </div>
+                                                <hr *ngIf="!last" style="margin: 2px 0; padding: 0 4px;">
+                                            </ng-container>
+                                        </div>
+                                    </ng-template> -->
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- (click)="openSingleCamera(item)" -->
+                        <div class="camera-name">
+                            {{item.device_name ? item.device_name : item.device}}
+                        </div>
+
+
+                        <div class="w-104 h-142 pos-absolute bottom-4 right-18 control-center">
+                            <div class="w-100-p h-100-p controls round" style="background: #282828">
+                                <div class="white px-6 py-0">
+                                    <label for="zoom" class="mb-0">Zoom {{zoomLevel == '1' ? 'In' : 'Out'}}</label>
+                                    <input type="range" id="zoom" min="1" max="2" value="1" class="slider" (change)="onZoomCamera($event, item.device)">
+                                </div>
+                                <div class="w-96 h-96 white" fxLayout="row wrap" style="margin-left: 4px">
+                                    <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('5', item.device)" fxLayoutAlign="center center"><i class="ri-arrow-left-up-fill"></i></div>
+                                    <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('1', item.device)" fxLayoutAlign="center center"><i class="ri-arrow-up-fill"></i></div>
+                                    <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('7', item.device)" fxLayoutAlign="center center"><i class="ri-arrow-right-up-fill"></i></div>
+                                    <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('3', item.device)" fxLayoutAlign="center center"><i class="ri-arrow-left-fill"></i></div>
+                                    <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"></div>
+                                    <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('4', item.device)" fxLayoutAlign="center center"><i class="ri-arrow-right-fill"></i></div>
+                                    <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('6', item.device)" fxLayoutAlign="center center"><i class="ri-arrow-left-down-fill"></i></div>
+                                    <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('2', item.device)" fxLayoutAlign="center center"><i class="ri-arrow-down-fill"></i></div>
+                                    <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('8', item.device)" fxLayoutAlign="center center"><i class="ri-arrow-right-down-fill"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="col-lg-12 p-0">
+            <div class=" panel-default card round shadow font-size-12 ">
+                <div class="row">
+                    <div class="panel-body padding-15" style="width: 100%;">
+                        <ng-container *ngIf="camerasData.length > 0">
+                            <div *ngFor="let item of camerasData" class="card-group-row__col flex-wrap player-box"
+                                [ngClass]="views?.layout == 2 ? 'col-md-6' : views?.layout == 3 ? 'col-md-4' : 'col-md-3'">
+
+                                <div class="player-wrapper">
+
+                                    <vg-player>
+                                        <vg-controls style="width: 320px">
+                                            <vg-fullscreen></vg-fullscreen>
+                                        </vg-controls>
+                                        <video #myMedia [autoplay]="true" [vgHls]="item.url" [id]="item.id"
+                                            type="video/mp4">
+                                        </video>
+                                    </vg-player>
+
+                                </div>
+                                <div class="mapfilters" style="right: 15px; left: auto;min-width: 0px;">
+                                    <ul style="list-style: none;display: flex;">
+                                        <li style="padding-right: 8px;">
+                                            <a [ngbPopover]="popContent2" [popoverTitle]="" placement="bottom"
+                                            [autoClose]="false">
+                                            <i class="ri-settings-5-fill"
+                                                style="background-color: #ca090970; color: white; padding: 7px;  border-radius: 5px;">
+                                            </i>
+                                        </a>
+                                            <ng-template #popContent2>
+                                            <div class="w-150" fxLayoutAlign="space-between center">
+                                                <ng-select placeholder="Building" class="w-100-p">
+                                                    <ng-option *ngFor="let items of building" [value]="items.id">
+                                                        {{items.name}}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                            <div class="w-150" fxLayoutAlign="space-between center">
+                                                <ng-select placeholder="Camera" class="w-100-p pt-12">
+                                                    <ng-option *ngFor="let items of camera" [value]="items.id">
+                                                        {{items.name}}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                            <div class="pt-12">
+                                                <button type="button" class="btn btn-danger btn-block btn-round">
+                                                    Show Fotage</button>
+                                            </div>
+                                        </ng-template>
+                                        </li>
+                                        <li style="padding-right: 8px;">
+                                            <a [ngbPopover]="popContent" [popoverTitle]="popTitle" popoverClass="pb"
+                                                placement="bottom">
+                                                <i class="ri-download-fill"
+                                                    style="background-color: #ca090970; color: white; padding: 7px;  border-radius: 5px;">
+                                                    <span
+                                                        style="margin-bottom: 20px;">&nbsp;{{item.downloads?.count}}</span></i>
+                                            </a>
+                                            <ng-template #popContent>
+                                                <div class="w-100-p fs-12">
+                                                    <ng-container
+                                                        *ngFor="let item of item.downloads?.data let last=last">
+                                                        <div class="item">{{item.user__first_name}}</div>
+                                                        <hr *ngIf="!last" style="margin: 2px 0; padding: 0 4px;">
+                                                    </ng-container>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template #popTitle>
+                                                <div class="w-100" fxLayoutAlign="space-between center">
+                                                    <div>Download</div>
+                                                    <div
+                                                        style="background-color: #f96868;; color: white;border-radius: 8px;font-size: 12px; padding: 0 4px;">
+                                                        {{item.downloads?.count}}</div>
+                                                </div>
+                                            </ng-template>
+                                        </li>
+                                        <li>
+                                            <a [ngbPopover]="popContent1" [popoverTitle]="popTitle1" popoverClass="pb"
+                                                placement="bottom">
+                                                <i class="ri-eye-fill" style="   background-color: #ca090970;
+                                                color: white;  padding: 7px; border-radius: 5px;">&nbsp;
+                                                    {{item.views?.count}}</i>
+                                            </a>
+
+                                            <ng-template #popContent1>
+                                                <div class="w-100-p fs-12">
+                                                    <ng-container *ngFor="let item of item.views?.data; let last=last">
+                                                        <div class="item">
+                                                            {{item.user__first_name}}
+                                                        </div>
+                                                        <hr *ngIf="!last" style="margin: 2px 0; padding: 0 4px;">
+                                                    </ng-container>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template #popTitle1>
+                                                <div class="w-100" fxLayoutAlign="space-between center">
+                                                    <div>View</div>
+                                                    <div
+                                                        style="background-color: #f96868;; color: white;border-radius: 8px;font-size: 12px; padding: 0 4px;">
+                                                        {{item.views?.count}}</div>
+                                                </div>
+                                            </ng-template>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div
+                                    style="border-radius: 10%;margin: auto; position: absolute;padding: 5px 10px 5px 10px;color: aliceblue;background: rgb(202, 9, 9);margin: 6px;">
+                                    {{item.camera_name}}
+                                </div>
+                            </div>
+                        </ng-container>
+
+
+                        <ng-container *ngIf="camerasData.length === 0">
+                            <div style="display:flex; justify-content:center;">
+                                <img src="./../../../../assets/images/no-video.png" alt="" width="150px">
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</div>

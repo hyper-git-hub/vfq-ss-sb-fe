@@ -1,0 +1,37 @@
+::ng-deep .group-container .ng-select-container {
+  box-shadow: none;
+  border-radius: 0 !important;
+}
+
+.fa-passwd-reset>.fa-lock {
+  font-size: 0.85rem;
+}
+
+.flex-custom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.input-group-addon {
+  padding: 9px 15px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1;
+  color: #76838f;
+  text-align: center;
+  background-color: #f3f7f9;
+  border: 1px solid #e4eaec;
+  border-radius: 3px;
+}
+
+.input-group-addon {
+  height: 36px !important;
+  border-radius: 0 !important;
+}
+
+.p-mask {
+  width: calc(100% - 56px) !important;
+  padding-top: 1px !important;
+}

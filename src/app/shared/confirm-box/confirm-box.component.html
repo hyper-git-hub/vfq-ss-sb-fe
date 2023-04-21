@@ -1,0 +1,48 @@
+<div class="confirm-wrapper" *ngIf="data.edit">
+    <span class="close-btn" mat-button (click)="onNoClick()">X</span>
+    <h1  class="title">{{data.item}}</h1>
+    <div class="dialog-actions" style="margin-bottom: 20px; flex-direction: column;">
+        <div style="width: 70%;">
+            <span class="content">
+                <input type="text" class="form-control" name="building" [value]="data.item" #buildingValue>
+            </span>
+        </div>
+        <div style="margin-top: 20px;">
+            <button
+                class="btn btn-success btn-round btn-block1 margin-left-5" (click)="recordAction(null)" type="button">Update</button>
+    
+            <button class="btn btn-default btn-round btn-block1 margin-left-5"
+                (click)="onNoClick()" type="button">Cancel</button>
+        </div>
+    </div>
+
+</div>
+
+<div class="confirm-wrapper" *ngIf="!data.edit">
+    <span class="close-btn" mat-button (click)="onNoClick()">X</span>
+    <h1  class="title" *ngIf="data.delete == true " >You won't be able to revert this!</h1>
+    <h1  class="title" *ngIf="data.inactive == true"  >Are you sure?</h1>
+    <img class="imagepopup" src="../../../assets/images/alert.png" height="80px">
+    <div >
+        <span class="content">
+            <p>What do you want to do with <b>{{data.item}} ?</b></p>
+            <p *ngIf="data?.allocation==true && data.delete == true">All Records associated with <b>data.item</b>, will be de-allocated.</p>
+            <p *ngIf="data?.message==true && data.delete == true">Warning! If you delete this group, all the users associated to this group will not be able to access the portal.</p>
+        </span>
+    </div>
+
+    <div class="dialog-actions" style="margin-bottom: 20px;">
+        <button *ngIf="data.delete == true " class="btn btn-danger btn-round btn-block1" (click)="recordAction(1)"
+           cdkFocusInitial type="submit">Delete the Record</button>
+        <button *ngIf="data.inactive == true && data.status=='1'"
+            class="btn btn-warning btn-round btn-block1 margin-left-5" (click)="recordAction(2)" type="button">Mark as
+            Inactive</button>
+        <button *ngIf="data.inactive == true && data.status=='2'"
+            class="btn btn-success btn-round btn-block1 margin-left-5" (click)="recordAction(2)" type="button">Mark as
+            Active</button>
+
+        <button *ngIf="data.cancel == true " class="btn btn-default btn-round btn-block1 margin-left-5"
+            (click)="onNoClick()" type="button">Cancel</button>
+    </div>
+
+</div>

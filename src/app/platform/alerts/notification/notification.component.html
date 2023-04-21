@@ -1,0 +1,33 @@
+<app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
+
+<div class="page-container w-100-p">
+  <div class="panel-body padding-0">
+    <div class="form-group">
+      <div class="row">
+        <div style="float: right;padding: 0px 48px;">
+          <div class="form-group margin-bottom-10" (click)="clearNotifications()">
+            <!-- <a class="btn btn-success btn-round "> <i class="ri-refresh-line "></i>
+                          Clear
+                      </a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-100-p panel panel-default card ">
+      <div class="panel-heading">
+        <h3 class="panel-title fw-600 mb-0">List
+          <span class="fw-200 ml-10 grey-400">
+            <i class="ri-question-line" tooltipPosition="right" ngbTooltip="some info goes here"></i>
+          </span>
+        </h3>
+      </div>
+
+      <div class="panel-body p-16">
+        <general-table style="height: 100%;" [config]="config" [dataSource]="notificationsList" [count]="count"
+          (signals)="onTableSignals($event)"></general-table>
+      </div>
+    </div>
+  </div>
+
+</div>

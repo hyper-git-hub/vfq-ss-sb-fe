@@ -1,0 +1,73 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Bulk Upload
+    </h4>
+    <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-12">
+            <form novalidate [formGroup]="bulkUploadForm" id="bulkUploadFormID"
+                (ngSubmit)="bulkUploadSubmit(bulkUploadForm.value)">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="padding-20 padding-bottom-0 padding-top-0">
+                            <div class="form-group">
+                                <button class="file-upload-btn" type="button">
+                                <input class="file-upload-input" type='file' (change)="fileChanges($event)"
+                                accept=".ms-excel, .xls" formControlName="csvFiles" />
+                                    Browse
+                                </button>
+
+                                <span class="fileName-padding" *ngIf="selectedFileName != '' && !notCSVExcel">
+                                    {{selectedFileName}}
+                                </span>
+
+                                <span class="alert alert-danger fileName-padding" *ngIf="notCSVExcel">
+                                    Please choose excel file only - file format: .xls
+                                </span>
+
+                                <div class="image-upload-wrap">
+                                    <input class="file-upload-input" type='file' (change)="fileChanges($event)"
+                                        accept=".ms-excel, .xls" formControlName="csvFiles" />
+                                    <!--.ms-excel, .xlsx-->
+
+                                    <div class="drag-text">
+                                        <h4>Drag and drop your excel file here</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer" style="height: auto;">
+    <div class="col-md-12">
+        <div class="col-md-6 text-left" style="float: left;">
+            Download <a href="../assets/doc/UserBulkUpload.xls">Sample</a>
+            file here
+            <small class="text-danger" style="display: inline-block;">
+                * Password must be at least one lowercase letter, one Uppercase letter, one numeric digit and
+                length greater than 8
+            </small>
+
+            <p *ngIf="rejectedUsersList.length>0">Download <a (click)="downloadRejectedUser()">Rejected
+                    Users</a> List</p>
+
+            <p *ngIf="rejectedUsersList.length>0"> Rejected Count:
+                <b>{{bulkUploadApiResponse.rejected_count}}</b> |
+                Created Count: <b>{{bulkUploadApiResponse.created_counts}}</b>
+            </p>
+        </div>
+        <div class="col-md-6" style="float: left;">
+            <button type="button" #closeFormBulk class="btn btn-default btn-round btn-block1" (click)="onCloseModel()"data-dismiss="modal">Close
+            </button>
+            <button type="submit" class="btn btn-primary btn-round btn-block1" form="bulkUploadFormID" (ngSubmit)="bulkUploadSubmit(bulkUploadForm.value)"
+                [disabled]="disableButton">Upload
+            </button>
+        </div>
+    </div>
+</div>

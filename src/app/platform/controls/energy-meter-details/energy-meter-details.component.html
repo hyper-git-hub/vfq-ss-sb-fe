@@ -1,0 +1,22 @@
+<app-list-detail [deviceTitle]="'Energy Meter Details'" [breadCrumbs]="breadCrumbs" [loading]="loading || currLoading || voltageLoading || pcGraphLoading"
+    [actions]="actions" [deviceDetail]="buildingDetails" [deviceUrl]="deviceDetailUrl" [table]="table"
+    [deviceImage]="'/assets/images/energy-meter.jpg'" (signals)="onDetailsSignals($event)">
+</app-list-detail>
+
+<div class="px-30 pb-30 d-flex">
+    <div class="mr-30" style="flex: 1;">
+        <app-gen-line-chart graphTitle="Current" seriesTitle="Current" unit="(amp)" [graphID]="'giCurrent'" [graphData]="currentGraphData"
+            [graphConfig]="currGraphConfig" (signals)="onCurrGraphSignals($event)" [showDaysDropdown]="true"></app-gen-line-chart>
+    </div>
+    <div style="flex: 1;">
+        <app-gen-line-chart graphTitle="Voltage" seriesTitle="Voltage" unit="(V)" [graphID]="'giVolt'" [graphData]="voltageGraphData"
+            [graphConfig]="voltageGraphConfig" (signals)="onVoltGraphSignals($event)" [showDaysDropdown]="true"></app-gen-line-chart>
+    </div>
+</div>
+
+<div class="px-30">
+    <div style="flex: 1;">
+        <app-gen-line-chart graphTitle="Power" seriesTitle="Power" unit="(W)" [graphID]="'powerGraph'" [graphData]="pCData"
+            [graphConfig]="pcGraphConfig" (signals)="onPCGraphSignals($event)" [showDaysDropdown]="true"></app-gen-line-chart>
+    </div>
+</div>
