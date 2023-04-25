@@ -182,7 +182,7 @@
         </div>
 
         <div class="modal-footer">
-            <button [disabled]="alertForm.invalid" type="submit" (click)="onSubmit()" form="alert-form"
+            <button [disabled]="!alertForm.valid || loading" type="submit" (click)="onSubmit()" form="alert-form"
                 [disabled]="alertForm.invalid" class="btn btn-success btn-round">
                 <i class="ri-check-fill"></i>
                 <span>{{!!data ? 'Update' : 'Save'}}</span>

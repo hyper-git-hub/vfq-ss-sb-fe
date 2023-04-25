@@ -121,7 +121,7 @@ export class SmokeDetailComponent implements OnInit {
         for (const key in this.buildingDetails) {
           if (ele.key === key) {
             if (key === 'device_online') {
-              ele.value = this.buildingDetails[key] ? 'On' : 'Off';
+              // ele.value = this.buildingDetails[key] ? 'On' : 'Off';
             } else if (key === 'updated_at') {
               // ele.value = this.df.transform(this.buildingDetails[key], 'dd-MM-yyyy, hh:mm a'); ``
             } else {

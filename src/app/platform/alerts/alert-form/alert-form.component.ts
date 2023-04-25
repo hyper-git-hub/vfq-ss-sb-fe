@@ -54,7 +54,7 @@ export class AlertFormComponent implements OnInit {
     this.buildingFilters = { device_type: 'smoke', customer_id: this.customerId, device: '', building: '', space: '', space_attribute: '', open_area: '', export: '' };
 
     this.alertForm = this.formBuilder.group({
-      alert_type: ['smoke', [Validators.required]],
+      alert_type: ['Smoke Alarm', [Validators.required]],
       device_type: [null],
       device: [null, [Validators.required]],
       building: [null],
@@ -112,19 +112,42 @@ export class AlertFormComponent implements OnInit {
 
       let at = this.data.alert_type;
       if (at != 'Smoke Alarm' && at != 'Water Leakage Sensor') {
-        this.enableThreshold = true;
-        this.alertForm.get('lower_threshold').setValidators(Validators.required);
-        this.alertForm.get('upper_threshold').setValidators(Validators.required);
+        this.setValidator(true);
       } else {
-        this.enableThreshold = false;
-        this.alertForm.get('lower_threshold').removeValidators(Validators.required);
-        this.alertForm.get('upper_threshold').removeValidators(Validators.required);
+        this.setValidator(false);
       }
       this.getCustomerDeviceBuilding(this.buildingFilters);  
       this.alertForm.patchValue(this.data);
+
     } else {
       this.getBuildingList();
-      this.getCustomerDevice(this.buildingFilters);  
+      this.getCustomerDevice(this.buildingFilters);
+      this.alertForm.get('packet_key').setValue('fire_status');
+      this.alertForm.get('alert_type').valueChanges.subscribe((val) => {
+        if (val === 'Occupancy' || val === 'Temperature' || val === 'Humidity') {
+          this.setValidator(true);
+        } else {
+          this.setValidator(false);
+        }
+      });
+
+      this.alertForm.valueChanges.subscribe(() => {
+        console.log(this.alertForm.controls);
+      })
+    }
+  }
+
+  setValidator(enable: boolean) {
+    if (enable) {
+      this.enableThreshold = true;
+      this.alertForm.get('lower_threshold').setValidators(Validators.required);
+      this.alertForm.get('upper_threshold').setValidators(Validators.required);
+    } else {
+      this.enableThreshold = false;
+      this.alertForm.get('lower_threshold').removeValidators(Validators.required);
+      this.alertForm.get('upper_threshold').removeValidators(Validators.required);
+      this.alertForm.get('lower_threshold').setValue(null);
+      this.alertForm.get('upper_threshold').setValue(null);
     }
   }
 
@@ -176,11 +199,14 @@ export class AlertFormComponent implements OnInit {
   onSelectBuilding(ev: any) {
     this.deviceFilters.building = ev;
     this.buildingFilters.building = ev;
+    this.buildingFilters.floor = '';
+    this.buildingFilters.space = '';
+    this.buildingFilters.space_attribute = '';
+    this.buildingFilters.open_area = '';
     this.alertForm.get('floor').reset();
     this.alertForm.get('area_type').reset();
     if (!!ev) {
       this.getBuildingFloors(ev);
-
       this.getCustomerDevice(this.buildingFilters);
     }
   }
@@ -277,6 +303,7 @@ export class AlertFormComponent implements OnInit {
   onSelectFloor(ev: any) {
     this.deviceFilters.floor = ev;
     this.buildingFilters.floor = ev;
+    this.alertForm.get('device').setValue(null);
     if (!!ev) {
       this.getBuildingSpacesByFloor(ev);
       this.getCustomerDevice(this.buildingFilters);
@@ -299,7 +326,6 @@ export class AlertFormComponent implements OnInit {
   }
 
   onSelectOpenArea(ev: any) {
-
     this.deviceFilters.open_area = ev;
     this.buildingFilters.open_area = ev;
     this.getCustomerDevice(this.buildingFilters);
@@ -309,6 +335,7 @@ export class AlertFormComponent implements OnInit {
     if (!this.alertForm.valid) {
       return;
     }
+    this.loading = true;
     const formData = this.alertForm.value;
     let slug = `${environment.baseUrlNotif}/alert/`;
 
@@ -331,19 +358,23 @@ export class AlertFormComponent implements OnInit {
   }
   
   createAlert(slug: string, payload: any) {
+    this.loading = true;
     this.apiService.post(slug, payload).subscribe((resp: any) => {
       this.toastr.success("Alert created successfully");
       this.onCloseModel();
     }, (err: any) => {
+      this.loading = false;
       this.toastr.error(err.error['message']);
     });
   }
 
   updateAlert(slug: string, payload: any) {
+    this.loading = true;
     this.apiService.patch(slug, payload).subscribe((resp: any) => {
       this.toastr.success("Alert updated successfully");
       this.onCloseModel();
     }, (err: any) => {
+      this.loading = false;
       this.toastr.error(err.error['message']);
     });
   }
