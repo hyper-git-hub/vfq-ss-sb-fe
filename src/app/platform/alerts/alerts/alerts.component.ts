@@ -80,12 +80,12 @@ export class AlertsComponent implements OnInit {
     this.customerId = u.customer['customer_id'];
 
     this.smokeAlertsData = [];
-    this.smokeFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Smoke Alarm', search: '' };
-    this.waterLeakageFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Water Leakage Sensor', search: '' };
-    this.occupancyFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Occupancy', search: '' };
-    this.temperatureFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Temperature', search: '' };
-    this.humidityFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Humidity', search: '' };
-    this.geozoneFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'geozone', search: '' };
+    this.smokeFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Smoke Alarm', search: '', customer_id: this.customerId };
+    this.waterLeakageFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Water Leakage Sensor', search: '', customer_id: this.customerId };
+    this.occupancyFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Occupancy', search: '', customer_id: this.customerId };
+    this.temperatureFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Temperature', search: '', customer_id: this.customerId };
+    this.humidityFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Humidity', search: '', customer_id: this.customerId };
+    this.geozoneFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'geozone', search: '', customer_id: this.customerId };
 
     this.smokeConfig = new TableConfig(SmokeAlertsTableConfig.config);
     this.waterLeakageConfig = new TableConfig(WaterLeakageTableConfig.config);
@@ -299,6 +299,23 @@ export class AlertsComponent implements OnInit {
 
   onSelectTab(ev: any) {
     this.active = ev;
+    if (ev === 'smoke') {
+      this.smokeFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Smoke Alarm', search: '', customer_id: this.customerId };
+    } else if (ev === 'water-leakage') {
+      this.waterLeakageFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Water Leakage Sensor', search: '', customer_id: this.customerId };
+    } else if (ev === 'occupancy') {
+      this.occupancyFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Occupancy', search: '', customer_id: this.customerId };
+    } else if (ev === 'temperature') {
+      this.temperatureFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Temperature', search: '', customer_id: this.customerId };
+    } else if (ev === 'humidity') {
+      this.humidityFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Humidity', search: '', customer_id: this.customerId };
+    } else if (ev === 'geozone') {
+      this.geozoneFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'geozone', search: '', customer_id: this.customerId };
+    }
+
+    setTimeout(() => {
+      this.actions.next({ action: 'reload' });
+    }, 100);
   }
 
   onSubmit() {
@@ -377,31 +394,30 @@ export class AlertsComponent implements OnInit {
     this.buildingFilters = { device_type: 'Smoke Alarm', customer_id: this.customerId, device: '' };
     this.getCustomerDevice(this.buildingFilters);
 
-    switch (this.active) {
-      case 'smoke':
-        this.smokeFilters = { limit: 10, offset: '0', alert_type: 'Smoke Alarm' };
-        this.actions.next({ action: 'reload' });
-        break;
-      case 'water-leakage':
-        this.waterLeakageFilters = { limit: 10, offset: '0', alert_type: 'Water Leakage Sensor' };
-        this.actions.next({ action: 'reload' });
-        break;
-      case 'occupancy':
-        this.occupancyFilters = { limit: 10, offset: '0', alert_type: 'occupancy' };
-        this.actions.next({ action: 'reload' });
-        break;
-      case 'temperature':
-        this.temperatureFilters = { limit: 10, offset: '0', alert_type: 'temperature' };
-        this.actions.next({ action: 'reload' });
-        break;
-      case 'humidity':
-        this.humidityFilters = { limit: 10, offset: '0', alert_type: 'humidity' };
-        this.actions.next({ action: 'reload' });
-        break;
-      default:
-        break;
-    }
     setTimeout(() => {
+      // switch (this.active) {
+      //   case 'smoke':
+      //     break;
+      //     case 'water-leakage':
+      //     this.waterLeakageFilters = { limit: 10, offset: '0', alert_type: 'Water Leakage Sensor' };
+      //     this.actions.next({ action: 'reload' });
+      //     break;
+      //     case 'occupancy':
+      //       this.occupancyFilters = { limit: 10, offset: '0', alert_type: 'occupancy' };
+      //       this.actions.next({ action: 'reload' });
+      //     break;
+      //   case 'temperature':
+      //     this.temperatureFilters = { limit: 10, offset: '0', alert_type: 'temperature' };
+      //     this.actions.next({ action: 'reload' });
+      //     break;
+      //   case 'humidity':
+      //     this.humidityFilters = { limit: 10, offset: '0', alert_type: 'humidity' };
+      //     this.actions.next({ action: 'reload' });
+      //     break;
+      //   default:
+      //     break;
+      // }
+      this.smokeFilters = { limit: 10, offset: '0', alert_type: 'Smoke Alarm' };
       this.onSelectTab('smoke');
     }, 200);
   }

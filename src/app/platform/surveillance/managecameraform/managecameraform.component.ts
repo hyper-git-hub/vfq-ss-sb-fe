@@ -178,6 +178,8 @@ export class ManagecameraformComponent implements OnInit {
                 });
             });
         }
+        this.requestMotion = this.data.motion;
+        this.requestOccupancy = this.data.occupancy;
     }
 
     getBuildings(buildingType?: any) {

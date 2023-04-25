@@ -91,6 +91,7 @@ export class WaterMeterDetailsComponent implements OnInit {
 
     this.apiService.get(url.href).subscribe((resp: any) => {
       const dt = resp.data;
+      this.table[0].value = dt['device_online'] ? 'On' : 'Off';
       this.table[5].value = dt['water_flow'] ? Number(dt['water_flow']).toFixed().toString() + ' (Ltrs)' : '';
     });
   }
@@ -104,7 +105,7 @@ export class WaterMeterDetailsComponent implements OnInit {
         for (const key in this.buildingDetails) {
           if (ele.key === key) {
             if (key === 'device_online') {
-              ele.value = this.buildingDetails[key] ? 'On' : 'Off';
+              // ele.value = this.buildingDetails[key] ? 'On' : 'Off';
             } else if (key === 'updated_at') {
               ele.value = this.df.transform(this.buildingDetails[key], 'dd-MM-yyyy, hh:mm a'); ``
             } else {
