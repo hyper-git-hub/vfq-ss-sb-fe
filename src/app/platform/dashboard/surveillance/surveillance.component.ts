@@ -16,6 +16,8 @@ import { environment, ports } from 'src/environments/environment';
 })
 export class SurveillanceComponent implements OnInit, OnDestroy {
   loading: boolean;
+  cardsLoading: boolean;
+  graphsLoading: boolean;
   showBuildingCard: boolean;
   showDevicesCard: boolean;
   
@@ -75,6 +77,8 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
     this.customerid = this.user.customer.customer_id;
 
     this.loading = false;
+    this.cardsLoading = false;
+    this.graphsLoading = false;
     this.showBuildingCard = false;
     this.showDevicesCard = false;
     this.breadCrumbs = [
@@ -289,6 +293,7 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
   }
 
   getDashboardSliderCards(ev?: any) {
+    this.cardsLoading = true;
     const slug = `${environment.baseUrlSB}${ports.monolith}/building/building_detail/?id=${ev}`;
     this.apiService.get(slug).subscribe((data: any) => {
       if (data['data'] && data['data'] && data['data'].data.length > 0) {
@@ -297,10 +302,14 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
         this.totalFloors = floors > 1 ? `${floors} Floors` : `${floors} Floor`;
         this.sliderArray = dt.building_devices;
       }
+      this.cardsLoading = false;
+    }, (err: any) => {
+      this.cardsLoading = false;
     });
   }
 
   getDashboardGraphs(filters) {
+    this.graphsLoading = true;
     this.defaultLoader = { visibility: true }
     const slug = `${environment.baseUrlDashboard}/analytics/graphs?dashboard_id=${this.pageIdForGraph}`;
     this.apiService.get(slug).subscribe((resp: any) => {
@@ -355,6 +364,9 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
         //   this.row3.push(graph)
         // }
       })
+      this.graphsLoading = false;
+    }, (err: any) => {
+      this.graphsLoading = false;
     })
   }
 
@@ -582,12 +594,15 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
 
     if (element === 'MOA') {
       let data = [];
-      for (const key in graph.data) {
-        data.push({
-          name: key,
-          value: graph.data[key]
-        })
-      }
+      graph.data.forEach(element => {
+        data.push({ name: element.occupied_area, value: element.average });
+      });
+      // for (const key in graph.data) {
+      //   data.push({
+      //     name: key,
+      //     value: graph.data[key]
+      //   })
+      // }
       graph.data = data;
       graph.tooltip = '';
     }
@@ -653,14 +668,21 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
 
     if (element === 'COA') {
       let data = []
-      for (const key in graph.data) {
-        // console.log(key);
+      graph.data.forEach(ele => {
         data.push({
-          category: key,
-          value1: graph.data[key].underflow,
-          value2: graph.data[key].overflow,
+          category: ele.camera_id,
+          value1: ele.underflow,
+          value2: ele.overflow,
         })
-      }
+      });
+      // for (const key in graph.data) {
+      //   // console.log(key);
+      //   data.push({
+      //     category: key,
+      //     value1: graph.data[key].underflow,
+      //     value2: graph.data[key].overflow,
+      //   })
+      // }
       // console.log(data)
       graph.data = data;
       graph.tooltip = '';

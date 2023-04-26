@@ -1,5 +1,8 @@
 <app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
 
+<img *ngIf="loading || graphsLoading || cardsLoading" src="/assets/images/block-loader.gif" class="loader"
+    alt="Loading" width="150px" height="150px">
+
 <div class="p-30">
     <div class="row ml-0 mb-16">
         
