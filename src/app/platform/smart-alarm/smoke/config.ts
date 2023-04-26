@@ -18,7 +18,7 @@ export class smokeTableConfig {
         rowActions: [
             { icon: 'ri-pencil-line', tooltip: 'Edit', type: 'icon', action: 'onEdit', btnColor: 'btn-primary' },
             // { icon: 'ri-settings-2-line', type: 'icon', tooltip: 'Setting', action: 'onSetting', btnColor: 'btn-warning' },
-            // { icon: 'ri-delete-bin-6-line', tooltip: 'Delete', type: 'icon', action: 'onDelete', btnColor: 'btn-danger' },
+            { icon: 'ri-delete-bin-6-line', tooltip: 'Delete', type: 'icon', action: 'onDelete', btnColor: 'btn-danger' },
         ],
 
         columns: [
