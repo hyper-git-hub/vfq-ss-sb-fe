@@ -621,7 +621,7 @@ export class ManagebuildingformComponent implements OnInit {
       payload.status = this.data.status;
     }
 
-    if (payload != 6) {
+    if (payload.type != 6) {
       if (!payload.name || payload.name == "") {
         this.toastr.error("Building name is required");
         this.loading = false;
