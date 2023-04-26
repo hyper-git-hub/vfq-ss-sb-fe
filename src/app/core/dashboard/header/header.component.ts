@@ -127,7 +127,7 @@ export class HeaderComponent implements OnInit {
 
       this.fdb.object(`Notification/${this.userIdentity.guid}`).valueChanges().subscribe((item) => {
         if (!!item) {
-          this.toastr.success('You have a new notification');
+          this.toastr.success(item['body'], item['title']);
           this.updateAlertCount(item);
         }
       });
@@ -142,7 +142,7 @@ export class HeaderComponent implements OnInit {
   }
 
   getNotifications() {
-    const slug = `${environment.baseUrlNotif}/notifications/`;
+    const slug = `${environment.baseUrlNotif}/notifications/?limit=100&offset=0`;
     this.apiService.get(slug).subscribe((resp: any) => {
       this.notifications_list = resp.data['data'];
       if (this.notifications_list && this.notifications_list.length > 0) {
@@ -164,6 +164,7 @@ export class HeaderComponent implements OnInit {
     this.apiService.patch(slug,{}).subscribe((resp: any) => {
       // this.notifications_list = resp.data['data'];
       this.alert_count = 0;
+      this.getNotifications();
       // if (this.notifications_list && this.notifications_list.length > 0) {
       //   this.unRead = this.notifications_list.filter((item: any) => {
       //     return item.is_viewed === false;
@@ -175,6 +176,8 @@ export class HeaderComponent implements OnInit {
       //     }
       //   }
       // }
+    }, (err: any) => {
+      this.getNotifications();
     });
   }
   

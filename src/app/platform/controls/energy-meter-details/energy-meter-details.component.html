@@ -5,7 +5,7 @@
 
 <div class="px-30 pb-30 d-flex">
     <div class="mr-30" style="flex: 1;">
-        <app-gen-line-chart graphTitle="Current" seriesTitle="Current" unit="(amp)" [graphID]="'giCurrent'" [graphData]="currentGraphData"
+        <app-gen-line-chart graphTitle="Current" seriesTitle="Current" unit="(mA)" [graphID]="'giCurrent'" [graphData]="currentGraphData"
             [graphConfig]="currGraphConfig" (signals)="onCurrGraphSignals($event)" [showDaysDropdown]="true"></app-gen-line-chart>
     </div>
     <div style="flex: 1;">
