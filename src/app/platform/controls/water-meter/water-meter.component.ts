@@ -6,7 +6,7 @@ import { ShareDataService } from 'src/app/core/services/sharedData.service';
 import { TableConfig } from 'src/app/shared/general-table/model';
 import { environment } from 'src/environments/environment';
 
-import { EnergyMeterTableConfig } from './config';
+import { WaterMeterTableConfig } from './config';
 
 
 @Component({
@@ -46,7 +46,7 @@ export class WaterMeterComponent implements OnInit {
     let u: any = JSON.parse(localStorage.getItem('user'));
     this.customerId = u.customer['customer_id'];
     this.filters = { limit: 10, offset: '0', device_type: 'Water Meter',customer_id: this.customerId,  order_by: '', order: '', search: '', device: '', building: '', space: '', space_attribute: '', open_area: '', export: '' };
-    this.config = new TableConfig(EnergyMeterTableConfig.config);
+    this.config = new TableConfig(WaterMeterTableConfig.config);
   }
 
   ngOnInit(): void {

@@ -1,6 +1,6 @@
 import { environment } from "src/environments/environment";
 
-export class EnergyMeterTableConfig {
+export class WaterMeterTableConfig {
     public static config = {
         title: 'Water Meter',
         slug: `${environment.baseUrlSB}/building/smart_devices/`,
@@ -15,7 +15,7 @@ export class EnergyMeterTableConfig {
 
         rowActions: [
             { icon: 'ri-pencil-line', tooltip: 'Edit', type: 'icon', action: 'onEdit', btnColor: 'btn-primary' },
-            // { icon: 'ri-delete-bin-6-line', tooltip: 'Delete', type: 'icon', action: 'onDelete', btnColor: 'btn-danger' },
+            { icon: 'ri-delete-bin-6-line', tooltip: 'Delete', type: 'icon', action: 'onDelete', btnColor: 'btn-danger' },
         ],
 
         columns: [

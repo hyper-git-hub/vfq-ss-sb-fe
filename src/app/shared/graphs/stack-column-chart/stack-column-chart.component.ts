@@ -52,7 +52,7 @@ export class StackColumnChartComponent implements OnInit {
     let series1 = chart.series.push(new am4charts.ColumnSeries());
     series1.columns.template.width = am4core.percent(80);
     series1.columns.template.tooltipText =
-      "{name}: {valueY.totalPercent.formatNumber('#.00')}%";
+      "{name}: {valueY} ({valueY.totalPercent.formatNumber('#.00')}%)";
     series1.name = "Underflow Alert";
     series1.dataFields.categoryX = "category";
     series1.dataFields.valueY = "value1";
@@ -70,7 +70,7 @@ export class StackColumnChartComponent implements OnInit {
     let series2 = chart.series.push(new am4charts.ColumnSeries());
     series2.columns.template.width = am4core.percent(80);
     series2.columns.template.tooltipText =
-      "{name}: {valueY.totalPercent.formatNumber('#.00')}%";
+      "{name}: {valueY} ({valueY.totalPercent.formatNumber('#.00')}%)";
     series2.name = "Overflow Alert";
     series2.dataFields.categoryX = "category";
     series2.dataFields.valueY = "value2";

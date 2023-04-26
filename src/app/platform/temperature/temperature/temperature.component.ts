@@ -5,11 +5,12 @@ import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { ShareDataService } from 'src/app/core/services/sharedData.service';
 import { ApiService } from 'src/app/services/api.service';
-import { VAlertAction } from 'src/app/shared/alert/alert.model';
-import { AlertService } from 'src/app/shared/alert/alert.service';
+// import { VAlertAction } from 'src/app/shared/alert/alert.model';
+// import { AlertService } from 'src/app/shared/alert/alert.service';
 import { TableConfig } from 'src/app/shared/general-table/model';
 import { environment } from 'src/environments/environment';
-import { temperatureTableConfig } from './config';
+import { ROUNDHUM, ROUNDTEMP, temperatureTableConfig } from './config';
+import { FORMATS } from 'src/app/shared/general-table/formats';
 
 @Component({
   selector: 'app-temperature',
@@ -66,6 +67,12 @@ export class TemperatureComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.defineFormats();
+  }
+
+  defineFormats() {
+    FORMATS['round-temp'] = ROUNDTEMP;
+    FORMATS['round-hum'] = ROUNDHUM;
   }
 
   onDeviceSignals(ev: any) {

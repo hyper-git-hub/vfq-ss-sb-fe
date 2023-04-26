@@ -163,7 +163,7 @@ export class EnergyMeterDetailsComponent implements OnInit {
       const dt = resp.data;
 
       this.table[0].value = dt['device_online'] ? 'On' : 'Off';
-      this.table[5].value = Number(dt['current']).toFixed(2).toString() + ' Amp';
+      this.table[5].value = Number(dt['current']).toFixed(2).toString() + ' mA';
       this.table[6].value = Number(dt['voltage']).toFixed().toString() + ' V';
       this.table[8].value = Number(dt['power']).toFixed(2).toString() + ' W';
     });
