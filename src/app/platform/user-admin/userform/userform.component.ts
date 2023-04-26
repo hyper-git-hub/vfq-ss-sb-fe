@@ -68,7 +68,7 @@ export class UserformComponent implements OnInit {
       department: [null],
       internal_role: [null,],
       work_location: [null],
-      write: [true],
+      write: [false],
       user_picture: new FormControl(null, [Validators.required]),
       status: new FormControl(1),
     });
