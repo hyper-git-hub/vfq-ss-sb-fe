@@ -24,6 +24,7 @@ export class DeviceFormComponent implements OnInit {
   floors: any[];
   spaces: any[];
   rooms: any[];
+  roomspatch: any[];
   openAreas: any[];
   booleanFloorOpen: any
   @Input() areas: any = [];
@@ -76,6 +77,7 @@ export class DeviceFormComponent implements OnInit {
       room: this.data.space_attribute,
       open_area: this.data.open_area,
     });
+    this.roomspatch =  this.data.space_attribute_name;
     // this.bulbform.patchValue(this.data);
   }
 
@@ -155,7 +157,7 @@ export class DeviceFormComponent implements OnInit {
   }
 
   getBuildingSpacesByFloor(ev: any) {
-    const slug = `${environment.baseUrlSB}/building/space/?floor_id=${ev}`;
+    const slug = `${environment.baseUrlSB}/building/spacename/?floor_id=${ev}`;
     this.apiService.get(slug).subscribe((resp: any) => {
       this.spaces = resp.data['data'];
     }, (err: any) => {
