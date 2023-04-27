@@ -1,6 +1,6 @@
 <app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
 
-<img *ngIf="loading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" width="150px" height="150px">
+<img *ngIf="loading || stateLoading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" width="150px" height="150px">
 
 <div class="page-container w-100-p">
     <div fxLayout="row">
@@ -54,8 +54,7 @@
 
                                         <div class="form-group margin-bottom-10 text-center">
                                             <div class="font-size-24 font-weight-200 margin-bottom-0 grey-800">
-                                                {{DeviceDetails?.device_name ? DeviceDetails?.device_name :
-                                                DeviceDetails?.device }}
+                                                {{ DeviceDetails?.device_name ? DeviceDetails?.device_name : DeviceDetails?.device }}
                                             </div>
                                         </div>
                                     </div>
@@ -70,12 +69,10 @@
                                     <input type="color" [formControl]="BulbRGB" class="form-control" min="0" max="360"
                                         [disabled]="!deviceInfo?.current_device_state">
 
-                                    <label for="input" class=" control-label"
-                                        style="margin-top: 6px;">Saturation:</label>
+                                    <label for="input" class=" control-label" style="margin-top: 6px;">Saturation:</label>
 
-                                    <input type="range" class="input10 form-control" min="0" max="30" value="0"
-                                        (change)="saturation()" id="saturate"
-                                        [disabled]="!deviceInfo?.current_device_state"
+                                    <input type="range" class="input10 form-control" min="1" max="100" id="saturate"
+                                        [formControl]="bulbSaturation" [disabled]="!deviceInfo?.current_device_state"
                                         style="-webkit-appearance: slider-horizontal; appearance: slider-horizontal">
 
                                     <!-- <input type="range" (change)="saturation()"  min="0"
@@ -84,12 +81,11 @@
                                     <!-- <img src="https://www.w3schools.com/images/picture.jpg" [ngStyle]="{filter: saturaion}"> -->
 
 
-                                    <label for="input" class="control-label"
-                                        style="margin-top: 6px;">Brightness:</label>
+                                    <label for="input" class="control-label" style="margin-top: 6px;">Brightness:</label>
 
-                                    <input type="range" class="input11 form-control" min="0" id="bright" max="30"
+                                    <input type="range" class="input11 form-control" min="1" id="bright" max="100"
                                         value="0" style="-webkit-appearance: slider-horizontal; appearance: slider-horizontal;"
-                                        [disabled]="!deviceInfo?.current_device_state" (change)="brightness()">
+                                        [disabled]="!deviceInfo?.current_device_state" [formControl]="bulbBrightness">
                                 </div>
                                 <button type="submit" [disabled]="!deviceInfo?.current_device_state || loading"
                                     class="btn btn-success btn-round btn-block1" (click)="postDeviceAction()">
