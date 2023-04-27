@@ -25,6 +25,7 @@ export class DeviceFormComponent implements OnInit {
   spaces: any[];
   rooms: any[];
   roomspatch: any[];
+  spacepatch: any[];
   openAreas: any[];
   booleanFloorOpen: any
   @Input() areas: any = [];
@@ -68,6 +69,8 @@ export class DeviceFormComponent implements OnInit {
   }
 
   onEditModal() {
+    this.roomspatch =  this.data.space_attribute_name;
+    this.spacepatch =  this.data.space_name;
     this.deviceForm.patchValue({
       device_name: this.data.device_name,
       building: this.data.building,
@@ -77,7 +80,6 @@ export class DeviceFormComponent implements OnInit {
       room: this.data.space_attribute,
       open_area: this.data.open_area,
     });
-    this.roomspatch =  this.data.space_attribute_name;
     // this.bulbform.patchValue(this.data);
   }
 
