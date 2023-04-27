@@ -37,6 +37,7 @@ export class BuildingComponent implements OnInit {
   filtersForm: FormGroup;
 
   filteredURL: any;
+  readonly: boolean;
   buildingFilters: any;
   activeInactiveData: any;
 
@@ -61,6 +62,9 @@ export class BuildingComponent implements OnInit {
       { id: 5, name: 'Stadium' },
       { id: 5, name: 'Other' },
     ];
+
+    const user: any = JSON.parse(localStorage.getItem('user'));
+    this.readonly = user.write ? false : true;
 
     this.config = new TableConfig(BuildingTableConfig.config);
     this.filteredURL = { limit: 10, offset: '0', order: '', order_by: '', search_text: '' };

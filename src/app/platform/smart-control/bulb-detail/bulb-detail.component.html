@@ -7,7 +7,7 @@
         <div class="panel panel-default round shadow card" style="width:1300px">
             <div class="panel-heading margin-bottom-0 ">
                 <h3 class="panel-title font-weight-600 bg-teal-8001 white1 ">Bulb Details</h3>
-                <div class="panel-actions">
+                <div *ngIf="!readonly" class="panel-actions">
                     <a class="btn btn-success fs-14 btn-round h-32 white d-flex" (click)="onAddbulb()">
                         <i class="ri-add-circle-fill"></i>Add Schedule</a>
                 </div>

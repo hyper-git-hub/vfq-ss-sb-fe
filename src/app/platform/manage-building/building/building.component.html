@@ -39,7 +39,7 @@
                             <div class="w-48-p" fxLayoutAlign="start start"></div>
 
                             <div class="w-52-p" fxLayoutAlign="end start" fxLayoutGap="8px">
-                                <button fxFlex="25" type="button" class="btn btn-danger btn-block btn-round"
+                                <button *ngIf="!readonly" fxFlex="25" type="button" class="btn btn-danger btn-block btn-round"
                                     (click)="onAddbuilding()">
                                     <i class="ri-add-circle-fill"></i> New Building
                                 </button>

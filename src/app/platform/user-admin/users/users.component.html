@@ -30,7 +30,7 @@
                         
 
                             <div class="w-52-p" fxLayoutAlign="end end" fxLayoutGap="8px">
-                                <button fxFlex="40%" type="button" class="btn btn-danger btn-block btn-round"
+                                <button *ngIf="!readonly" fxFlex="40%" type="button" class="btn btn-danger btn-block btn-round"
                                     (click)="onAddUser()">
                                     <i class="ri-add-circle-fill"></i>New</button>
 

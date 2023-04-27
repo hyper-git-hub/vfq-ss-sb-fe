@@ -63,6 +63,7 @@ export class BulbDetailComponent implements OnInit {
     coolpayload: any
     cool: any;
     coolOn: boolean;
+    readonly: boolean;
     DeviceDetails: any;
     data: any
     updateSwitch: any;
@@ -101,6 +102,8 @@ export class BulbDetailComponent implements OnInit {
 
         let user: any = JSON.parse(localStorage.getItem('user'));
         this.customerId = user.customer['customer_id'];
+
+        this.readonly = user.write ? false : true;
         this.filtersSchedule = { limit: 10, offset: '0', order_by: '', order: '', customer_id: this.customerId, device: this.deviceid };
 
         this.rgbcolor = this.hexToRgb('#B3B3B3');

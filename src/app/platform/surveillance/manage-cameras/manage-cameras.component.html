@@ -25,7 +25,7 @@
 
                         <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between start">
                             <div fxFlex="15">
-                                <button fxLayoutAlign="center" class="btn btn-danger btn-round w-100-p" style="display: flex;"
+                                <button *ngIf="!readonly" fxLayoutAlign="center" class="btn btn-danger btn-round w-100-p" style="display: flex;"
                                     (click)="AddManageCamera()">
                                     <i class="ri-add-circle"></i>&nbsp;
                                     <span>Create New</span>

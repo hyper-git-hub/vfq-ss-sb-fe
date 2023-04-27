@@ -7,7 +7,7 @@
     <div class="panel panel-default round shadow card">
         <div class="panel-heading mb-0">
             <h3 class="panel-title fw-600 mb-0">Socket Details</h3>
-            <div class="panel-actions right-8">
+            <div *ngIf="!readonly" class="panel-actions right-8">
                 <a class="btn btn-success fs-14 btn-round h-32 white d-flex" (click)="onAddSchedule()">
                     <i class="ri-add-circle-fill mr-6"></i>Add Schedule
                 </a>

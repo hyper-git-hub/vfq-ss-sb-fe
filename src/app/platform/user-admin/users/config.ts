@@ -27,11 +27,13 @@ export class userFormConfig {
     }
 }
 export class UserTableConfig {
+
     private static onlyChildUser = (row) =>
     {
         const user: any = JSON.parse(localStorage.getItem('user'));
-        return  user.guid !== row.guid;
+        return  user.guid !== row.guid  &&  row.user_type == 2 ;
     }
+
     public static config = {
         title: 'Users',
         slug: `${environment.baseUrlUser}/users/user-listing?usecase_id=5&`,
@@ -52,10 +54,10 @@ export class UserTableConfig {
         rowActions: [
             { icon: 'ri-pencil-line', type: 'icon', tooltip: 'Edit', action: 'onEdit', condition: UserTableConfig.onlyChildUser },
             { icon: 'ri-delete-bin-2-line', type: 'icon', tooltip: 'Delete', action: 'onDelete', btnColor: 'btn-danger',
-                condition: UserTableConfig.onlyChildUser },
+                condition: UserTableConfig.onlyChildUser  },
             // { icon: 'ri-settings-line', type: 'icon', tooltip: 'Setting', action: 'onSetting', btnColor: 'btn-warning' }
             { icon: 'ri-settings-line', type: 'icon', tooltip: 'Setting', action: 'onChangeStatus', btnColor: 'btn-warning',
-                condition: UserTableConfig.onlyChildUser }
+                condition: UserTableConfig.onlyChildUser  }
         ],
 
         columns: [

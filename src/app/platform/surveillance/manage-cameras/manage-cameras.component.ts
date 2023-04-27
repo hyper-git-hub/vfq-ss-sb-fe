@@ -35,6 +35,7 @@ export class ManageCamerasComponent implements OnInit {
   filterForm: FormGroup
   urlPort = ports;
   user: any;
+  readonly:boolean
   customerId: any;
   count: number = 0;
   filters: any;
@@ -53,6 +54,8 @@ export class ManageCamerasComponent implements OnInit {
     this.user = this.authService.getUser();
     this.customerId = this.user.customer.customer_id;
     this.loading = false;
+    const user: any = JSON.parse(localStorage.getItem('user'));
+    this.readonly = user.write ? false : true;
 
     this.formConfig = new FormConfig(manageCameraFormConfig.config);
 
