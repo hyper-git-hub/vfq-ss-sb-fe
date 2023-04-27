@@ -17,6 +17,7 @@ import { BulbFormComponent } from '../bulb-form/bulb-form.component';
 import { bulbDetailTableConfig, SCHEDULEDAYS, STATUS } from './config';
 import { AlertService } from 'src/app/shared/alert/alert.service';
 import { VAlertAction } from 'src/app/shared/alert/alert.model';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 
 @Component({
@@ -27,6 +28,7 @@ import { VAlertAction } from 'src/app/shared/alert/alert.model';
 export class BulbDetailComponent implements OnInit {
 
     loading: boolean;
+    stateLoading: boolean;
     count: number = 0;
 
     scheduleListing: any;
@@ -41,8 +43,8 @@ export class BulbDetailComponent implements OnInit {
     actions: Subject<any> = new Subject();
     turnOffBulb: boolean;
     BulbRGB = new FormControl('#B3B3B3');
-    Bulbsaturation = new FormControl();
-    Bulbbrightness = new FormControl();
+    bulbSaturation = new FormControl();
+    bulbBrightness = new FormControl();
     colorName: any = null;
     rgbcolor: any;
     filters = { limit: 10, offset: '0', order_by: '', order: '', search: '', export: '', device: '', building: '', floor_id: '', open_area: '' };
@@ -74,6 +76,7 @@ export class BulbDetailComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
     ) {
         this.loading = false;
+        this.stateLoading = false;
         this.turnOffBulb = false;
         this.rgbcolor = null;
         this.activatedRoute.paramMap.subscribe(data => {
@@ -130,6 +133,14 @@ export class BulbDetailComponent implements OnInit {
             let payload = { 'rgbww': this.rgbcolor.r + ',' + this.rgbcolor.g + ',' + this.rgbcolor.b + ',' + this.bulbActionPayload.w1 + ',' + this.bulbActionPayload.w2 };
             this.setConfiguration(action, payload);
         });
+
+        this.bulbSaturation.valueChanges.pipe(debounceTime(400), distinctUntilChanged()).subscribe(val => {
+            this.saturation(val);
+        });
+      
+        this.bulbBrightness.valueChanges.pipe(debounceTime(400), distinctUntilChanged()).subscribe(val => {
+            this.brightness(val);
+        });
     }
 
     defineFormats() {
@@ -138,7 +149,7 @@ export class BulbDetailComponent implements OnInit {
     }
 
     getDeviceState() {
-        this.loading = true;
+        this.stateLoading = true;
         const slug = `${environment.baseUrlDevice}/api/device/state?device_id=${this.deviceid}`;
         this.apiService.get(slug).subscribe((resp: any) => {
             const dt = resp.data;
@@ -151,9 +162,9 @@ export class BulbDetailComponent implements OnInit {
                     this.colorName = '#B3B3B3'
                 }
             }
-            this.loading = false;
+            this.stateLoading = false;
         }, (err: any) => {
-            this.loading = false;
+            this.stateLoading = false;
             this.toastr.error(err.error['message']);
         });
     }
@@ -177,13 +188,15 @@ export class BulbDetailComponent implements OnInit {
             const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
             this.colorName = hex;
             this.BulbRGB.setValue(hex);
-            // this.scheduleForm.get('brightness')?.setValue(rd[rd.length - 1]);
-          } else if (key === 'rgbww') {
+            this.bulbBrightness?.setValue(rd[rd.length - 1]);
+        } else if (key === 'rgbww') {
             let rd = dt['rgbww'].split(',');
             this.coolOn = false;
             this.warmOn = false;
             const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
             this.BulbRGB.setValue(hex);
+            this.bulbBrightness?.setValue(rd[rd.length - 1]);
+            this.bulbSaturation?.setValue(rd[rd.length - 2]);
             this.colorName = hex;
           } else if (key === 'white') {
             this.coolOn = true;
@@ -310,45 +323,63 @@ export class BulbDetailComponent implements OnInit {
         })
     }
 
-    saturation() {
-        let bulb = document.getElementById("bulb");
-        const saturationcode = document.querySelectorAll('.input10');
-        let saturaions: any = null;
-
-        if (saturationcode.length > 0) {
-            if (saturationcode[0].id === "saturate") {
-                saturaions = Number(saturationcode[0]['value']);
-                // console.log(saturaions)
-                this.saturaion = `saturate(${saturaions})`;
-                // console.log(this.saturaion)
-            }
-        }
-
-        this.bulbActionPayload.w2 = saturaions;
+    saturation(value) {
+        this.saturaion = `saturate(${value})`;
+        this.bulbActionPayload.w2 = value;
+    
         const action = 'setColors';
-        let payload = { 'rgbww': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${this.bulbActionPayload.w1},${saturaions}` };
+        let payload = { 'rgbww': `${this.rgbcolor?.r},${this.rgbcolor?.g},${this.rgbcolor?.b},${this.bulbActionPayload.w1},${value}` };
         this.setConfiguration(action, payload);
     }
 
-    brightness() {
-        let bulb = document.getElementById("bulb");
-        const brightnesscode = document.querySelectorAll('.input11');
-        let brightn: any = null;
-        if (brightnesscode.length > 0) {
-            if (brightnesscode[0].id === "bright") {
-                brightn = Number(brightnesscode[0]['value']);
-                // console.log(brightn)
-                this.brightnessfinal = `brightness(${brightn}%)`;
-                // console.log(this.brightnessfinal)
-            }
-        }
+    // setSaturation() {
+    //     let bulb = document.getElementById("bulb");
+    //     const saturationcode = document.querySelectorAll('.input10');
+    //     let saturaions: any = null;
 
-        this.bulbActionPayload.w1 = brightn;
+    //     if (saturationcode.length > 0) {
+    //         if (saturationcode[0].id === "saturate") {
+    //             saturaions = Number(saturationcode[0]['value']);
+    //             // console.log(saturaions)
+    //             this.saturaion = `saturate(${saturaions})`;
+    //             // console.log(this.saturaion)
+    //         }
+    //     }
+
+    //     this.bulbActionPayload.w2 = saturaions;
+    //     const action = 'setColors';
+    //     let payload = { 'rgbww': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${this.bulbActionPayload.w1},${saturaions}` };
+    //     this.setConfiguration(action, payload);
+    // }
+
+    brightness(value) {
+        this.brightnessfinal = `brightness(${value}%)`;
+        this.bulbActionPayload.w1 = value;
+    
         const action = 'setColors';
-        let payload = { 'rgbww': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${brightn},${this.bulbActionPayload.w2}` };
+        let payload = { 'rgbw': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${value}` };
         this.setConfiguration(action, payload);
-
     }
+
+    // setBrightness() {
+    //     let bulb = document.getElementById("bulb");
+    //     const brightnesscode = document.querySelectorAll('.input11');
+    //     let brightn: any = null;
+    //     if (brightnesscode.length > 0) {
+    //         if (brightnesscode[0].id === "bright") {
+    //             brightn = Number(brightnesscode[0]['value']);
+    //             // console.log(brightn)
+    //             this.brightnessfinal = `brightness(${brightn}%)`;
+    //             // console.log(this.brightnessfinal)
+    //         }
+    //     }
+
+    //     this.bulbActionPayload.w1 = brightn;
+    //     const action = 'setColors';
+    //     let payload = { 'rgbww': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${brightn},${this.bulbActionPayload.w2}` };
+    //     this.setConfiguration(action, payload);
+
+    // }
 
     onAddbulb(ev?: any) {
         const options: NgbModalOptions = { size: 'lg', scrollable: true };
@@ -424,14 +455,14 @@ export class BulbDetailComponent implements OnInit {
             }
             this.loading = false;
         }, (err: any) => {
+            this.getDeviceState();
             this.turnOffBulb = false;
-            if (this.turnOffBulb) {
-                this.getDeviceState();
-            } else {
-                this.warmOn = false;
-                this.coolOn = false;
-                this.colorName = '#B3B3B3';
-            }
+            // if (this.turnOffBulb) {
+            // } else {
+            //     this.warmOn = false;
+            //     this.coolOn = false;
+            //     this.colorName = '#B3B3B3';
+            // }
             this.loading = false;
             this.toastr.error(err.error['message']);
         });
