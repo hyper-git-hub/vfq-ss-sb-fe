@@ -334,7 +334,6 @@ export class GeneralTableComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     onSearch(ev: any): void {
-        console.log(ev)
         this.search = { search_with: ev.column, search_text: ev.search, column: this.sorting.column, direction: this.sorting.direction };
         if (this.filters) {
             this.search['filter'] = this.filters;
@@ -354,14 +353,14 @@ export class GeneralTableComponent implements OnInit, OnDestroy, OnChanges {
                 ev.filter = this.filters;
             }
             if (this.urlFilters) {
-                this.urlFilters.offset = event.offset;
+                this.urlFilters.offset = event.offset.toString();
                 this.urlFilters.limit = event.pageSize;
             }
             this.doApiCall(ev);
         } else {
+
             const pageEvent = { search_with: this.search.search_with, search_text: this.search.search_text, column: this.sorting.column, direction: this.sorting.direction, offset: (this.offset).toString(), limit: this.limit };
-            this.signals.emit({ type: 'onPagination', data: pageEvent });
-        }
+            this.signals.emit({ type: 'onPagination', data: pageEvent });        }
     }
 
     onFilters(filter: any) {
