@@ -90,7 +90,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Room<span class="text-danger2"></span></label>
-                                <ng-select placeholder="Select Room" formControlName="room"
+                                <ng-select placeholder="Select Room" [(ngModel)]="roomspatch" formControlName="room"
                                 (change)="onSelectRoom($event)">
                                     <ng-option *ngFor="let item of rooms" [value]="item.id">{{item.name}}
                                     </ng-option>
