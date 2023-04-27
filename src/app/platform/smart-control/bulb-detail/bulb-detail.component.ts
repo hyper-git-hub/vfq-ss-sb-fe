@@ -103,10 +103,10 @@ export class BulbDetailComponent implements OnInit {
         this.customerId = user.customer['customer_id'];
         this.filtersSchedule = { limit: 10, offset: '0', order_by: '', order: '', customer_id: this.customerId, device: this.deviceid };
 
-        const rgb = this.hexToRgb('#B3B3B3');
+        this.rgbcolor = this.hexToRgb('#B3B3B3');
         this.bulbActionPayload = { rgb: '', w1: '1', w2: '1', warm: '212', white: '100' };
         const action = 'setColors';
-        let payload = { 'rgbww': `${rgb.r},${rgb.g},${rgb.b},${this.bulbActionPayload.w1},${this.bulbActionPayload.w2}` };
+        let payload = { 'rgbww': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${this.bulbActionPayload.w1},${this.bulbActionPayload.w2}` };
         this.setConfiguration(action, payload);
     }
 
@@ -137,7 +137,7 @@ export class BulbDetailComponent implements OnInit {
         this.bulbSaturation.valueChanges.pipe(debounceTime(400), distinctUntilChanged()).subscribe(val => {
             this.saturation(val);
         });
-      
+
         this.bulbBrightness.valueChanges.pipe(debounceTime(400), distinctUntilChanged()).subscribe(val => {
             this.brightness(val);
         });
@@ -172,43 +172,43 @@ export class BulbDetailComponent implements OnInit {
     setBulbData(dt: any) {
         console.log(dt);
         for (const key in dt) {
-          if (key === 'power') {
-            this.turnOffBulb = dt['power'] === '1' ? true : false;
-        } else if (key === 'rgb') {
-            this.coolOn = false;
-            this.warmOn = false;
-            let rd = dt['rgb'].split(',');
-            const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
-            this.colorName = hex;
-            this.BulbRGB.setValue(hex);
-          } else if (key === 'rgbw') {
-            this.coolOn = false;
-            this.warmOn = false;
-            let rd = dt['rgbw'].split(',');
-            const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
-            this.colorName = hex;
-            this.BulbRGB.setValue(hex);
-            this.bulbBrightness?.setValue(rd[rd.length - 1]);
-        } else if (key === 'rgbww') {
-            let rd = dt['rgbww'].split(',');
-            this.coolOn = false;
-            this.warmOn = false;
-            const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
-            this.BulbRGB.setValue(hex);
-            this.bulbBrightness?.setValue(rd[rd.length - 1]);
-            this.bulbSaturation?.setValue(rd[rd.length - 2]);
-            this.colorName = hex;
-          } else if (key === 'white') {
-            this.coolOn = true;
-            this.warmOn = false;
-            this.colorName = '#F4FDFF';
-        } else if (key === 'warm') {
-            this.coolOn = false;
-            this.warmOn = true;
-            this.colorName = '#FCF9D9';
+            if (key === 'power') {
+                this.turnOffBulb = dt['power'] === '1' ? true : false;
+            } else if (key === 'rgb') {
+                this.coolOn = false;
+                this.warmOn = false;
+                let rd = dt['rgb'].split(',');
+                const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
+                this.colorName = hex;
+                this.BulbRGB.setValue(hex);
+            } else if (key === 'rgbw') {
+                this.coolOn = false;
+                this.warmOn = false;
+                let rd = dt['rgbw'].split(',');
+                const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
+                this.colorName = hex;
+                this.BulbRGB.setValue(hex);
+                this.bulbBrightness?.setValue(rd[rd.length - 1]);
+            } else if (key === 'rgbww') {
+                let rd = dt['rgbww'].split(',');
+                this.coolOn = false;
+                this.warmOn = false;
+                const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
+                this.BulbRGB.setValue(hex);
+                this.bulbBrightness?.setValue(rd[rd.length - 1]);
+                this.bulbSaturation?.setValue(rd[rd.length - 2]);
+                this.colorName = hex;
+            } else if (key === 'white') {
+                this.coolOn = true;
+                this.warmOn = false;
+                this.colorName = '#F4FDFF';
+            } else if (key === 'warm') {
+                this.coolOn = false;
+                this.warmOn = true;
+                this.colorName = '#FCF9D9';
+            }
         }
-        }
-      }
+    }
 
     getBuildingDetails() {
         const slug = `${environment.baseUrlSB}/building/smart_devices/?device=${this.deviceid}`;
@@ -326,7 +326,7 @@ export class BulbDetailComponent implements OnInit {
     saturation(value) {
         this.saturaion = `saturate(${value})`;
         this.bulbActionPayload.w2 = value;
-    
+
         const action = 'setColors';
         let payload = { 'rgbww': `${this.rgbcolor?.r},${this.rgbcolor?.g},${this.rgbcolor?.b},${this.bulbActionPayload.w1},${value}` };
         this.setConfiguration(action, payload);
@@ -355,7 +355,7 @@ export class BulbDetailComponent implements OnInit {
     brightness(value) {
         this.brightnessfinal = `brightness(${value}%)`;
         this.bulbActionPayload.w1 = value;
-    
+
         const action = 'setColors';
         let payload = { 'rgbw': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${value}` };
         this.setConfiguration(action, payload);
@@ -408,7 +408,7 @@ export class BulbDetailComponent implements OnInit {
         // console.log(event);
         this.loading = true;
         this.warm = event;
-        this.warmOn = !!event ? true: false;
+        this.warmOn = !!event ? true : false;
         this.colorName = event === 'WARM_LIGHT' ? '#FCF9D9' : '#fffff';
         const action = 'setColors';
         const payload = { "warm": "212" };
@@ -420,7 +420,8 @@ export class BulbDetailComponent implements OnInit {
         // console.log(event);
         this.cool = event;
         this.coolOn = !!event ? true : false;
-        this.colorName = event === 'WHITE_LIGHT' ? '#F4FDFF' : '#fffff'
+        this.colorName = event === 'WHITE_LIGHT' ? '#F4FDFF' : '#fffff';
+        console.log(this.colorName);
         const action = 'setColors';
         const payload = { "white": "100" };
         this.setConfiguration(action, payload);
@@ -481,47 +482,47 @@ export class BulbDetailComponent implements OnInit {
         this.loading = true;
         let url = new URL(`${environment.baseUrlSB}/building/schedule_devices/`);
         for (const key in filters) {
-          if (!!filters[key]) {
-            url.searchParams.set(key, filters[key]);
-          }
+            if (!!filters[key]) {
+                url.searchParams.set(key, filters[key]);
+            }
         };
         url.searchParams.set('export', type);
         let fileName = this.bulbDetailTableConfig.title + ' List';
-    
+
         this.apiService.getExportXlsPdf(url.href).subscribe((resp: any) => {
-          if (type === 'pdf') {
-            this.downloadPdf(resp, fileName);
-          } else {
-            this.downloadCSV(resp, fileName);
-          }
-          this.loading = false;
+            if (type === 'pdf') {
+                this.downloadPdf(resp, fileName);
+            } else {
+                this.downloadCSV(resp, fileName);
+            }
+            this.loading = false;
         }, (err: any) => {
-          this.loading = false;
-          this.toastr.error(err.error.message);
+            this.loading = false;
+            this.toastr.error(err.error.message);
         });
-      }
-    
-      downloadPdf(resp: any, title: string) {
+    }
+
+    downloadPdf(resp: any, title: string) {
         const data = resp;
         const blob = new Blob([data], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob)
-    
+
         let fileLink = document.createElement('a');
         fileLink.href = url
         fileLink.download = title;
         fileLink.click();
-      }
-    
-      downloadCSV(resp: any, title: string) {
+    }
+
+    downloadCSV(resp: any, title: string) {
         const data = resp;
         const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
         const url = window.URL.createObjectURL(blob)
-    
+
         let fileLink = document.createElement('a');
         fileLink.href = url
         fileLink.download = title;
         fileLink.click();
-      }
+    }
 }
 
 

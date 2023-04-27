@@ -15,6 +15,15 @@
     width: 272px;
 }
 
+::ng-deep .sign-in .dropdown-menu  {
+    left: -121px;
+    padding: 8px 8px;
+    border-radius: 4px;
+    // min-width: 174px;
+    min-height: 3rem;
+    width: 67px !important;
+}
+
 .list-group-item:hover {
     background: #f3f7f9;
 }
