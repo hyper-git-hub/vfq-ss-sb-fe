@@ -24,6 +24,7 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
   pageIdForGraph = 'MDSS';
   breadCrumbs: any[];
   devices: any[];
+  cameraFeatures: any[];
   viewCounts: any[];
   building: any[] = [];
   cardDetails: any = {};
@@ -98,6 +99,14 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
     this.zoomLevel = '1';
     this.devices = [];
     this.viewCounts = [];
+    this.cameraFeatures = [];
+    const cf: any = JSON.parse(localStorage.getItem('camera_features'));
+    if (cf.length > 0) {
+      cf.forEach(element => {
+        element = element.replace('cam_', '');
+        this.cameraFeatures.push(element);
+      });
+    }
 
     this.selectedBuilding = new FormControl(null);
   }
@@ -377,14 +386,25 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
     // url.searchParams.set('customer_id', this.customerid);
 
     this.apiService.get(url.href).subscribe((resp: any) => {
-      this.devices = resp.data['data'];
+      this.devices = [];
+      const devs: any[] = [];
+      const d = resp.data['data'];
+      d.forEach(dev => {
+        this.cameraFeatures.forEach(ele => {
+          if (dev.device === ele) {
+            this.devices.push(dev);
+            devs.push(dev);
+          }
+        });
+      });
+      // this.devices = resp.data['data'];
+      // const dt = resp.data['data'];
 
-      const dt = resp.data['data'];
-      if (!!dt) {
-        dt.forEach((ele, idx) => {
+      if (!!devs && devs.length > 0) {
+        devs.forEach((ele, idx) => {
           this.camIds += ele.device;
           this.playCameras(ele.device);
-          if (idx !== dt.length - 1) {
+          if (idx !== devs.length - 1) {
             this.camIds += ',';
           }
         });
