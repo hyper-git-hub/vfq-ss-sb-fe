@@ -113,6 +113,7 @@ export class ScheduleFormComponent implements OnInit {
     if (this.data) {
       this.selectedDeviceType = this.data['device_type'];
       this.deviceId = this.data.device;
+      console.log("datA:",this.data)
       this.getScheduleDetails();
     }
     this.scheduleForm.controls['bulbRGB'].valueChanges.pipe(debounceTime(400), distinctUntilChanged()).subscribe(value => {
@@ -135,6 +136,7 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   getScheduleDetails() {
+    console.log("andr agya")
     this.loading = true;
     const slug = `${environment.baseUrlDevice}/api/schedule-task/?device_id=${this.deviceId}&schedule_id=${this.data.schedule_id}`;
 
@@ -155,6 +157,7 @@ export class ScheduleFormComponent implements OnInit {
           this.setBulbData(configPayload);
         }
         this.config = dt?.device_configuration
+        console.log("dt:",dt)
         this.scheduleForm.patchValue(dt);
       }
     }, (err: any) => {

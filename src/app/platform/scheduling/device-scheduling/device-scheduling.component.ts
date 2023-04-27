@@ -72,6 +72,7 @@ export class DeviceSchedulingComponent implements OnInit {
   onTableSignals(ev: any) {
     // console.log(ev);
     if (ev.type === 'onEdit') {
+      console.log("hit")
       this.onCreateSchedule(ev.row);
     } else if (ev.type === 'onDelete') {
       this.onDeleteSchedule(ev.row);
