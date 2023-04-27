@@ -17,6 +17,7 @@ import { BulbFormComponent } from '../bulb-form/bulb-form.component';
 import { bulbDetailTableConfig, SCHEDULEDAYS, STATUS } from './config';
 import { AlertService } from 'src/app/shared/alert/alert.service';
 import { VAlertAction } from 'src/app/shared/alert/alert.model';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 
 @Component({
@@ -27,6 +28,7 @@ import { VAlertAction } from 'src/app/shared/alert/alert.model';
 export class BulbDetailComponent implements OnInit {
 
     loading: boolean;
+    stateLoading: boolean;
     count: number = 0;
 
     scheduleListing: any;
@@ -41,8 +43,8 @@ export class BulbDetailComponent implements OnInit {
     actions: Subject<any> = new Subject();
     turnOffBulb: boolean;
     BulbRGB = new FormControl('#B3B3B3');
-    Bulbsaturation = new FormControl();
-    Bulbbrightness = new FormControl();
+    bulbSaturation = new FormControl();
+    bulbBrightness = new FormControl();
     colorName: any = null;
     rgbcolor: any;
     filters = { limit: 10, offset: '0', order_by: '', order: '', search: '', export: '', device: '', building: '', floor_id: '', open_area: '' };
@@ -74,6 +76,7 @@ export class BulbDetailComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
     ) {
         this.loading = false;
+        this.stateLoading = false;
         this.turnOffBulb = false;
         this.rgbcolor = null;
         this.activatedRoute.paramMap.subscribe(data => {
@@ -100,10 +103,10 @@ export class BulbDetailComponent implements OnInit {
         this.customerId = user.customer['customer_id'];
         this.filtersSchedule = { limit: 10, offset: '0', order_by: '', order: '', customer_id: this.customerId, device: this.deviceid };
 
-        const rgb = this.hexToRgb('#B3B3B3');
+        this.rgbcolor = this.hexToRgb('#B3B3B3');
         this.bulbActionPayload = { rgb: '', w1: '1', w2: '1', warm: '212', white: '100' };
         const action = 'setColors';
-        let payload = { 'rgbww': `${rgb.r},${rgb.g},${rgb.b},${this.bulbActionPayload.w1},${this.bulbActionPayload.w2}` };
+        let payload = { 'rgbww': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${this.bulbActionPayload.w1},${this.bulbActionPayload.w2}` };
         this.setConfiguration(action, payload);
     }
 
@@ -130,6 +133,14 @@ export class BulbDetailComponent implements OnInit {
             let payload = { 'rgbww': this.rgbcolor.r + ',' + this.rgbcolor.g + ',' + this.rgbcolor.b + ',' + this.bulbActionPayload.w1 + ',' + this.bulbActionPayload.w2 };
             this.setConfiguration(action, payload);
         });
+
+        this.bulbSaturation.valueChanges.pipe(debounceTime(400), distinctUntilChanged()).subscribe(val => {
+            this.saturation(val);
+        });
+
+        this.bulbBrightness.valueChanges.pipe(debounceTime(400), distinctUntilChanged()).subscribe(val => {
+            this.brightness(val);
+        });
     }
 
     defineFormats() {
@@ -138,7 +149,7 @@ export class BulbDetailComponent implements OnInit {
     }
 
     getDeviceState() {
-        this.loading = true;
+        this.stateLoading = true;
         const slug = `${environment.baseUrlDevice}/api/device/state?device_id=${this.deviceid}`;
         this.apiService.get(slug).subscribe((resp: any) => {
             const dt = resp.data;
@@ -151,9 +162,9 @@ export class BulbDetailComponent implements OnInit {
                     this.colorName = '#B3B3B3'
                 }
             }
-            this.loading = false;
+            this.stateLoading = false;
         }, (err: any) => {
-            this.loading = false;
+            this.stateLoading = false;
             this.toastr.error(err.error['message']);
         });
     }
@@ -161,41 +172,43 @@ export class BulbDetailComponent implements OnInit {
     setBulbData(dt: any) {
         console.log(dt);
         for (const key in dt) {
-          if (key === 'power') {
-            this.turnOffBulb = dt['power'] === '1' ? true : false;
-        } else if (key === 'rgb') {
-            this.coolOn = false;
-            this.warmOn = false;
-            let rd = dt['rgb'].split(',');
-            const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
-            this.colorName = hex;
-            this.BulbRGB.setValue(hex);
-          } else if (key === 'rgbw') {
-            this.coolOn = false;
-            this.warmOn = false;
-            let rd = dt['rgbw'].split(',');
-            const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
-            this.colorName = hex;
-            this.BulbRGB.setValue(hex);
-            // this.scheduleForm.get('brightness')?.setValue(rd[rd.length - 1]);
-          } else if (key === 'rgbww') {
-            let rd = dt['rgbww'].split(',');
-            this.coolOn = false;
-            this.warmOn = false;
-            const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
-            this.BulbRGB.setValue(hex);
-            this.colorName = hex;
-          } else if (key === 'white') {
-            this.coolOn = true;
-            this.warmOn = false;
-            this.colorName = '#F4FDFF';
-        } else if (key === 'warm') {
-            this.coolOn = false;
-            this.warmOn = true;
-            this.colorName = '#FCF9D9';
+            if (key === 'power') {
+                this.turnOffBulb = dt['power'] === '1' ? true : false;
+            } else if (key === 'rgb') {
+                this.coolOn = false;
+                this.warmOn = false;
+                let rd = dt['rgb'].split(',');
+                const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
+                this.colorName = hex;
+                this.BulbRGB.setValue(hex);
+            } else if (key === 'rgbw') {
+                this.coolOn = false;
+                this.warmOn = false;
+                let rd = dt['rgbw'].split(',');
+                const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
+                this.colorName = hex;
+                this.BulbRGB.setValue(hex);
+                this.bulbBrightness?.setValue(rd[rd.length - 1]);
+            } else if (key === 'rgbww') {
+                let rd = dt['rgbww'].split(',');
+                this.coolOn = false;
+                this.warmOn = false;
+                const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
+                this.BulbRGB.setValue(hex);
+                this.bulbBrightness?.setValue(rd[rd.length - 1]);
+                this.bulbSaturation?.setValue(rd[rd.length - 2]);
+                this.colorName = hex;
+            } else if (key === 'white') {
+                this.coolOn = true;
+                this.warmOn = false;
+                this.colorName = '#F4FDFF';
+            } else if (key === 'warm') {
+                this.coolOn = false;
+                this.warmOn = true;
+                this.colorName = '#FCF9D9';
+            }
         }
-        }
-      }
+    }
 
     getBuildingDetails() {
         const slug = `${environment.baseUrlSB}/building/smart_devices/?device=${this.deviceid}`;
@@ -310,45 +323,63 @@ export class BulbDetailComponent implements OnInit {
         })
     }
 
-    saturation() {
-        let bulb = document.getElementById("bulb");
-        const saturationcode = document.querySelectorAll('.input10');
-        let saturaions: any = null;
+    saturation(value) {
+        this.saturaion = `saturate(${value})`;
+        this.bulbActionPayload.w2 = value;
 
-        if (saturationcode.length > 0) {
-            if (saturationcode[0].id === "saturate") {
-                saturaions = Number(saturationcode[0]['value']);
-                // console.log(saturaions)
-                this.saturaion = `saturate(${saturaions})`;
-                // console.log(this.saturaion)
-            }
-        }
-
-        this.bulbActionPayload.w2 = saturaions;
         const action = 'setColors';
-        let payload = { 'rgbww': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${this.bulbActionPayload.w1},${saturaions}` };
+        let payload = { 'rgbww': `${this.rgbcolor?.r},${this.rgbcolor?.g},${this.rgbcolor?.b},${this.bulbActionPayload.w1},${value}` };
         this.setConfiguration(action, payload);
     }
 
-    brightness() {
-        let bulb = document.getElementById("bulb");
-        const brightnesscode = document.querySelectorAll('.input11');
-        let brightn: any = null;
-        if (brightnesscode.length > 0) {
-            if (brightnesscode[0].id === "bright") {
-                brightn = Number(brightnesscode[0]['value']);
-                // console.log(brightn)
-                this.brightnessfinal = `brightness(${brightn}%)`;
-                // console.log(this.brightnessfinal)
-            }
-        }
+    // setSaturation() {
+    //     let bulb = document.getElementById("bulb");
+    //     const saturationcode = document.querySelectorAll('.input10');
+    //     let saturaions: any = null;
 
-        this.bulbActionPayload.w1 = brightn;
+    //     if (saturationcode.length > 0) {
+    //         if (saturationcode[0].id === "saturate") {
+    //             saturaions = Number(saturationcode[0]['value']);
+    //             // console.log(saturaions)
+    //             this.saturaion = `saturate(${saturaions})`;
+    //             // console.log(this.saturaion)
+    //         }
+    //     }
+
+    //     this.bulbActionPayload.w2 = saturaions;
+    //     const action = 'setColors';
+    //     let payload = { 'rgbww': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${this.bulbActionPayload.w1},${saturaions}` };
+    //     this.setConfiguration(action, payload);
+    // }
+
+    brightness(value) {
+        this.brightnessfinal = `brightness(${value}%)`;
+        this.bulbActionPayload.w1 = value;
+
         const action = 'setColors';
-        let payload = { 'rgbww': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${brightn},${this.bulbActionPayload.w2}` };
+        let payload = { 'rgbw': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${value}` };
         this.setConfiguration(action, payload);
-
     }
+
+    // setBrightness() {
+    //     let bulb = document.getElementById("bulb");
+    //     const brightnesscode = document.querySelectorAll('.input11');
+    //     let brightn: any = null;
+    //     if (brightnesscode.length > 0) {
+    //         if (brightnesscode[0].id === "bright") {
+    //             brightn = Number(brightnesscode[0]['value']);
+    //             // console.log(brightn)
+    //             this.brightnessfinal = `brightness(${brightn}%)`;
+    //             // console.log(this.brightnessfinal)
+    //         }
+    //     }
+
+    //     this.bulbActionPayload.w1 = brightn;
+    //     const action = 'setColors';
+    //     let payload = { 'rgbww': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${brightn},${this.bulbActionPayload.w2}` };
+    //     this.setConfiguration(action, payload);
+
+    // }
 
     onAddbulb(ev?: any) {
         const options: NgbModalOptions = { size: 'lg', scrollable: true };
@@ -377,7 +408,7 @@ export class BulbDetailComponent implements OnInit {
         // console.log(event);
         this.loading = true;
         this.warm = event;
-        this.warmOn = !!event ? true: false;
+        this.warmOn = !!event ? true : false;
         this.colorName = event === 'WARM_LIGHT' ? '#FCF9D9' : '#fffff';
         const action = 'setColors';
         const payload = { "warm": "212" };
@@ -389,7 +420,8 @@ export class BulbDetailComponent implements OnInit {
         // console.log(event);
         this.cool = event;
         this.coolOn = !!event ? true : false;
-        this.colorName = event === 'WHITE_LIGHT' ? '#F4FDFF' : '#fffff'
+        this.colorName = event === 'WHITE_LIGHT' ? '#F4FDFF' : '#fffff';
+        console.log(this.colorName);
         const action = 'setColors';
         const payload = { "white": "100" };
         this.setConfiguration(action, payload);
@@ -424,14 +456,14 @@ export class BulbDetailComponent implements OnInit {
             }
             this.loading = false;
         }, (err: any) => {
+            this.getDeviceState();
             this.turnOffBulb = false;
-            if (this.turnOffBulb) {
-                this.getDeviceState();
-            } else {
-                this.warmOn = false;
-                this.coolOn = false;
-                this.colorName = '#B3B3B3';
-            }
+            // if (this.turnOffBulb) {
+            // } else {
+            //     this.warmOn = false;
+            //     this.coolOn = false;
+            //     this.colorName = '#B3B3B3';
+            // }
             this.loading = false;
             this.toastr.error(err.error['message']);
         });
@@ -450,47 +482,47 @@ export class BulbDetailComponent implements OnInit {
         this.loading = true;
         let url = new URL(`${environment.baseUrlSB}/building/schedule_devices/`);
         for (const key in filters) {
-          if (!!filters[key]) {
-            url.searchParams.set(key, filters[key]);
-          }
+            if (!!filters[key]) {
+                url.searchParams.set(key, filters[key]);
+            }
         };
         url.searchParams.set('export', type);
         let fileName = this.bulbDetailTableConfig.title + ' List';
-    
+
         this.apiService.getExportXlsPdf(url.href).subscribe((resp: any) => {
-          if (type === 'pdf') {
-            this.downloadPdf(resp, fileName);
-          } else {
-            this.downloadCSV(resp, fileName);
-          }
-          this.loading = false;
+            if (type === 'pdf') {
+                this.downloadPdf(resp, fileName);
+            } else {
+                this.downloadCSV(resp, fileName);
+            }
+            this.loading = false;
         }, (err: any) => {
-          this.loading = false;
-          this.toastr.error(err.error.message);
+            this.loading = false;
+            this.toastr.error(err.error.message);
         });
-      }
-    
-      downloadPdf(resp: any, title: string) {
+    }
+
+    downloadPdf(resp: any, title: string) {
         const data = resp;
         const blob = new Blob([data], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob)
-    
+
         let fileLink = document.createElement('a');
         fileLink.href = url
         fileLink.download = title;
         fileLink.click();
-      }
-    
-      downloadCSV(resp: any, title: string) {
+    }
+
+    downloadCSV(resp: any, title: string) {
         const data = resp;
         const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
         const url = window.URL.createObjectURL(blob)
-    
+
         let fileLink = document.createElement('a');
         fileLink.href = url
         fileLink.download = title;
         fileLink.click();
-      }
+    }
 }
 
 
