@@ -72,7 +72,7 @@ export class SocketScheduleFormComponent implements OnInit {
 
     getScheduleDetails(id: any) {
         this.loading = true;
-        const slug = `${environment.baseUrlDevice}/api/schedule-task/?device_id=${id}`;
+        const slug = `${environment.baseUrlDevice}/api/schedule-task/?device_id=${id}&schedule_id=${this.data.schedule_id}`;
         this.apiService.get(slug).subscribe((resp: any) => {
             const dt = resp.data['data'][0];
             if (!!dt) {
