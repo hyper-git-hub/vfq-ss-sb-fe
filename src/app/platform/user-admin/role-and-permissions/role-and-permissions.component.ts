@@ -29,6 +29,7 @@ export class RoleAndPermissionsComponent implements OnInit {
   count: number;
   breadCrumbs: any[];
   loading: boolean;
+  readonly: boolean;
   submitted: boolean = false;
   btnText: string = "Save";
   dataSource: any = [];
@@ -89,6 +90,10 @@ export class RoleAndPermissionsComponent implements OnInit {
 
 
     this.loggedInUser = this.authService.getUser();
+
+    const user: any = JSON.parse(localStorage.getItem('user'));
+    this.readonly = user.write ? false : true;
+
 
     this.loggedInUserPackageID = this.loggedInUser?.customer?.associations.filter(item => {
       return item.package.usecase === 5

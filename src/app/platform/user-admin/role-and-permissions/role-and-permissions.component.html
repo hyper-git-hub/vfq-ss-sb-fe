@@ -5,7 +5,7 @@
     
 
 <div class="page-container w-100-p" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start start">
-    <div fxLayout="row" class="w-100-p card round p-12">
+    <div *ngIf="!readonly" fxLayout="row" class="w-100-p card round p-12">
         <div class="panel-heading mb-0"></div>
 
         <ngb-accordion class="w-100-p  calender-overflow" [closeOthers]="true">
@@ -43,7 +43,6 @@
                 </ng-template>
             </ngb-panel>
         </ngb-accordion>
-
     </div>
 
 

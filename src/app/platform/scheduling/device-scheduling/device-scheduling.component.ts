@@ -19,6 +19,7 @@ import { FORMATS } from 'src/app/shared/general-table/formats';
 export class DeviceSchedulingComponent implements OnInit {
 
   loading: boolean;
+  readonly: boolean;
   count: number;
   customerId: number;
   filters: any;
@@ -58,6 +59,7 @@ export class DeviceSchedulingComponent implements OnInit {
 
     let user: any = JSON.parse(localStorage.getItem('user'));
     this.customerId = user.customer['customer_id'];
+    this.readonly = user.write ? false : true;
     this.filters = { limit: 10, offset: '0', customer_id: this.customerId };
     this.actions = new Subject();
     this.config = new TableConfig(SchedulingTableConfig.config);
@@ -97,7 +99,7 @@ export class DeviceSchedulingComponent implements OnInit {
 
     dialogRef.closed.subscribe(() => {
       // this.getBulbListing(this.filterbulb);
-      this.actions.next({action: 'reload'});
+      this.actions.next({ action: 'reload' });
     });
   }
 
@@ -125,12 +127,12 @@ export class DeviceSchedulingComponent implements OnInit {
   onDeleteSchedule(ev: any) {
     AlertService.confirm('Are you sure?', 'You want to delete this schedule', 'Yes', 'No').subscribe((resp: VAlertAction) => {
       if (resp.positive) {
-        this.actions.next({action: 'loadingTrue'});
+        this.actions.next({ action: 'loadingTrue' });
         const slug = `${environment.baseUrlDevice}/api/schedule-task/?device_id=${ev.device}&schedule_id=${ev.schedule_id}`;
         this.apiService.delete(slug).subscribe((resp: any) => {
-          this.actions.next({action: 'reload'});
+          this.actions.next({ action: 'reload' });
         }, (err: any) => {
-          this.actions.next({action: 'loadingFalse'});
+          this.actions.next({ action: 'loadingFalse' });
           this.toastr.error(err.error['message'], 'Error deleting schedule');
         });
       } else {

@@ -32,6 +32,7 @@ import { DateUtils } from 'src/app/Utils/DateUtils';
 export class SocketDetailComponent implements OnInit {
   loading: boolean;
   socketTurnOn: boolean;
+  readonly: boolean;
   breadCrumbs: any[];
 
   sheduleListingData: any[];
@@ -96,6 +97,7 @@ export class SocketDetailComponent implements OnInit {
     let u: any = localStorage.getItem('user');
     const user = JSON.parse(u);
     this.customerId = user.customer['customer_id'];
+    this.readonly = user.write ? false : true;
     // this.filters.customer_id = this.customerId;
     this.filters.device = this.deviceId;
     this.socketTurnOn = false;

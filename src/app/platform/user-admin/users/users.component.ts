@@ -40,6 +40,7 @@ export class UsersComponent implements OnInit {
     count: number;
     selectedIDToDelete: any[] = [];
     closeResult = '';
+    readonly: boolean;
     user: any;
     customerid: any;
     userlisting;//: any[];
@@ -56,6 +57,9 @@ export class UsersComponent implements OnInit {
         public userservice: UserserviceService) {
 
         this.user = this.authService.getUser();
+
+        const user: any = JSON.parse(localStorage.getItem('user'));
+        this.readonly = user.write ? false : true;
 
 
         this.customerid = this.user.customer.customer_id;

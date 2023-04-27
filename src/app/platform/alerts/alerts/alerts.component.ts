@@ -19,6 +19,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AlertsComponent implements OnInit {
   loading: boolean;
+  readonly: boolean;
 
   smokeFilters: any;
   waterLeakageFilters: any;
@@ -78,6 +79,8 @@ export class AlertsComponent implements OnInit {
 
     let u: any = JSON.parse(localStorage.getItem('user'));
     this.customerId = u.customer['customer_id'];
+    this.readonly = u.write ? false : true;
+
 
     this.smokeAlertsData = [];
     this.smokeFilters = { limit: 10, offset: '0', order_by: '', order: '', alert_type: 'Smoke Alarm', search: '', customer_id: this.customerId };
