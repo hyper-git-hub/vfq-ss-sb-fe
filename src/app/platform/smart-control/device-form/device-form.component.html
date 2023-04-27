@@ -80,7 +80,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Space<span class="text-danger2"></span></label>
-                                <ng-select placeholder="Select Space" formControlName="space"
+                                <ng-select placeholder="Select Space"  [(ngModel)]="spacepatch" formControlName="space"
                                 (change)="onSelectSpace($event)">
                                     <ng-option *ngFor="let item of spaces" [value]="item.id">{{item.name}}
                                     </ng-option>
