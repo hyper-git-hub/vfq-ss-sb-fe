@@ -101,9 +101,12 @@ export class BulbFormComponent implements OnInit {
         });
     }
 
+    
+
     getScheduleDetails() {
         this.loading = true;
-        const slug = `${environment.baseUrlDevice}/api/schedule-task/?device_id=${this.deviceId}`;
+        console.log("andr agya")
+        const slug = `${environment.baseUrlDevice}/api/schedule-task/?device_id=${this.deviceId}&schedule_id=${this.data.schedule_id}`;
         this.apiService.get(slug).subscribe((resp: any) => {
             const dt = resp.data['data'][0];
             if (!!dt) {
