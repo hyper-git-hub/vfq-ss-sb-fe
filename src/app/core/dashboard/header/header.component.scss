@@ -6,17 +6,17 @@
     display:none;
 }
 
-.dropdown-menu {
-    left: -121px;
+::ng-deep .pnl .dropdown-menu {
+    left: -218px;
     padding: 8px 8px;
     border-radius: 4px;
     min-width: 174px;
     min-height: 3rem;
-    width: 272px;
+    width: 272px !important;
 }
 
-::ng-deep .sign-in .dropdown-menu  {
-    left: -121px;
+::ng-deep .pnl2 .dropdown-menu  {
+    left: -104px;
     padding: 8px 8px;
     border-radius: 4px;
     // min-width: 174px;

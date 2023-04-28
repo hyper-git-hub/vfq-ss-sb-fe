@@ -49,6 +49,12 @@ export class SimplePieChartComponent implements OnInit {
     series.slices.template.draggable = true;
     series.slices.template.inert = true;
     series.alignLabels = false;
+    // series.labels.template.disabled = true;
+    series.ticks.template.disabled = true;
+    series.labels.template.fill = am4core.color("white");
+    series.labels.template.radius = am4core.percent(-40);
+    // if (series.dataFields.value) {
+    // }
 
     series.hiddenState.properties.startAngle = 90;
     series.hiddenState.properties.endAngle = 90;
