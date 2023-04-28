@@ -170,7 +170,7 @@ export class AlertFormComponent implements OnInit {
   }
 
   getBuildingSpacesByFloor(ev: any) {
-    const slug = `${environment.baseUrlSB}/building/space/?floor_id=${ev}`;
+    const slug = `${environment.baseUrlSB}/building/spacename/?floor_id=${ev}`;
     this.apiService.get(slug).subscribe((resp: any) => {
       this.spaces = resp.data['data'];
     }, (err: any) => {
