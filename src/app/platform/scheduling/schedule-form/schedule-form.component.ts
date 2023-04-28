@@ -16,6 +16,8 @@ export class ScheduleFormComponent implements OnInit {
   loading: boolean;
   turnOnBulb: boolean;
   stateRequired: boolean;
+  warmOn: boolean;
+  coolOn: boolean;
 
   title: string;
   customerId: number;
@@ -53,6 +55,8 @@ export class ScheduleFormComponent implements OnInit {
     this.loading = false;
     this.loading = false;
     this.stateRequired = false;
+    this.coolOn = false;
+    this.warmOn = false;
     this.title = 'Create Schedule';
 
     this.deviceTypes = [
@@ -174,20 +178,34 @@ export class ScheduleFormComponent implements OnInit {
         let rd = dt['rgb'].split(',');
         const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
         this.colorName = hex;
+        this.coolOn = false;
+        this.warmOn = false;
         this.scheduleForm.get('bulbRGB')?.setValue(hex);
       } else if (key === 'rgbw') {
         let rd = dt['rgbw'].split(',');
         const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
         this.colorName = hex;
+        this.coolOn = false;
+        this.warmOn = false;
         this.scheduleForm.get('bulbRGB')?.setValue(hex);
         this.scheduleForm.get('brightness')?.setValue(rd[rd.length - 1]);
       } else if (key === 'rgbww') {
         let rd = dt['rgbww'].split(',');
         const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
+        this.coolOn = false;
+        this.warmOn = false;
         this.scheduleForm.get('bulbRGB')?.setValue(hex);
         this.scheduleForm.get('brightness')?.setValue(rd[rd.length - 1]);
         this.scheduleForm.get('saturation')?.setValue(rd[rd.length - 2]);
         this.colorName = hex;
+      } else if (key === 'white') {
+        this.coolOn = true;
+        this.warmOn = false;
+        this.colorName = '#F4FDFF';
+      } else if (key === 'warm') {
+          this.coolOn = false;
+          this.warmOn = true;
+          this.colorName = '#FCF9D9';
       }
     }
   }
@@ -217,6 +235,7 @@ export class ScheduleFormComponent implements OnInit {
   onFilterSignals(ev: any) {
     this.filters = ev;
     if (!!ev.device_type) {
+      this.selectedDeviceType = ev.device_type;
       this.scheduleForm.get('device_type')?.setValue(ev.device_type);
       if (ev.device_type == 'socket') {
         this.stateRequired = true
@@ -229,7 +248,9 @@ export class ScheduleFormComponent implements OnInit {
     if (!!ev.device) {
       this.scheduleForm.get('device')?.setValue(ev.device);
       this.deviceId = ev.device;
-      this.getDeviceLastState();
+      if (!this.data) {
+        this.getDeviceLastState();
+      }
     }
   }
 
@@ -252,6 +273,7 @@ export class ScheduleFormComponent implements OnInit {
     this.colorName = '#FCF9D9';
     const action = 'setColors';
     const payload = { "warm": "212" };
+    this.warmOn = true;
     this.setConfiguration(action, payload);
   }
 
@@ -259,6 +281,7 @@ export class ScheduleFormComponent implements OnInit {
     this.colorName = '#F4FDFF';
     const action = 'setColors';
     const payload = { "white": "100" };
+    this.coolOn = true;
     this.setConfiguration(action, payload);
   }
 
@@ -333,9 +356,9 @@ export class ScheduleFormComponent implements OnInit {
       this.loading = false;
       this.turnOnBulb = false;
       this.colorName = '#B3B3B3';
-      this.scheduleForm.get('bulbRGB').disable();
-      this.scheduleForm.get('saturation').disable();
-      this.scheduleForm.get('brightness').disable();
+      // this.scheduleForm.get('bulbRGB').disable();
+      // this.scheduleForm.get('saturation').disable();
+      // this.scheduleForm.get('brightness').disable();
       this.setBulbConfig(false);
       this.toastrService.error(err.error['message']);
     });
@@ -362,6 +385,7 @@ export class ScheduleFormComponent implements OnInit {
     const slug = `${environment.baseUrlDevice}/api/device/state?device_id=${this.deviceId}`;
     this.apiService.get(slug).subscribe((resp: any) => {
         const dt = resp.data['device_last_configuration'];
+        console.log(this.selectedDeviceType);
         if (this.selectedDeviceType === 'Bulb') {
           this.setBulbData(dt.payload);
         } else {
