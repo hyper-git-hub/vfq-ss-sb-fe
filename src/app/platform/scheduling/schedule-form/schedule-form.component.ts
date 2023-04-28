@@ -303,9 +303,15 @@ export class ScheduleFormComponent implements OnInit {
 
   setOnOff(ev: any) {
     if (ev != void 0 && this.selectedDeviceType === 'Socket') {
-      let action = ev ? 'turnOnSocket' : 'turnOffSocket';;
-      let payload = { "power": ev ? '1' : '0' };
-      this.setConfiguration(action, payload);  
+      if (this.selectedDeviceType === 'Socket') {
+        let action = ev ? 'turnOnSocket' : 'turnOffSocket';;
+        let payload = { "power": ev ? '1' : '0' };
+        this.setConfiguration(action, payload);
+      } else {
+        let action = ev ? 'BulbPowerOn' : 'BulbPowerOff';;
+        let payload = { "power": ev ? '1' : '0' };
+        this.setConfiguration(action, payload);
+      }
     }
   }
 
