@@ -30,7 +30,7 @@ export class bulbDetailTableConfig {
             { name: 'space_attribute_name', title: 'Room', sortable: true, sortingOutside: true },
             { name: 'start_time', title: 'Start Time', sortable: true, sortingOutside: true, format: 'timeutc' },
             { name: 'end_time', title: 'End Time', sortable: true, sortingOutside: true, format: 'timeutc' },
-            { name: 'days', title: 'Days', sortable: true, sortingOutside: true, format: 'schedule-days' },
+            { name: 'days', title: 'Days', sortable: false, format: 'schedule-days' },
         ]
     }
 }
