@@ -103,7 +103,7 @@ export class TemperatureDetailComponent implements OnInit {
         this.table[1].value = dt.floor_name;
         this.table[2].value = dt.space_name;
         this.table[3].value = dt.space_attribute_name;
-        this.table[5].value = this.df.transform(dt['updated_at'], 'dd-MM-yyyy, hh:mm a');
+        this.table[5].value = this.df.transform(this.convertToSystemTime(dt['updated_at']), 'dd-MM-yyyy, hh:mm a');
 
       }
     }, (err: any) => {
@@ -134,6 +134,7 @@ export class TemperatureDetailComponent implements OnInit {
       this.graphData = resp.data[0]['data'];
       this.loading = false;
     }, (err: any) => {
+      this.loading = false;
       this.toastr.error(err.error['message'], 'Error getting graph data for this device');
     });
   }

@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DateUtils } from 'src/app/Utils/DateUtils';
 
 import { ApiService } from 'src/app/services/api.service';
@@ -18,6 +19,8 @@ export class BulbFormComponent implements OnInit {
     loading: boolean;
     title: string;
     turnOnBulb: boolean;
+    warmOn: boolean;
+    coolOn: boolean;
 
     scheduleForm: FormGroup;
     startDate: FormControl = new FormControl(null);
@@ -27,7 +30,7 @@ export class BulbFormComponent implements OnInit {
     start_days: any[] = [];
     device_children_id: any[] = [];
     device_configuration: any;
-    
+
     data: any;
     warm: any;
     cool: any;
@@ -48,6 +51,8 @@ export class BulbFormComponent implements OnInit {
     ) {
         this.loading = false;
         this.turnOnBulb = false;
+        this.coolOn = false;
+        this.warmOn = true;
         this.deviceId = null;
         this.data = null;
         this.title = 'Add ';
@@ -62,12 +67,16 @@ export class BulbFormComponent implements OnInit {
             start_date: [null],
             device_children_id: [null],
             device_configuration: [null],
+
+            bulbRGB: ['#B3B3B3'],
+            brightness: [100],
+            saturation: [1]
         });
 
         const rgb = this.hexToRgb('#B3B3B3');
         this.bulbActionPayload = { rgb: '', w1: '1', w2: '1', warm: '212', white: '100' };
         const action = 'setColors';
-        let payload = { 'rgbww': `${rgb.r},${rgb.g},${rgb.b},${this.bulbActionPayload.w1},${this.bulbActionPayload.w2}` };
+        const payload = { "warm": "212" };
         this.setConfiguration(action, payload);
 
         this.start_days = [
@@ -83,14 +92,13 @@ export class BulbFormComponent implements OnInit {
 
     ngOnInit(): void {
         if (this.data) {
-            console.log("data:",this.data)
             this.bulbname = this.data.device_name;
             this.getScheduleDetails();
+        } else {
+            this.getDeviceLastState();
         }
 
-        this.getBulbState();
-
-        this.bulbRGB.valueChanges.subscribe(value => {
+        this.scheduleForm.controls['bulbRGB'].valueChanges.pipe(debounceTime(400), distinctUntilChanged()).subscribe(value => {
             this.colorName = value;
             this.rgbcolor = this.hexToRgb(value);
             this.bulbActionPayload.rgb = this.rgbcolor;
@@ -99,13 +107,43 @@ export class BulbFormComponent implements OnInit {
             let payload = { 'rgb': this.rgbcolor.r + ',' + this.rgbcolor.g + ',' + this.rgbcolor.b };
             this.setConfiguration(action, payload);
         });
+
+        this.scheduleForm.controls['saturation'].valueChanges.pipe(debounceTime(400), distinctUntilChanged()).subscribe(val => {
+            this.setSaturation(val);
+        });
+
+        this.scheduleForm.controls['brightness'].valueChanges.pipe(debounceTime(400), distinctUntilChanged()).subscribe(val => {
+            this.setBrightness(val);
+        });
     }
 
-    
+    getDeviceLastState() {
+        this.loading = true;
+        const slug = `${environment.baseUrlDevice}/api/device/state?device_id=${this.deviceId}`;
+        this.apiService.get(slug).subscribe((resp: any) => {
+            const dt = resp.data['device_last_configuration'];
+            // console.log(this.selectedDeviceType);
+            if (!!dt) {
+                console.log(dt);
+                this.setBulbData(dt.payload);
+            } else {
+                this.warmOn = true;
+                this.colorName = '#FCF9D9';
+                const action = 'setColors';
+                const payload = { "warm": "212" };
+                this.setConfiguration(action, payload);
+            }
+            this.loading = false;
+        }, (err: any) => {
+            this.loading = false;
+            // this.setBulbConfig(false);
+            this.whiteLight();
+            this.toastr.error(err.error['message']);
+        });
+    }
 
     getScheduleDetails() {
         this.loading = true;
-        console.log("andr agya")
         const slug = `${environment.baseUrlDevice}/api/schedule-task/?device_id=${this.deviceId}&schedule_id=${this.data.schedule_id}`;
         this.apiService.get(slug).subscribe((resp: any) => {
             const dt = resp.data['data'][0];
@@ -118,6 +156,19 @@ export class BulbFormComponent implements OnInit {
                         }
                     });
                 });
+
+                const dlc = dt['device_configuration'];
+                // console.log(this.selectedDeviceType);
+                if (!!dlc) {
+                    console.log(dlc);
+                    this.setBulbData(dlc.payload);
+                } else {
+                    this.warmOn = true;
+                    this.colorName = '#FCF9D9';
+                    const action = 'setColors';
+                    const payload = { "warm": "212" };
+                    this.setConfiguration(action, payload);
+                }
             }
             this.loading = false;
             dt.start_time = DateUtils.getLocalTime(dt.start_time);
@@ -127,10 +178,6 @@ export class BulbFormComponent implements OnInit {
             this.loading = false;
             this.toastr.error(err.error['message'], 'Error getting schedule details');
         });
-    }
-
-    getBulbState() {
-        
     }
 
     onSelectDay(ev: any) {
@@ -144,38 +191,39 @@ export class BulbFormComponent implements OnInit {
         }
     }
 
-    saturation() {
-        const saturationcode = document.querySelectorAll('.input10');
-        let saturaions: any = null;
-
-        if (saturationcode.length > 0) {
-            if (saturationcode[0].id === "saturate") {
-                saturaions = Number(saturationcode[0]['value']);
-                this.saturaion = `saturate(${saturaions})`;
-            }
-        }
-
-        this.bulbActionPayload.w2 = saturaions;
+    warmLight() {
+        this.colorName = '#FCF9D9';
         const action = 'setColors';
-        let payload = { 'rgbww': `${this.rgbcolor?.r},${this.rgbcolor?.g},${this.rgbcolor?.b},${this.bulbActionPayload.w1},${saturaions}` };
+        const payload = { "warm": "212" };
+        this.warmOn = true;
+        this.coolOn = false;
         this.setConfiguration(action, payload);
     }
 
-    brightness() {
-        let bulb = document.getElementById("bulb");
-        const brightnesscode = document.querySelectorAll('.input11');
-        let brightn: any = null;
-
-        if (brightnesscode.length > 0) {
-            if (brightnesscode[0].id === "bright") {
-                brightn = Number(brightnesscode[0]['value']);
-                this.brightnessfinal = `brightness(${brightn}%)`;
-            }
-        }
-
-        this.bulbActionPayload.w1 = brightn;
+    whiteLight() {
+        this.colorName = '#F4FDFF';
         const action = 'setColors';
-        let payload = { 'rgbw': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${brightn}` };
+        const payload = { "white": "100" };
+        this.coolOn = true;
+        this.warmOn = false;
+        this.setConfiguration(action, payload);
+    }
+
+    setSaturation(value) {
+        this.saturaion = `saturate(${value})`;
+        this.bulbActionPayload.w2 = value;
+
+        const action = 'setColors';
+        let payload = { 'rgbww': `${this.rgbcolor?.r},${this.rgbcolor?.g},${this.rgbcolor?.b},${this.bulbActionPayload.w1},${value}` };
+        this.setConfiguration(action, payload);
+    }
+
+    setBrightness(value) {
+        this.brightnessfinal = `brightness(${value}%)`;
+        this.bulbActionPayload.w1 = value;
+
+        const action = 'setColors';
+        let payload = { 'rgbw': `${this.rgbcolor.r},${this.rgbcolor.g},${this.rgbcolor.b},${value}` };
         this.setConfiguration(action, payload);
     }
 
@@ -188,37 +236,7 @@ export class BulbFormComponent implements OnInit {
         let action = onOff ? 'BulbPowerOn' : 'BulbPowerOff';
         let payload = { "power": onOff ? '1' : '0' };
         this.setConfiguration(action, payload);
-        
-        const slug = `${environment.baseUrlDevice}/api/device/action`;
-        let payload1: any = {
-            device_id: this.deviceId,
-            configuration: this.config
-        }
-        this.postDeviceAction(slug, payload1);
-    }
 
-    warmLight(ev: any) {
-        this.warm = ev;
-        this.colorName = ev === 'WARM_LIGHT' ? '#FCF9D9' : '#fffff';
-        const action = 'setColors';
-        const payload = { "warm": "212" };
-        this.setConfiguration(action, payload);
-
-        // const slug = `${environment.baseUrlDevice}/api/device/action`;
-        // let payload1: any = {
-        //     device_id: this.deviceId,
-        //     configuration: this.config
-        // }
-        // this.postDeviceAction(slug, payload1);
-    }
-
-    whiteLight(ev: any) {
-        this.cool = ev;
-        this.colorName = ev === 'WHITE_LIGHT' ? '#F4FDFF' : '#fffff'
-        const action = 'setColors';
-        const payload = { "white": "100" };
-        this.setConfiguration(action, payload);
-        
         // const slug = `${environment.baseUrlDevice}/api/device/action`;
         // let payload1: any = {
         //     device_id: this.deviceId,
@@ -241,6 +259,56 @@ export class BulbFormComponent implements OnInit {
         return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
     }
 
+    rgbToHex(r, g, b) {
+        return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1);
+    }
+
+    setBulbData(dt: any) {
+        for (const key in dt) {
+            if (key === 'power') {
+                this.turnOnBulb = dt['power'] === '1' ? true : false;
+            } else if (key === 'rgb') {
+                let rd = dt['rgb'].split(',');
+                const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
+                this.colorName = hex;
+                this.coolOn = false;
+                this.warmOn = false;
+                this.scheduleForm.get('bulbRGB')?.setValue(hex);
+            } else if (key === 'rgbw') {
+                let rd = dt['rgbw'].split(',');
+                const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
+                this.colorName = hex;
+                this.coolOn = false;
+                this.warmOn = false;
+                this.scheduleForm.get('bulbRGB')?.setValue(hex);
+                this.scheduleForm.get('brightness')?.setValue(rd[rd.length - 1]);
+            } else if (key === 'rgbww') {
+                let rd = dt['rgbww'].split(',');
+                const hex = this.rgbToHex(rd[0], rd[1], rd[2]);
+                this.coolOn = false;
+                this.warmOn = false;
+                this.scheduleForm.get('bulbRGB')?.setValue(hex);
+                this.scheduleForm.get('brightness')?.setValue(rd[rd.length - 1]);
+                this.scheduleForm.get('saturation')?.setValue(rd[rd.length - 2]);
+                this.colorName = hex;
+            } else if (key === 'white') {
+                this.coolOn = true;
+                this.warmOn = false;
+                this.colorName = '#F4FDFF';
+                const action = 'setColors';
+                const payload = { "white": "100" };
+                this.setConfiguration(action, payload);
+            } else if (key === 'warm') {
+                this.coolOn = false;
+                this.warmOn = true;
+                this.colorName = '#FCF9D9';
+                const action = 'setColors';
+                const payload = { "warm": "212" };
+                this.setConfiguration(action, payload);
+            }
+        }
+    }
+
     onSubmit() {
         if (this.scheduleForm.invalid) {
             return;
@@ -252,7 +320,7 @@ export class BulbFormComponent implements OnInit {
             device_id: this.deviceId,
             configuration: this.config
         }
-        
+
         const formData = this.scheduleForm.value;
         let slug = `${environment.baseUrlDevice}/api/schedule-task`;
         let devConfig = { action: formData.state ? 'BulbPowerOn' : 'BulbPowerOff', payload: { "power": formData.state ? '1' : '0' } };
@@ -266,7 +334,7 @@ export class BulbFormComponent implements OnInit {
             repeat: formData.repeat,
             state: formData.state,
             device_children_id: [],
-            device_configuration: devConfig,
+            device_configuration: this.config,
         };
 
         if (this.data) {
@@ -288,7 +356,7 @@ export class BulbFormComponent implements OnInit {
             this.loading = false;
         });
     }
-    
+
     updateSchedule(slug: string, payload: any) {
         payload.schedule_id = this.data.schedule_id;
         this.apiService.patch(slug, payload).subscribe((resp: any) => {

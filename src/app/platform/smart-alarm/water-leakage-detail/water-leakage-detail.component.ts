@@ -122,7 +122,7 @@ export class WaterLeakageDetailComponent implements OnInit {
       this.table[2].value = dt.building_name;
       this.table[3].value = dt.floor_name;
       this.table[4].value = dt.space_name;
-      this.table[6].value = this.df.transform(dt.updated_at, 'dd-MM-yyyy, hh:mm a');
+      this.table[6].value = this.df.transform(this.convertToSystemTime(dt.updated_at), 'dd-MM-yyyy, hh:mm a');
       this.loading = false;
     }, (err: any) => {
       this.loading = false;

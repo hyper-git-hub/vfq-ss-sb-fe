@@ -11,15 +11,13 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group margin-bottom-10 text-center">
-                            <button style="border: none; background: transparent;"
-                                (click)="warmLight('WARM_LIGHT' )">
-                                <img class="zoom" src="/assets/images/warm.png">
+                            <button type="button" style="border: none; background: transparent;" (click)="warmLight()">
+                                <img class="zoom" [src]="warmOn ? '/assets/images/warm-on.png' : '/assets/images/warm-off.png'">
                             </button>
                         </div>
                         <div class="form-group margin-bottom-10 text-center ">
-                            <button style="border: none; background: transparent;"
-                                (click)="whiteLight('WHITE_LIGHT')">
-                                <img class="zoom" src="/assets/images/cool.png">
+                            <button type="button" style="border: none; background: transparent;" (click)="whiteLight()">
+                                <img class="zoom" [src]=" coolOn ? '/assets/images/cool-on.png' : '/assets/images/cool-off.png'">
                             </button>
                         </div>
                     </div>
@@ -46,20 +44,20 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="input" class="control-label margin-top-10">RGB:</label>
-                    <input type="color" [formControl]="bulbRGB" class="form-control" min="0" max="360">
+                    <input type="color" formControlName="bulbRGB" class="form-control" min="0" max="360">
 
-                    <label for="input" class="control-label" style="margin-top: 6px;">Saturation:</label>
-                    <input type="range" class="input10 form-control" min="0" max="30" value="0" (change)="saturation()"
-                        id="saturate" style="-webkit-appearance: slider-horizontal; appearance: slider-horizontal">
+                    <label for="sat" class="control-label" style="margin-top: 6px;">Saturation:</label>
+                    <input type="range" formControlName="saturation" class="form-control" min="1" max="100"
+                        id="sat" style="-webkit-appearance: slider-horizontal; appearance: slider-horizontal">
 
-                    <label for="input" class="control-label" style="margin-top: 6px;">Brightness:</label>
-                    <input type="range" class="input11 form-control" min="0" id="bright" max="30" value="0"
-                        style="-webkit-appearance: slider-horizontal; appearance: slider-horizontal" (change)="brightness()">
+                    <label for="bright" class="control-label" style="margin-top: 6px;">Brightness:</label>
+                    <input type="range" formControlName="brightness" class="form-control" id="bright" min="0" max="100"
+                        style="-webkit-appearance: slider-horizontal; appearance: slider-horizontal">
                 </div>
             </div>
         </div>
 
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-12">
                 <div class="form-group mb-10">
                     <table class="table mb-0 table-bordered1 table-condensed">
@@ -82,7 +80,7 @@
                     </table>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="row">
             <div class="col-md-12">

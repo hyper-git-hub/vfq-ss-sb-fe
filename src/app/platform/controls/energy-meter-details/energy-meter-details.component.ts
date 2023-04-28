@@ -12,6 +12,7 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { ApiService } from 'src/app/services/api.service';
 import { SignalRService } from 'src/app/services/signal-r.service';
 import { environment } from 'src/environments/environment';
+import { Helpers } from 'src/app/Utils/helpers';
 
 
 @Component({
@@ -142,7 +143,7 @@ export class EnergyMeterDetailsComponent implements OnInit {
             if (key === 'device_online') {
               // ele.value = this.buildingDetails[key] ? 'On' : 'Off';
             } else if (key === 'updated_at') {
-              ele.value = this.df.transform(this.buildingDetails[key], 'dd-MM-yyyy, hh:mm a'); ``
+              // ele.value = this.df.transform(this.buildingDetails[key], 'dd-MM-yyyy, hh:mm a'); ``
             } else {
               ele.value = this.buildingDetails[key];
             }
@@ -165,8 +166,13 @@ export class EnergyMeterDetailsComponent implements OnInit {
       this.table[0].value = dt['device_online'] ? 'On' : 'Off';
       this.table[5].value = Number(dt['current']).toFixed(2).toString() + ' mA';
       this.table[6].value = Number(dt['voltage']).toFixed().toString() + ' V';
+      this.table[7].value = dt['updated_at'] ? this.df.transform(this.convertToSystemTime(dt['updated_at']), 'dd-MM-yyyy, hh:mm a') : '';
       this.table[8].value = Number(dt['power']).toFixed(2).toString() + ' W';
     });
+  }
+
+  convertToSystemTime(t: any) {
+    return Helpers.convertUTCtoLocalDatetime(t);
   }
 
   onDetailsSignals(ev: any) {
