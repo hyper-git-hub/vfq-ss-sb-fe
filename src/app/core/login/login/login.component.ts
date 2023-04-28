@@ -172,9 +172,12 @@ export class LoginComponent implements OnInit {
                 ft.push(+element);
               }
             });
+            let u: any = JSON.parse(localStorage.getItem('user'));
             const write = resp.data['write'];
-            const perm = { write: write === 'WRITE' ? true : false };
-            localStorage.setItem('permission', JSON.stringify(perm));
+            u.write = write === 'WRITE' ? true : false;
+            localStorage.setItem('user', JSON.stringify(u));
+            // const perm = { write: write === 'WRITE' ? true : false };
+            // localStorage.setItem('permission', JSON.stringify(perm));
             // if (resp.data && resp.data['write']) {
             // }
             localStorage.setItem('features', JSON.stringify(ft));
