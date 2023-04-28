@@ -134,6 +134,7 @@ export class TemperatureDetailComponent implements OnInit {
       this.graphData = resp.data[0]['data'];
       this.loading = false;
     }, (err: any) => {
+      this.loading = false;
       this.toastr.error(err.error['message'], 'Error getting graph data for this device');
     });
   }
