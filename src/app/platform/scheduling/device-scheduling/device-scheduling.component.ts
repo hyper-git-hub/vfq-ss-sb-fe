@@ -59,7 +59,8 @@ export class DeviceSchedulingComponent implements OnInit {
 
     let user: any = JSON.parse(localStorage.getItem('user'));
     this.customerId = user.customer['customer_id'];
-    this.readonly = user.write ? false : true;
+    let per: any = JSON.parse(localStorage.getItem('permission'));
+    this.readonly = per ? false : true;
     this.filters = { limit: 10, offset: '0', customer_id: this.customerId };
     this.actions = new Subject();
     this.config = new TableConfig(SchedulingTableConfig.config);

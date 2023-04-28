@@ -97,7 +97,8 @@ export class SocketDetailComponent implements OnInit {
     let u: any = localStorage.getItem('user');
     const user = JSON.parse(u);
     this.customerId = user.customer['customer_id'];
-    this.readonly = user.write ? false : true;
+    let per: any = JSON.parse(localStorage.getItem('permission'));
+    this.readonly = per ? false : true;
     // this.filters.customer_id = this.customerId;
     this.filters.device = this.deviceId;
     this.socketTurnOn = false;
