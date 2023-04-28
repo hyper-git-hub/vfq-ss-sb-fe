@@ -29,7 +29,7 @@ export class SchedulingTableConfig {
             { name: 'space_attribute_name', title: 'Room', sortable: true, sortingOutside: false },
             { name: 'start_time', title: 'Start Time', sortable: true, sortingOutside: false, format: 'timeutc' },
             { name: 'end_time', title: 'End Time', sortable: true, sortingOutside: false, format:'timeutc' },
-            { name: 'days', title: 'Days', sortable: true, sortingOutside: false, format: 'schedule-days' },
+            { name: 'days', title: 'Days', sortable: false, format: 'schedule-days' },
         ]
     }
 }
