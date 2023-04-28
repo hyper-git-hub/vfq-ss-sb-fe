@@ -165,13 +165,18 @@ export class LoginComponent implements OnInit {
           this.apiService.get(featureURL).subscribe((resp: any) => {
             let ft: any[] = [];
             let camFt: any[] = [];
-            resp.data.forEach((element: string) => {
+            resp.data['features'].forEach((element: string) => {
               if (element.includes('cam')) {
                 camFt.push(element);
               } else {
                 ft.push(+element);
               }
             });
+            const write = resp.data['write'];
+            const perm = { write: write === 'WRITE' ? true : false };
+            localStorage.setItem('permission', JSON.stringify(perm));
+            // if (resp.data && resp.data['write']) {
+            // }
             localStorage.setItem('features', JSON.stringify(ft));
             localStorage.setItem('camera_features', JSON.stringify(camFt));
             
