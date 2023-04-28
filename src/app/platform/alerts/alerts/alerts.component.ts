@@ -79,7 +79,8 @@ export class AlertsComponent implements OnInit {
 
     let u: any = JSON.parse(localStorage.getItem('user'));
     this.customerId = u.customer['customer_id'];
-    this.readonly = u.write ? false : true;
+    let per: any = JSON.parse(localStorage.getItem('permission'));
+    this.readonly = per ? false : true;
 
 
     this.smokeAlertsData = [];

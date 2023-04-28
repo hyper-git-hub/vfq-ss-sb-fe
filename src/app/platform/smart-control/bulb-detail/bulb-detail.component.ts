@@ -102,8 +102,8 @@ export class BulbDetailComponent implements OnInit {
 
         let user: any = JSON.parse(localStorage.getItem('user'));
         this.customerId = user.customer['customer_id'];
-
-        this.readonly = user.write ? false : true;
+        let per: any = JSON.parse(localStorage.getItem('permission'));
+        this.readonly = per ? false : true;
         this.filtersSchedule = { limit: 10, offset: '0', order_by: '', order: '', customer_id: this.customerId, device: this.deviceid };
 
         this.rgbcolor = this.hexToRgb('#B3B3B3');

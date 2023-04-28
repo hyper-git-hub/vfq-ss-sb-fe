@@ -55,7 +55,8 @@ export class ManageCamerasComponent implements OnInit {
     this.customerId = this.user.customer.customer_id;
     this.loading = false;
     const user: any = JSON.parse(localStorage.getItem('user'));
-    this.readonly = user.write ? false : true;
+    let per: any = JSON.parse(localStorage.getItem('permission'));
+    this.readonly = per ? false : true;
 
     this.formConfig = new FormConfig(manageCameraFormConfig.config);
 

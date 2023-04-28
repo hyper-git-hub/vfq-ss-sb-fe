@@ -64,7 +64,8 @@ export class BuildingComponent implements OnInit {
     ];
 
     const user: any = JSON.parse(localStorage.getItem('user'));
-    this.readonly = user.write ? false : true;
+    let per: any = JSON.parse(localStorage.getItem('permission'));
+    this.readonly = per ? false : true;
 
     this.config = new TableConfig(BuildingTableConfig.config);
     this.filteredURL = { limit: 10, offset: '0', order: '', order_by: '', search_text: '' };
