@@ -273,11 +273,13 @@ export class ManagebuildingformComponent implements OnInit {
 
 
   getSelectedType(ev) {
-    this.selectedType = ev;
-    if (this.lastInsertedBuilding) {
-      this.getBuildingFloorsById(this.selectedType)
+    if (this.data) {
+      this.selectedType = ev;
+      if (this.lastInsertedBuilding) {
+        this.getBuildingFloorsById(this.selectedType)
+      }
+      this.displayTypeFields(ev);
     }
-    this.displayTypeFields(ev);
 
   }
 
@@ -760,6 +762,9 @@ export class ManagebuildingformComponent implements OnInit {
     if (!value.floor) {
       this.toastr.error("Floor is required");
       return;
+    }
+    if (typeof(value.floor) === 'number' ) {
+      value.floor = [value.floor];
     }
     this.loading = true;
     this.buildingService.addFloor(value, this.urlPort.smartBuilding).subscribe((resp: any) => {
