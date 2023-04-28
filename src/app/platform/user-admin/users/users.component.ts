@@ -59,7 +59,8 @@ export class UsersComponent implements OnInit {
         this.user = this.authService.getUser();
 
         const user: any = JSON.parse(localStorage.getItem('user'));
-        this.readonly = user.write ? false : true;
+        let per: any = JSON.parse(localStorage.getItem('permission'));
+        this.readonly = per ? false : true;
 
 
         this.customerid = this.user.customer.customer_id;

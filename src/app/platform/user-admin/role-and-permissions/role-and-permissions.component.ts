@@ -92,7 +92,8 @@ export class RoleAndPermissionsComponent implements OnInit {
     this.loggedInUser = this.authService.getUser();
 
     const user: any = JSON.parse(localStorage.getItem('user'));
-    this.readonly = user.write ? false : true;
+    let per: any = JSON.parse(localStorage.getItem('permission'));
+    this.readonly = per ? false : true;
 
 
     this.loggedInUserPackageID = this.loggedInUser?.customer?.associations.filter(item => {

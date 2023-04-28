@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
   showPassword: boolean;
   showCaptcha: boolean;
   errorMessage: string;
+  permission: boolean;
   captchaAdded: string;
   wrongPasswordAttemptCounter: number;
   port: any;
@@ -174,8 +175,10 @@ export class LoginComponent implements OnInit {
             });
             let u: any = JSON.parse(localStorage.getItem('user'));
             const write = resp.data['write'];
-            u.write = (write === 'WRITE' || write === true) ? true : false;
-            localStorage.setItem('user', JSON.stringify(u));
+            console.log("write:",write)
+            this.permission = (write === 'WRITE' || write === true) ? true : false;
+            console.log("permission:",this.permission)
+            localStorage.setItem('permission', JSON.stringify(this.permission));
             // const perm = { write: write === 'WRITE' ? true : false };
             // localStorage.setItem('permission', JSON.stringify(perm));
             // if (resp.data && resp.data['write']) {

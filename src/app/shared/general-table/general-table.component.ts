@@ -70,7 +70,8 @@ export class GeneralTableComponent implements OnInit, OnDestroy, OnChanges {
         this.config = new TableConfig(null);
         this.loading = false;
         const user: any = JSON.parse(localStorage.getItem('user'));
-        this.readonly = user.write ? false : true;
+        let per: any = JSON.parse(localStorage.getItem('permission'));
+        this.readonly = per ? false : true;
         this.directDownload = true;
         this.btnStatus = false;
 
