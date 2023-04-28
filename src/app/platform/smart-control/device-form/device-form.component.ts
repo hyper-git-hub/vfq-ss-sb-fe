@@ -24,8 +24,7 @@ export class DeviceFormComponent implements OnInit {
   floors: any[];
   spaces: any[];
   rooms: any[];
-  roomspatch: any[];
-  spacepatch: any[];
+
   openAreas: any[];
   booleanFloorOpen: any
   @Input() areas: any = [];
@@ -60,6 +59,7 @@ export class DeviceFormComponent implements OnInit {
       if (!!this.data.floor_name) {
         this.getBuildingFloors(this.data.building);
         this.getBuildingSpacesByFloor(this.data.floor);
+        this.getRoomsBySpacesByFloor(this.data.floor, this.data.space);
       } else if (!!this.data.open_area) {
         this.getBuildingOpenAreas(this.data.building);
       }
@@ -69,8 +69,6 @@ export class DeviceFormComponent implements OnInit {
   }
 
   onEditModal() {
-    this.roomspatch =  this.data.space_attribute_name;
-    this.spacepatch =  this.data.space_name;
     this.deviceForm.patchValue({
       device_name: this.data.device_name,
       building: this.data.building,
