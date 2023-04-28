@@ -144,7 +144,7 @@
                     <div class="col-md-6">
                         <div class="form-group mb-10">
                             <label>Action <span *ngIf="stateRequired" class="text-danger">*</span></label>
-                            <ng-select placeholder="Choose Action" formControlName="state" [clearable]="true" (change)="setOnOff($event)">
+                            <ng-select placeholder="Choose Action" formControlName="state" [clearable]="false" (change)="setOnOff($event)">
                                 <ng-option [value]="true"> ON </ng-option>
                                 <ng-option [value]="false"> OFF </ng-option>
                             </ng-select>
