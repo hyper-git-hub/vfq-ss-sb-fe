@@ -44,6 +44,12 @@ export class PieChartComponent implements OnInit {
     series.dataFields.category = "country";
     series.slices.template.cornerRadius = 6;
     series.colors.step = 3;
+
+    series.alignLabels = false;
+    // series.labels.template.disabled = true;
+    series.ticks.template.disabled = true;
+    series.labels.template.fill = am4core.color("white");
+    series.labels.template.radius = am4core.percent(-40);
     
     series.hiddenState.properties.endAngle = -90;
     

@@ -408,7 +408,11 @@ export class ReportsComponent implements OnInit {
 
   showReport() {
     for (const key in this.deviceFilters) {
-      this.reportsFilters[key] = this.deviceFilters[key];
+      if (key === 'device') {
+        this.reportsFilters['device_id'] = this.deviceFilters[key];
+      } else {
+        this.reportsFilters[key] = this.deviceFilters[key];
+      }
       // if (!!this.deviceFilters[key]) {
       // }
     }
