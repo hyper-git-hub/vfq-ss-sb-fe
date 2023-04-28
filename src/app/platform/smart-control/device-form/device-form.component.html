@@ -80,7 +80,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Space<span class="text-danger2"></span></label>
-                                <ng-select placeholder="Select Space"  [(ngModel)]="spacepatch" formControlName="space"
+                                <ng-select placeholder="Select Space"  formControlName="space"
                                 (change)="onSelectSpace($event)">
                                     <ng-option *ngFor="let item of spaces" [value]="item.id">{{item.name}}
                                     </ng-option>
@@ -90,7 +90,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Room<span class="text-danger2"></span></label>
-                                <ng-select placeholder="Select Room" [(ngModel)]="roomspatch" formControlName="room"
+                                <ng-select placeholder="Select Room"  formControlName="room"
                                 (change)="onSelectRoom($event)">
                                     <ng-option *ngFor="let item of rooms" [value]="item.id">{{item.name}}
                                     </ng-option>
