@@ -353,7 +353,7 @@
                                             <label class="control-label">Floors<span
                                                     class="text-danger2">*</span></label>
                                             <ng-select placeholder="Select Type" [clearable]="false"
-                                                (change)="getSelectedType($event)"
+                                                (change)="getSelectedType($event)" [multiple]="!data ? true : false"
                                                 formControlName="floor">
                                                 <ng-option *ngFor="let items of floor" [value]="items.id">
                                                     {{items.name}}
