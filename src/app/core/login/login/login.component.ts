@@ -174,7 +174,7 @@ export class LoginComponent implements OnInit {
             });
             let u: any = JSON.parse(localStorage.getItem('user'));
             const write = resp.data['write'];
-            u.write = write === 'WRITE' ? true : false;
+            u.write = (write === 'WRITE' || write === true) ? true : false;
             localStorage.setItem('user', JSON.stringify(u));
             // const perm = { write: write === 'WRITE' ? true : false };
             // localStorage.setItem('permission', JSON.stringify(perm));
