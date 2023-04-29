@@ -769,7 +769,11 @@ export class ManagebuildingformComponent implements OnInit {
     this.loading = true;
     this.buildingService.addFloor(value, this.urlPort.smartBuilding).subscribe((resp: any) => {
       this.goToNextStep(3)
-      this.getFloorAttributes(value.floor)
+      if (this.data) {
+        this.getFloorAttributes(value.floor)
+      } else {
+        this.getFloorAttributes(value.floor[0]);
+      }
       setTimeout(() => {
         this.loadingTab.stepTwo = false;
         this.disableTab.stepTwo = true;
