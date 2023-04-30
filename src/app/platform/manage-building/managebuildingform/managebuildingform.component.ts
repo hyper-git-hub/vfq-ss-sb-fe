@@ -1222,6 +1222,9 @@ export class ManagebuildingformComponent implements OnInit {
 
 
   goToPrevStep(step) {
+    this.reqFloorDel = false;
+    this.requestFloor = false;
+    this.requestSpace = false;
     if (step === 1) {
       this.disableTab.stepOne = false;
       this.active = 1;
@@ -1232,6 +1235,9 @@ export class ManagebuildingformComponent implements OnInit {
   }
 
   goToNextStep(step) {
+    this.reqFloorDel = false;
+    this.requestFloor = false;
+    this.requestSpace = false;
     if (step === 2 && (this.loadingTab.stepOne || this.data)) {
       this.disableTab.stepTwo = false;
       this.active = 2;
@@ -1239,6 +1245,12 @@ export class ManagebuildingformComponent implements OnInit {
       this.disableTab.stepThree = false;
       this.active = 3;
     }
+  }
+
+  onTabSelect(step) {
+    this.reqFloorDel = false;
+    this.requestFloor = false;
+    this.requestSpace = false;
   }
 
 }

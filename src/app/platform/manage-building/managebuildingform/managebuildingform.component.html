@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-md-12">
             <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs pb-6">
-                <li style="border-bottom: 2px solid #e60000;" class="mr-12" [ngbNavItem]="1" [disabled]="disableTab.stepOne">
+                <li style="border-bottom: 2px solid #e60000;" class="mr-12" [ngbNavItem]="1" [disabled]="disableTab.stepOne" (click)="onTabSelect(1)">
                     <a ngbNavLink>Buildings</a>
                     <ng-template ngbNavContent>
                         <form [formGroup]="buildingForm" (ngSubmit)="onSubmit(buildingForm.value)">
@@ -245,7 +245,7 @@
                     </ng-template>
                 </li>
 
-                <li class="mr-12 tab-border-bottom" [ngbNavItem]="2" [disabled]="disableTab.stepTwo" *ngIf="buildingForm.get('type').value !== 6">
+                <li class="mr-12 tab-border-bottom" [ngbNavItem]="2" [disabled]="disableTab.stepTwo" (click)="onTabSelect(1)" *ngIf="buildingForm.get('type').value !== 6">
                     <a ngbNavLink>Floors/Open Areas</a>
                     <ng-template ngbNavContent>
                         <form [formGroup]="floorForm" (ngSubmit)="onSubmitFloor(floorForm.value)">
@@ -585,7 +585,7 @@
                     </ng-template>
                 </li>
 
-                <li class="mr-12 tab-border-bottom" [ngbNavItem]="3" [disabled]="disableTab.stepThree" *ngIf="buildingForm.get('type').value !== 6">
+                <li class="mr-12 tab-border-bottom" [ngbNavItem]="3" [disabled]="disableTab.stepThree" (click)="onTabSelect(1)" *ngIf="buildingForm.get('type').value !== 6">
                     <a ngbNavLink>Spaces</a>
                     <ng-template ngbNavContent>
                         <form [formGroup]="spaceForm" (ngSubmit)="onSubmitSpace(spaceForm.value)">
