@@ -772,7 +772,7 @@ export class ManagebuildingformComponent implements OnInit {
       if (this.data) {
         this.getFloorAttributes(value.floor)
       } else {
-        this.getFloorAttributes(value.floor[0]);
+        this.getFloorAttributes(this.floor[0].id);
       }
       setTimeout(() => {
         this.loadingTab.stepTwo = false;
