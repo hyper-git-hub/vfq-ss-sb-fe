@@ -124,7 +124,7 @@ export class ReportsComponent implements OnInit {
     this.openAreas = [];
 
     this.deviceFilters = {
-      limit: 10, offset: '0', order: '', order_by: '', export: '', date_filter: 'week',
+      limit: 1, offset: '0', order: '', order_by: '', export: '', date_filter: 'week',
       start_date: '', end_date: '', report_class: '', report_type: 'socket_power_consumption_report',
       building_id: '', open_area_id: '', floor_id: '', space_id: '',
       room_id: '', device_id: '',
