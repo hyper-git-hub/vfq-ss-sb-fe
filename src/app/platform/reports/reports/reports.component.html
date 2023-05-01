@@ -167,7 +167,7 @@
     </div>
 
     <div class="panel-body p-16">
-      <general-table style="height: 100%" [count]="count" [config]="config" [actions]="actions"
+      <general-table style="height: 100%" [count]="count" [config]="config" [actions]="actions" [pageInfo]="pageInfo"
         [dataSource]="reportsListingData" [urlFilters]="reportsFilters" (signals)="onTableSignal($event)">
       </general-table>
     </div>
