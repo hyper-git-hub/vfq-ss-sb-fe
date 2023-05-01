@@ -45,7 +45,7 @@ export class socketsPCTableConfig {
             { name: 'floor_or_open_area_name', title: 'Floor/Open Area', sortable: true, sortingOutside: true },
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
-            { name: 'space_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
+            { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
             { name: 'average_consumption', title: 'Average Consumption', sortable: true, sortingOutside: true },
         ]
     }
@@ -69,7 +69,7 @@ export class emPCTableConfig {
             { name: 'floor_or_open_area_name', title: 'Floor/Open Area', sortable: true, sortingOutside: true },
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
-            { name: 'space_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
+            { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
             { name: 'average_consumption', title: 'Average Consumption', sortable: true, sortingOutside: true },
         ]
     }
@@ -92,8 +92,9 @@ export class waterPCTableConfig {
             { name: 'floor_or_open_area_name', title: 'Floor/Open Area', sortable: true, sortingOutside: true },
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
-            { name: 'space_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
+            { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
             // { name: 'status', title: 'Status', sortable: true, sortingOutside: true, sortColumn: 'online_status' },
+            { name: 'average_consumption', title: 'Avg Water Consumption', sortable: true, sortingOutside: true },
         ]
     }
 }
@@ -115,7 +116,7 @@ export class smokeAlertTableConfig {
             { name: 'floor_or_open_area_name', title: 'Floor/Open Area', sortable: true, sortingOutside: true },
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
-            { name: 'space_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
+            { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
             // { name: 'status', title: 'Status', sortable: true, sortingOutside: true, sortColumn: 'online_status' },
         ]
     }
@@ -138,7 +139,7 @@ export class waterLeakageTableConfig {
             { name: 'floor_or_open_area_name', title: 'Floor/Open Area', sortable: true, sortingOutside: true },
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
-            { name: 'space_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
+            { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
             // { name: 'status', title: 'Status', sortable: true, sortingOutside: true, sortColumn: 'online_status' },
         ]
     }
@@ -161,7 +162,7 @@ export class temperatureTableConfig {
             { name: 'floor_or_open_area_name', title: 'Floor/Open Area', sortable: true, sortingOutside: true },
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
-            { name: 'space_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
+            { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
             { name: 'average_temperature', title: 'Average Temp', sortable: true, sortingOutside: true },
             { name: 'average_humidity', title: 'Average Humidity', sortable: true, sortingOutside: true },
         ]
@@ -185,7 +186,7 @@ export class cameraStatusTableConfig {
             { name: 'floor_or_open_area_name', title: 'Floor/Open Area', sortable: true, sortingOutside: true },
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
-            { name: 'space_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
+            { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
             { name: 'status', title: 'Status', sortable: true, sortingOutside: true, sortColumn: 'online_status' },
         ]
     }
@@ -208,7 +209,7 @@ export class fvTableConfig {
             { name: 'floor_or_open_area_name', title: 'Floor/Open Area', sortable: true, sortingOutside: true },
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
-            { name: 'space_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
+            { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
             { name: 'status', title: 'Status', sortable: true, sortingOutside: true, sortColumn: 'online_status' },
         ]
     }
@@ -231,7 +232,7 @@ export class fdTableConfig {
             { name: 'floor_or_open_area_name', title: 'Floor/Open Area', sortable: true, sortingOutside: true },
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
-            { name: 'space_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
+            { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
             { name: 'status', title: 'Status', sortable: true, sortingOutside: true, sortColumn: 'online_status' },
         ]
     }
@@ -254,7 +255,7 @@ export class wtTableConfig {
             { name: 'floor_or_open_area_name', title: 'Floor/Open Area', sortable: true, sortingOutside: true },
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
-            { name: 'space_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
+            { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
             { name: 'status', title: 'Status', sortable: true, sortingOutside: true, sortColumn: 'online_status' },
         ]
     }
@@ -277,7 +278,7 @@ export class gmAlertTableConfig {
             { name: 'floor_or_open_area_name', title: 'Floor/Open Area', sortable: true, sortingOutside: true },
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
-            { name: 'space_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
+            { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
             { name: 'status', title: 'Status', sortable: true, sortingOutside: true, sortColumn: 'online_status' },
         ]
     }
@@ -301,7 +302,7 @@ export class alertsEventsTableConfig {
             { name: 'floor_or_open_area_name', title: 'Floor/Open Area', sortable: true, sortingOutside: true },
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
-            { name: 'space_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
+            { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
             { name: 'status', title: 'Status', sortable: true, sortingOutside: true, sortColumn: 'online_status' },
         ]
     }
@@ -324,7 +325,7 @@ export class occupancyTableConfig {
             { name: 'floor_or_open_area_name', title: 'Floor/Open Area', sortable: true, sortingOutside: true },
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
-            { name: 'space_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
+            { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
             { name: 'status', title: 'Status', sortable: true, sortingOutside: true, sortColumn: 'online_status' },
         ]
     }
@@ -347,7 +348,7 @@ export class userActivityTableConfig {
             { name: 'floor_or_open_area_name', title: 'Floor/Open Area', sortable: true, sortingOutside: true },
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
-            { name: 'space_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
+            { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
             { name: 'status', title: 'Status', sortable: true, sortingOutside: true, sortColumn: 'online_status' },
         ]
     }
