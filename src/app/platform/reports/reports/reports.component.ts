@@ -219,6 +219,8 @@ export class ReportsComponent implements OnInit {
   }
 
   onSelectType(ev: any) {
+    this.pageInfo = { pageIndex: 0, pageSize: 1, offset: 0 };
+    this.deviceFilters.offset = '0';
     this.deviceFilters.report_type = ev;
     let idx = this.reportTypes.findIndex(ele => {
       return ele.id === ev;
@@ -454,6 +456,7 @@ export class ReportsComponent implements OnInit {
     this.reportsForm.reset();
     // this.actions.next({ type: 'onReset' });
     // this.reportsForm.controls['report_class']?.setValue('socket');
+    this.pageInfo = { pageIndex: 0, pageSize: 1, offset: 0 };
     this.reportsForm.controls['report_type']?.setValue('socket_power_consumption_report');
     this.reportsFilters = {};
     this.reportsFilters = { limit: 10, offset: '0', use_case_id: 5, report_type: 'socket_power_consumption_report' };
