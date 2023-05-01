@@ -175,6 +175,7 @@ export class OccupancyComponent implements OnInit {
 
   onSubmit() {
     this.actions.next({ action: 'reload' });
+    this.getOccupancyGraph(this.occupancyFilters);
   }
 
   onReset() {
