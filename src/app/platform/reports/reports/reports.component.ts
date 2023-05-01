@@ -123,7 +123,7 @@ export class ReportsComponent implements OnInit {
     this.openAreas = [];
 
     this.deviceFilters = {
-      limit: 10, offset: '0', order: '', order_by: '', export: '', date_filter: '',
+      limit: 10, offset: '0', order: '', order_by: '', export: '', date_filter: 'week',
       start_date: '', end_date: '', report_class: '', report_type: 'socket_power_consumption_report',
       building_id: '', open_area_id: '', floor_id: '', space_id: '',
       room_id: '', device_id: '',
@@ -139,7 +139,7 @@ export class ReportsComponent implements OnInit {
       space_id: new FormControl(null),
       room_id: new FormControl(null),
       device_id: new FormControl(null),
-      date_filter: new FormControl(null),
+      date_filter: new FormControl('week'),
       end_date: new FormControl(null),
       start_date: new FormControl(null),
     });
@@ -147,7 +147,7 @@ export class ReportsComponent implements OnInit {
 
     let user: any = JSON.parse(localStorage.getItem('user'));
     this.customerId = user.customer['customer_id'];
-    this.reportsFilters = { limit: 10, offset: '0', use_case_id: 5, report_type: 'socket_power_consumption_report' };
+    this.reportsFilters = { limit: 10, offset: '0', use_case_id: 5, date_filter: 'week', report_type: 'socket_power_consumption_report' };
 
     // this.reportsForm.get('report_type').valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((val: any) => {
     //   if (!!val) {
