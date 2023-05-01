@@ -51,7 +51,7 @@ export class ReportsComponent implements OnInit {
 
   actions: Subject<any> = new Subject();
   @Output() signals: EventEmitter<any>;
-  pageInfo = { pageIndex: 0, pageSize: 1, offset: 0 };
+  pageInfo = { pageIndex: 0, pageSize: 10, offset: 0 };
 
   constructor(
     private apiService: ApiService,
@@ -124,7 +124,7 @@ export class ReportsComponent implements OnInit {
     this.openAreas = [];
 
     this.deviceFilters = {
-      limit: 1, offset: '0', order: '', order_by: '', export: '', date_filter: 'week',
+      limit: 10, offset: '0', order: '', order_by: '', export: '', date_filter: 'week',
       start_date: '', end_date: '', report_class: '', report_type: 'socket_power_consumption_report',
       building_id: '', open_area_id: '', floor_id: '', space_id: '',
       room_id: '', device_id: '',
@@ -219,7 +219,7 @@ export class ReportsComponent implements OnInit {
   }
 
   onSelectType(ev: any) {
-    this.pageInfo = { pageIndex: 0, pageSize: 1, offset: 0 };
+    this.pageInfo = { pageIndex: 0, pageSize: 10, offset: 0 };
     this.deviceFilters.offset = '0';
     this.deviceFilters.report_type = ev;
     let idx = this.reportTypes.findIndex(ele => {
@@ -456,7 +456,7 @@ export class ReportsComponent implements OnInit {
     this.reportsForm.reset();
     // this.actions.next({ type: 'onReset' });
     // this.reportsForm.controls['report_class']?.setValue('socket');
-    this.pageInfo = { pageIndex: 0, pageSize: 1, offset: 0 };
+    this.pageInfo = { pageIndex: 0, pageSize: 10, offset: 0 };
     this.reportsForm.controls['report_type']?.setValue('socket_power_consumption_report');
     this.reportsFilters = {};
     this.reportsFilters = { limit: 10, offset: '0', use_case_id: 5, report_type: 'socket_power_consumption_report' };
