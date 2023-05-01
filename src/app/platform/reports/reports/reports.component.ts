@@ -149,11 +149,11 @@ export class ReportsComponent implements OnInit {
     this.customerId = user.customer['customer_id'];
     this.reportsFilters = { limit: 10, offset: '0', use_case_id: 5, report_type: 'socket_power_consumption_report' };
 
-    this.reportsForm.get('report_type').valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((val: any) => {
-      if (!!val) {
-        this.makeConfig(val);
-      }
-    });
+    // this.reportsForm.get('report_type').valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((val: any) => {
+    //   if (!!val) {
+    //     this.makeConfig(val);
+    //   }
+    // });
   }
 
   ngOnInit(): void {
@@ -407,6 +407,7 @@ export class ReportsComponent implements OnInit {
   }
 
   showReport() {
+    this.makeConfig(this.deviceFilters.report_type);
     for (const key in this.deviceFilters) {
       if (key === 'device') {
         this.reportsFilters['device_id'] = this.deviceFilters[key];
