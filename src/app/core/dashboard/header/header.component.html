@@ -41,13 +41,13 @@
                     *ngIf="fmsIsEnabled || ATIsEnabled">
                     <button ngbDropdownItem *ngIf="fmsIsEnabled">
                         <a style="text-decoration:none; color: #76838f; font-size: 12px;"
-                            [href]="'https://app-dev-fmsnewpackage.azurewebsites.net/verify-token?token='+token"
+                            [href]="'https://app-fmsnewpackage-stag.azurewebsites.net/verify-token?token='+token"
                             target="_blank">
                             Fleet Management System</a>
                     </button>
                     <button ngbDropdownItem *ngIf="ATIsEnabled">
                         <a style="text-decoration:none; color: #76838f; font-size: 12px;"
-                            [href]="'https://at.dev.iot.vodafone.com.qa/verify-token?token='+token" target="_blank">
+                            [href]="'https://at.staging.iot.vodafone.com.qa/verify-token?token='+token" target="_blank">
                             Asset Tracking System</a>
                     </button>
                 </div>
