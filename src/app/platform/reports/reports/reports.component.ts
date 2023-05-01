@@ -51,6 +51,7 @@ export class ReportsComponent implements OnInit {
 
   actions: Subject<any> = new Subject();
   @Output() signals: EventEmitter<any>;
+  pageInfo = { pageIndex: 0, pageSize: 1, offset: 0 };
 
   constructor(
     private apiService: ApiService,
