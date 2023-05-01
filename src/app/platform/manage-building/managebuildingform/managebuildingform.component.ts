@@ -278,8 +278,8 @@ export class ManagebuildingformComponent implements OnInit {
       if (this.lastInsertedBuilding) {
         this.getBuildingFloorsById(this.selectedType)
       }
-      this.displayTypeFields(ev);
     }
+    this.displayTypeFields(ev);
 
   }
 
