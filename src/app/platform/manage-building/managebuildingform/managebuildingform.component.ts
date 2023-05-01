@@ -142,6 +142,7 @@ export class ManagebuildingformComponent implements OnInit {
   ];
 
   floorArea = 1;
+  floorDelArea = 1;
   attr: any[] = [];
 
   constructor(
@@ -393,6 +394,7 @@ export class ManagebuildingformComponent implements OnInit {
   delByFloorOrAreaChange(ev) {
     this.floorForDelete = [];
     this.floorArea = ev;
+    this.floorDelArea = ev;
     if (this.floorArea === 1) {
       this.getFloorsOfBuildingForDelete(this.lastInsertedBuilding)
     }
@@ -1187,6 +1189,16 @@ export class ManagebuildingformComponent implements OnInit {
         
         // this.spaceForm.get('space').setValue(this.floorSpaces[0].id);
         // this.spaceForm.get('spaceTable').setValue(this.floorSpaces[0].id);
+      } else {
+        // this.typeValuesFloor.forEach(element => {
+        //   this.enableOrDisableFields(element.key, false)
+        // });
+
+        this.typeValuesFloor.forEach(element => {
+          let field = element.name.toLowerCase();
+          this.floorAttri.at(0).get(element.key).setValue(0)
+          this.enableOrDisableFields(element.key, false)
+        });
       }
       if (forTable) {
         this.consumersbuild = resp['data']['data'];

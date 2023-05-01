@@ -302,6 +302,7 @@ export class PlayBackComponent implements OnInit {
 
   onSubmitFilter() {
     const dt = this.devices;
+    console.log(dt);
     if (!!dt) {
       dt.forEach((ele, idx) => {
         this.camIds += ele.device;
