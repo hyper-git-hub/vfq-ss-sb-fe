@@ -334,7 +334,7 @@ export class PlayBackComponent implements OnInit {
 
   setupSocket(port: any, device: any) {
     setTimeout(() => {
-      let url = `${environment.websocketUrl}/test?cameraId=${device}`;
+      let url = `${environment.websocketUrl}/?cameraId=${device}`;
       let idx = this.devices.findIndex(ele => {
         return ele.device === device;
       });
