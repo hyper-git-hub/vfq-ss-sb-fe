@@ -39,7 +39,7 @@ export const environment = {
   baseUrlSS: 'https://staging.gateway.iot.vodafone.com.qa/smartsurveillance',    // Staging SSgit add
   baseUrlSB: 'https://staging.gateway.iot.vodafone.com.qa/smart-building',
   baseUrlRA: 'https://staging.gateway.iot.vodafone.com.qa/role-access',
-  baseUrlStreaming: 'https://staging.gateway.iot.vodafone.com.qa/camera-service',
+  baseUrlStreaming: 'https://staging.gateway.iot.vodafone.com.qa/sscamera',
   baseUrlDevice: 'https://staging.gateway.iot.vodafone.com.qa/device-manager',
   baseUrlAudit: 'https://staging.gateway.iot.vodafone.com.qa/platform-audit',
   baseUrlNotif: 'https://staging.gateway.iot.vodafone.com.qa/alert-notification',
