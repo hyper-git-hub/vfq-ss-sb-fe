@@ -7,15 +7,16 @@ import { ApiService } from 'src/app/services/api.service';
 import { FormConfig } from 'src/app/shared/general-forms/models';
 import { TableConfig } from 'src/app/shared/general-table/model';
 import { environment } from 'src/environments/environment';
-import { DateUtils } from 'src/app/Utils/DateUtils';
 
 import {
+  ROUNDHUM, ROUNDTEMP,
   alertsEventsTableConfig, cameraStatusTableConfig, emPCTableConfig, fdTableConfig, fvTableConfig, gmAlertTableConfig,
   occupancyTableConfig, reportFilterFormConfig, smokeAlertTableConfig, socketsPCTableConfig, temperatureTableConfig,
   userActivityTableConfig, waterLeakageTableConfig, waterPCTableConfig, wtTableConfig
 } from './config';
 import { DatePipe } from '@angular/common';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { FORMATS } from 'src/app/shared/general-table/formats';
+
 
 @Component({
   selector: 'app-reports',
@@ -195,6 +196,7 @@ export class ReportsComponent implements OnInit {
       this.config = new TableConfig(waterLeakageTableConfig.config);
     } else if (val === 'temperature_report') {
       this.config = new TableConfig(temperatureTableConfig.config);
+      this.defineTempFormats();
     } else if (val === 'camera_status_report') {
       this.config = new TableConfig(cameraStatusTableConfig.config);
     } else if (val === 'footage_viewer_report') {
@@ -212,6 +214,11 @@ export class ReportsComponent implements OnInit {
     } else if (val === 'user_activity_report') {
       this.config = new TableConfig(userActivityTableConfig.config);
     }
+  }
+
+  defineTempFormats() {
+    FORMATS['round-temp'] = ROUNDTEMP;
+    FORMATS['round-hum'] = ROUNDHUM;
   }
 
   onSelectClass(ev: any) {

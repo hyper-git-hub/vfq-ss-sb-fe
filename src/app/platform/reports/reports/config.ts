@@ -161,11 +161,30 @@ export class temperatureTableConfig {
             // { name: 'open_area_name', title: 'Open Area', sortable: true, sortingOutside: true },
             { name: 'space_name', title: 'Space', sortable: true, sortingOutside: true },
             { name: 'room_name', title: 'Room', sortable: true, sortingOutside: true, sortColumn: 'room_name' },
-            { name: 'average_temperature', title: 'Average Temp', sortable: true, sortingOutside: true },
-            { name: 'average_humidity', title: 'Average Humidity', sortable: true, sortingOutside: true },
+            { name: 'average_temperature', title: 'Average Temp', sortable: true, sortingOutside: true, format: 'round-temp' },
+            { name: 'average_humidity', title: 'Average Humidity', sortable: true, sortingOutside: true, format: 'round-hum' },
         ]
     }
 }
+
+function roundTemp(v: any, r?: any, c?: any): any {
+    if (!!r.average_temperature) {
+        let t = +r.average_temperature;
+        return t.toFixed(2);
+    }
+}
+
+function roundHum(v: any, r?: any, c?: any): any {
+    if (!!r.average_humidity) {
+        let hum = +r.average_humidity;
+        return hum.toFixed(2);
+    }
+}
+
+export const ROUNDTEMP: any = (v: any, r?: any, c?: any) => roundTemp(v, r, c);
+export const ROUNDHUM: any = (v: any, r?: any, c?: any) => roundHum(v, r, c);
+
+
 export class cameraStatusTableConfig {
     public static config = {
         title: 'Camera Status Reports',
