@@ -201,14 +201,17 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
 
     this.apiService.get(url.href).subscribe((resp: any) => {
       this.viewCounts = resp.data.data;
+      console.log(this.viewCounts);
 
       this.devices.forEach(dev => {
         this.viewCounts.forEach((element: Object, idx) => {
           if (element.hasOwnProperty(dev.device)) {
-            dev.views_count = element[dev.device];
+            console.log(element, dev);
+            dev['views_count'] = element[dev.device]['user_count'];
           }
         });
       });
+      console.log(this.devices);
       this.loading = false;
     }, (err: any) => {
       this.loading = false;

@@ -134,21 +134,16 @@
                               </div>
 
                               <div class="form-group mb-10" fxLayout="row" fxLayoutGap="8px">
-                                <p-calendar placeholder="Select Start Date" appendTo="body" formControlName="start_date"
-                                    (onSelect)="onSelectDateRange($event,'start')" [maxDate]="maxStartDate" [style]="{'width':'100%'}"
-                                    id="sd" name="start_date" [showTime]="true">
+                                <p-calendar placeholder="Select Start Date" appendTo="body" formControlName="starttime"
+                                    (onSelect)="onSelectDateRange($event,'start')"  [style]="{'width':'100%'}"
+                                    id="sd" [showTime]="true">
                                 </p-calendar>
 
-                                <p-calendar placeholder="Select End Date" appendTo="body" formControlName="end_date"
-                                    [minDate]="maxStartDate" (onSelect)="onSelectDateRange($event,'end')" [style]="{'width':'100%'}"
-                                    id="ed" name="end_date" [showTime]="true">
+                                <p-calendar placeholder="Select End Date" appendTo="body" formControlName="endtime"
+                                     (onSelect)="onSelectDateRange($event,'end')" [style]="{'width':'100%'}"
+                                    id="ed" [showTime]="true">
                                 </p-calendar>
                               </div>
-
-                              <div class="form-group mb-10">
-                              </div>
-                            <!-- <app-general-forms class="w-100-p" [config]="formConfig1" [actions]="actions"
-                                (signals)="onGeneralFormSignal($event)"></app-general-forms> -->
                         </fieldset>
 
                         <div class="w-100-p" fxLayoutAlign="end end">
@@ -202,14 +197,15 @@
 
         <div class="panel-body p-10">
             <canvas id="65" style="width: 100%; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"> </canvas>
-            <div *ngIf="recordedVedio" class="player-wrapper" style="width: 500px;height: 195px;">
+            <canvas [id]="pbFilterForm.get('device').value" style="width: 400px; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"> </canvas>
+            <!-- <div *ngIf="recordedVedio" class="player-wrapper" style="width: 500px;height: 195px;">
 
                 <vg-player>
                     <video #myMedia [vgHls]="recordedVedio" id="my-video" type="video/mp4" controls>
                     </video>
                 </vg-player>
 
-            </div>
+            </div> -->
         </div>
     </div>
 
