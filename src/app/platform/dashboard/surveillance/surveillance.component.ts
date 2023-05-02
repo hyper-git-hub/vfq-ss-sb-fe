@@ -20,7 +20,7 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
   graphsLoading: boolean;
   showBuildingCard: boolean;
   showDevicesCard: boolean;
-  
+
   pageIdForGraph = 'MDSS';
   breadCrumbs: any[];
   devices: any[];
@@ -431,10 +431,10 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
     this.apiService.get(url.href).subscribe((resp: any) => {
       this.viewCounts = resp.data.data;
 
-      this.devices.forEach(dev => {
-        this.viewCounts.forEach((element: Object, idx) => {
-          if (element.hasOwnProperty(dev.device)) {
-            dev.views_count = element[dev.device];
+      this.viewCounts.forEach((element: any, idx) => {
+        this.devices.forEach(dev => {
+          if (element.camera_name === dev.device) {
+            dev['views_count'] = element['user_count'];
           }
         });
       });
@@ -451,7 +451,7 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
     this.apiService.post(url.href, payload).subscribe((resp: any) => {
       this.setupSocket(resp['socket_port'], cameraID);
     }, (err: any) => {
-      this.toastr.error(err.error['message'], 'Error playing live stream');
+      // this.toastr.error(err.error['message'], 'Error playing live stream');
     });
   }
 
@@ -734,6 +734,6 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.patchCameraViews();
     // console.log();
-    // this.player2.stop()
+    this.player2.destroy();
   }
 }
