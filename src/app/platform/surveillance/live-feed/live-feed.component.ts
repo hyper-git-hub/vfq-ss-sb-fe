@@ -46,6 +46,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
   rtsp: any;
   detailFilters: any;
   pc: RTCPeerConnection;
+  player2: any;
 
   constructor(
     private dialog: NgbModal,
@@ -201,17 +202,14 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
 
     this.apiService.get(url.href).subscribe((resp: any) => {
       this.viewCounts = resp.data.data;
-      console.log(this.viewCounts);
 
-      this.devices.forEach(dev => {
-        this.viewCounts.forEach((element: Object, idx) => {
-          if (element.hasOwnProperty(dev.device)) {
-            console.log(element, dev);
-            dev['views_count'] = element[dev.device]['user_count'];
+      this.viewCounts.forEach((element: any, idx) => {
+          this.devices.forEach(dev => {
+          if (element.camera_name === dev.device) {
+            dev['views_count'] = element['user_count'];
           }
         });
       });
-      console.log(this.devices);
       this.loading = false;
     }, (err: any) => {
       this.loading = false;
@@ -278,7 +276,8 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
       // let player = new JSMpeg.VideoElement("#video-canvas", url)
       var canvas = document.getElementById(this.devices[idx]?.id);
       // @ts-ignore JSMpeg defined via script
-      var player2 = new JSMpeg.Player(url, { canvas: canvas });
+      this.player2 = new JSMpeg.Player(url, { canvas: canvas });
+      console.log(this.player2.source, this.player2.source.socket);
     }, 1000);
   }
 
@@ -368,6 +367,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.patchCameraViews();
+    this.player2.destroy();
   }
 
   start() {
