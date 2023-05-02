@@ -424,6 +424,20 @@ export class ReportsComponent implements OnInit {
     this.actions.next({ action: 'reload' });
   }
 
+  reloadReport() {
+    for (const key in this.deviceFilters) {
+      if (key === 'device') {
+        this.reportsFilters['device_id'] = this.deviceFilters[key];
+      } else {
+        this.reportsFilters[key] = this.deviceFilters[key];
+      }
+      // if (!!this.deviceFilters[key]) {
+      // }
+    }
+
+    this.actions.next({ action: 'reload' });
+  }
+
   onTableSignal(ev: any) {
     // console.log(ev);
     if (ev.type === 'onData') {
@@ -441,14 +455,14 @@ export class ReportsComponent implements OnInit {
     } else if (ev.type === 'onSorting') {
       this.deviceFilters.order = ev.data['direction'] === 'desc' ? 'descending' : 'ascending';
       this.deviceFilters.order_by = ev.data['column'];
-      this.showReport();
+      this.reloadReport();
     } else if (ev.type === 'onPagination') {
       this.deviceFilters.limit = ev.data['limit'];
       this.deviceFilters.offset = ev.data['offset'];
-      this.showReport();
+      this.reloadReport();
     } else if (ev.type === 'searchTable') {
       this.deviceFilters.search = ev.data;
-      this.showReport();
+      this.reloadReport();
     }
   }
 
@@ -462,8 +476,7 @@ export class ReportsComponent implements OnInit {
     this.reportsFilters = { limit: 10, offset: '0', use_case_id: 5, report_type: 'socket_power_consumption_report' };
     this.deviceFilters = { limit: 10, offset: '0', use_case_id: 5, report_type: 'socket_power_consumption_report' };
     setTimeout(() => {
-      this.showReport();
-
+      this.reloadReport();
     }, 200);
   }
 }
