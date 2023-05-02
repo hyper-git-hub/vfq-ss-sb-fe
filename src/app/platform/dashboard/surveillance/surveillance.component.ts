@@ -458,7 +458,7 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
   setupSocket(port: any, device: any) {
     setTimeout(() => {
       // let url = `wss://staging.gateway.iot.vodafone.com.qa/sb_node_live_stream:${port}`;
-      let url = `${environment.websocketUrl}/test?cameraId=${device}`;
+      let url = `${environment.websocketUrl}/?cameraId=${device}`;
       let idx = this.devices.findIndex(ele => {
         return ele.device === device;
       });

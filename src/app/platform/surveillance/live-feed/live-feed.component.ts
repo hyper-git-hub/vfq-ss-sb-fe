@@ -265,7 +265,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
 
   setupSocket(port: any, device: any) {
     setTimeout(() => {
-      let url = `${environment.websocketUrl}/test?cameraId=${device}`;
+      let url = `${environment.websocketUrl}/?cameraId=${device}`;
       // let url = `ws://node-js-live-stream.appservices.hypernymbiz.com:4400/test?cameraId=CAM1`;
       // let url = `wss://staging.gateway.iot.vodafone.com.qa/sb_node_live_stream:443`;
       let idx = this.devices.findIndex(ele => {
