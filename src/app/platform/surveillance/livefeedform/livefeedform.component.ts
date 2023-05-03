@@ -2,11 +2,10 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { livefeedTableConfig } from './livefeedform-config';
 import { TableConfig } from 'src/app/shared/general-table/model';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-import { ToastrService } from 'ngx-toastr';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { ApiResponse } from 'src/app/interfaces/response';
+import { environment } from 'src/environments/environment';
+import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -29,6 +28,7 @@ export class LivefeedformComponent implements OnInit {
   listHall: any[] = [];
   listRoom: any[] = [];
   cameraList: any[] = []
+  cameras: any[] = []
   cameraName: any
 
 
@@ -38,7 +38,9 @@ export class LivefeedformComponent implements OnInit {
 
 
 
-constructor(private modalRef: NgbActiveModal) {
+constructor(private modalRef: NgbActiveModal,
+  private apiService: ApiService,
+  private toastr: ToastrService,) {
 
   this.bySec = [
     { id: '1', name: 'Lobby' },
@@ -91,7 +93,7 @@ constructor(private modalRef: NgbActiveModal) {
 }
 
 ngOnInit(): void {
-console.log("data:",this.data)
+  this.getCameraDevices();
 
 if(this.data.layout == 2)
 {
@@ -139,6 +141,16 @@ onChangeView(ev: any) {
 onChangeCam(ev: any) {
   console.log("The Changes of Camera ==> ", ev)
 
+}
+
+getCameraDevices() {
+  this.cameras = [];
+  let url = new URL(`${environment.baseUrlSB}/building/smart_devices/?device_type=camera`);
+  this.apiService.get(url.href).subscribe((resp: any) => {
+    this.cameras= resp.data['data'];
+  }, (err: any) => {
+    this.toastr.error(err.error['message'], 'Error getting cameras');
+  });
 }
 onSubmit() {
   console.log( "this.catagory == > ", this.catagory )

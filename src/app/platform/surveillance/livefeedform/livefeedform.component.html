@@ -92,8 +92,8 @@
                                         <div class="form-group ">
                                             <label>Camera</label>
                                             <ng-select class=" margin-bottom-10" [searchable]="false" [clearable]="false"
-                                                placeholder="Select Space" (change)="onChangeCam($event)" formControlName="camera">
-                                                <ng-option *ngFor="let items of cameraList" [value]="items.id">{{ items.name }}
+                                                placeholder="Select Cameras" (change)="onChangeCam($event)" formControlName="camera">
+                                                <ng-option *ngFor="let items of cameras" [value]="items.device">{{ items.device_name }}
                                                 </ng-option>
                                             </ng-select>
                                         </div>
