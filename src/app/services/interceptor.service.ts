@@ -28,7 +28,6 @@ export class InterceptorService implements HttpInterceptor {
     const baseUrlRA = environment.baseUrlRA;
     const baseUrlDevice = environment.baseUrlDevice;
     const signalR = environment.signalR;
-    const translateUrl = environment.translateUrl;
     const bypassurl = '&bypassurl=true';
     const streamingUrl = environment.baseUrlStreaming;
     const inventory = environment.cobInventory;
@@ -44,7 +43,6 @@ export class InterceptorService implements HttpInterceptor {
 
 
       if (req.url.includes(signalR)
-        || req.url.includes(translateUrl)
         || req.url.includes(streamingUrl)
         ) {
         cloneReq = req.clone({ url: req.url });
