@@ -142,6 +142,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
 
     this.apiService.patch(slug, {guid: this.userGuid}).subscribe((resp: any) => {
       this.views = resp.data;
+      
       this.loading = false;
     }, (err: any) => {
       this.loading = false;
@@ -355,6 +356,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     const options: NgbModalOptions = { size: 'sm', scrollable: true };
     const dialogRef = this.dialog.open(LivefeedformComponent, options);
     dialogRef.componentInstance.title = 'Add View';
+    dialogRef.componentInstance.data = this.views;
     dialogRef.componentInstance.catagory = 'add';
   }
 
