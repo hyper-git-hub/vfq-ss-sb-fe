@@ -9,13 +9,13 @@
             </div>
 
             <div fxFlex="80" fxLayout="row" fxLayoutGap="2px" fxLayoutAlign="end start">
-                <!-- <ng-select placeholder="Hallways">
+             <ng-select placeholder="Hallways">
                     <ng-option *ngFor="let item of hallways" [value]="item.id">
                         {{item.name}}
                     </ng-option>
                 </ng-select>
-                <button type="button" class="btn btn-success btn-xs" (click)="onAddlivefeed()">Add</button> -->
-                <!-- <button type="button" class="btn btn-primary btn-xs" (click)="onEditlivefeed()">Edit</button> -->
+                <button type="button" class="btn btn-primary btn-xs" (click)="onEditlivefeed()">Edit</button>
+                <button type="button" class="btn btn-success btn-xs" (click)="onAddlivefeed()">Add</button>
                 <button type="button" (click)="updateLayout(2)" class="btn btn-info btn-xs">2x2</button>
                 <button type="button" (click)="updateLayout(3)" class="btn btn-info btn-xs">3x3</button>
             </div>

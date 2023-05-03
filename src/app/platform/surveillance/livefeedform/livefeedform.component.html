@@ -68,12 +68,9 @@
                                         <div class="form-group ">
                                             <label>View Name</label>
                                             <input type="text" class="form-control" required="true" formControlName="name" placeholder="Name">
-                                            
-                                            <ng-container *ngIf=" cameraName.invalid && (cameraName.touched || cameraName.dirty)">
-                                                <span class="text-danger" *ngIf="userform.controls['name'].hasError('required')">
-                                                    Please provide View Name
-                                                </span>
-                                            </ng-container>
+                                            <div *ngIf="userform.controls['name'].hasError('required') && userform.controls['name'].touched" class="text-danger">
+                                                Please provide View Name
+                                            </div>
             
                                         </div>
                                     </div>
