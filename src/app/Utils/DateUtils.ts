@@ -512,9 +512,9 @@ export class DateUtils {
       try {
         const utcDate = Date.parse(date);
         const resultDate = addMinutes(utcDate, new Date().getTimezoneOffset());
-        return format(resultDate, 'YYYY-MM-DD HH:mm:ss');
+        return format(resultDate, 'yyyy-MM-dd HH:mm:ss');
       } catch (e) {
-        // console.log(e);
+        console.log(e);
       }
     }
     return '';

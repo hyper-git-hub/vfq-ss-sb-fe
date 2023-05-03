@@ -26,14 +26,16 @@
                                     <!-- <label>Building <span class="text-danger">*</span></label> -->
                                     <ng-select placeholder="Select Building" [clearable]="false"
                                         (change)="onSelectBuilding($event)" formControlName="building">
-                                        <ng-option *ngFor="let building of buildings" [value]="building.id">{{building.name}}
+                                        <ng-option *ngFor="let building of buildings"
+                                            [value]="building.id">{{building.name}}
                                         </ng-option>
                                     </ng-select>
-                                    <div *ngIf="pbFilterForm.controls['building'].hasError('required') && pbFilterForm.controls['building'].touched" class="text-danger">
+                                    <div *ngIf="pbFilterForm.controls['building'].hasError('required') && pbFilterForm.controls['building'].touched"
+                                        class="text-danger">
                                         Please select a building
                                     </div>
                                 </div>
-                
+
                                 <div fxFlex="18.5" class="mb-6">
                                     <!-- <label>Type <span class="text-danger">*</span></label> -->
                                     <ng-select placeholder="Select type" [clearable]="false"
@@ -42,20 +44,21 @@
                                         </ng-option>
                                     </ng-select>
                                 </div>
-                
+
                                 <ng-container *ngIf="pbFilterForm.controls['area'].value === 'floor' ">
                                     <div fxFlex="18.5">
                                         <!-- <label for="">Floor <span class="text-danger">*</span> </label> -->
-                                        <ng-select placeholder="Select Floor" formControlName="floor" [clearable]="false"
-                                            (change)="onSelectFloor($event)">
-                                            <ng-option *ngFor="let floor of floors" [value]="floor.id">{{floor.name}}</ng-option>
+                                        <ng-select placeholder="Select Floor" formControlName="floor"
+                                            [clearable]="false" (change)="onSelectFloor($event)">
+                                            <ng-option *ngFor="let floor of floors"
+                                                [value]="floor.id">{{floor.name}}</ng-option>
                                         </ng-select>
                                         <!-- <div *ngIf="cameraForm.controls['floor'].hasError('required')" class="text-danger">
                                             Please select a floor
                                         </div> -->
                                     </div>
-                                    
-                
+
+
                                     <div fxFlex="18.5">
                                         <!-- <label for="">Space <span class="text-danger">*</span> </label> -->
                                         <ng-select placeholder="Select Space" formControlName="space"
@@ -64,7 +67,7 @@
                                             </ng-option>
                                         </ng-select>
                                     </div>
-                
+
                                     <div fxFlex="18.5">
                                         <!-- <label for="">Room </label> -->
                                         <ng-select placeholder="Select room" formControlName="room"
@@ -74,7 +77,7 @@
                                         </ng-select>
                                     </div>
                                 </ng-container>
-                
+
                                 <ng-container *ngIf="pbFilterForm.controls['area'].value === 'openArea' ">
                                     <div fxFlex="18.5">
                                         <!-- <label for="">Open Area <span class="text-danger">*</span> </label> -->
@@ -90,9 +93,13 @@
                                     <!-- <label for="">Camera <span class="text-danger">*</span> </label> -->
                                     <ng-select placeholder="Select Camera" formControlName="device"
                                         (change)="onSelectDevice($event)">
-                                        <ng-option *ngFor="let device of devices" [value]="device.device">{{device.device_name}}
+                                        <ng-option *ngFor="let device of devices"
+                                            [value]="device.device">{{device.device_name}}
                                         </ng-option>
                                     </ng-select>
+                                    <div class="text-danger" *ngIf="pbFilterForm.controls['device'].hasError('required') && pbFilterForm.controls['device'].touched">
+                                        Please select a camera
+                                    </div>
                                 </div>
                             </div>
                         </fieldset>
@@ -103,66 +110,72 @@
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div class="form-group mb-10">
                                     <div class="radio-custom fs-16">
-                                      <input type="radio" id="today" value="today" formControlName="date_filter" name="date_filter"
-                                        (change)="onChangePeriod($event)">
-                                      <label for="today">Current Day</label>
+                                        <input type="radio" id="today" value="today" formControlName="date_filter"
+                                            (change)="onChangePeriod($event)">
+                                        <label for="today">Current Day</label>
                                     </div>
                                 </div>
 
                                 <div class="form-group mb-10">
                                     <div class="radio-custom fs-16">
-                                      <input type="radio" id="week" value="week" formControlName="date_filter" name="date_filter"
-                                        (change)="onChangePeriod($event)">
-                                      <label for="week">Previous Week</label>
+                                        <input type="radio" id="week" value="week" formControlName="date_filter"
+                                            (change)="onChangePeriod($event)">
+                                        <label for="week">Previous Week</label>
                                     </div>
                                 </div>
 
                                 <div class="form-group mb-10">
                                     <div class="radio-custom fs-16">
-                                      <input type="radio" id="month" value="month" formControlName="date_filter" name="date_filter"
-                                        (change)="onChangePeriod($event)">
-                                      <label for="month">Previous Month</label>
+                                        <input type="radio" id="month" value="month" formControlName="date_filter"
+                                            (change)="onChangePeriod($event)">
+                                        <label for="month">Previous Month</label>
                                     </div>
                                 </div>
 
                                 <div class="form-group mb-10">
                                     <div class="radio-custom fs-16">
-                                        <input type="radio"  id="range" value="range" formControlName="date_filter" name="date_filter"
+                                        <input type="radio" id="range" value="range" formControlName="date_filter"
                                             (change)="onChangePeriod($event)">
                                         <label for="range">Select a period</label>
                                     </div>
                                 </div>
-                              </div>
+                            </div>
 
-                              <div class="form-group mb-10" fxLayout="row" fxLayoutGap="8px">
-                                <p-calendar placeholder="Select Start Date" appendTo="body" formControlName="starttime"
-                                    (onSelect)="onSelectDateRange($event,'start')"  [style]="{'width':'100%'}"
-                                    id="sd" [showTime]="true">
-                                </p-calendar>
+                            <div class="form-group mb-10" fxLayout="row" fxLayoutGap="8px">
+                                <div>
+                                    <p-calendar placeholder="Select Start Time" appendTo="body" formControlName="starttime"
+                                        (onSelect)="onSelectDateRange($event,'start')" [style]="{'width':'100%'}" id="sd"
+                                        [showTime]="true">
+                                    </p-calendar>
+                                    <div class="text-danger" *ngIf="pbFilterForm.controls['starttime'].hasError('required') && pbFilterForm.controls['starttime'].touched">
+                                        Please select start time
+                                    </div>
+                                </div>
 
-                                <p-calendar placeholder="Select End Date" appendTo="body" formControlName="endtime"
-                                     (onSelect)="onSelectDateRange($event,'end')" [style]="{'width':'100%'}"
-                                    id="ed" [showTime]="true">
-                                </p-calendar>
-                              </div>
+                                <div>
+                                    <p-calendar placeholder="Select End Time" appendTo="body" formControlName="endtime"
+                                        (onSelect)="onSelectDateRange($event,'end')" [style]="{'width':'100%'}" id="ed"
+                                        [showTime]="true">
+                                    </p-calendar>
+                                    <div class="text-danger" *ngIf="pbFilterForm.controls['endtime'].hasError('required') && pbFilterForm.controls['endtime'].touched">
+                                        Please select end time
+                                    </div>
+                                </div>
+                            </div>
                         </fieldset>
 
                         <div class="w-100-p" fxLayoutAlign="end end">
                             <div class="w-60-p " fxLayoutAlign="end end" fxLayoutGap="8px">
-
-                                <!-- <button fxFlex="25%" (click)="onSubmit()" type="button"
-                                    class="btn btn-danger btn-block btn-round">
-                                    Submit</button>   
-                                    <button fxFlex="25%"  (click)="onDonwload()" class="btn btn-default btn-block btn-round">
-                                    Download Video</button> -->
-
-                                <button fxFlex="25%" type="button" (click)="onSubmitFilter()" [disabled]="!pbFilterForm.valid" class="btn btn-danger btn-block btn-round">
+                                <button fxFlex="25%" type="button" (click)="onSubmitFilter()"
+                                    [disabled]="!pbFilterForm.valid" class="btn btn-danger btn-block btn-round">
                                     Submit
                                 </button>
-                                <button [disabled]="!recordedVedio" fxFlex="25%" type="button" (click)="onDonwload()"
-                                    [hidden]="downloadHiddenOne" class="btn btn-default btn-block btn-round">
+
+                                <button fxFlex="25%" type="button" (click)="onDownload()" [hidden]="downloadHiddenOne"
+                                    class="btn btn-default btn-block btn-round">
                                     Download Video
                                 </button>
+
                                 <!-- <button #download fxFlex="25%" [hidden]="downloadHiddenTwo"
                                  fileSaver [method]="'GET'" [fileName]="'videoName.mp4'"
                                     [url]="downloadVideo"
@@ -197,8 +210,9 @@
         </div>
 
         <div class="panel-body p-10">
-            <canvas id="65" style="width: 100%; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"> </canvas>
-            <canvas [id]="pbFilterForm.get('device').value" style="width: 400px; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"> </canvas>
+            <!-- <canvas id="65" style="width: 100%; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"> </canvas> -->
+            <canvas [id]="pbFilterForm.get('device').value"
+                style="width: 100%; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"> </canvas>
             <!-- <div *ngIf="recordedVedio" class="player-wrapper" style="width: 500px;height: 195px;">
 
                 <vg-player>
