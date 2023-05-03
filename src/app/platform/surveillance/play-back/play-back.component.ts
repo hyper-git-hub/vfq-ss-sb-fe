@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -21,7 +21,7 @@ import * as dateFns from 'date-fns';
   templateUrl: './play-back.component.html',
   styleUrls: ['./play-back.component.scss'],
 })
-export class PlayBackComponent implements OnInit {
+export class PlayBackComponent implements OnInit, OnDestroy {
   @ViewChild('download') download: ElementRef;
 
   model: NgbDateStruct;
@@ -64,6 +64,7 @@ export class PlayBackComponent implements OnInit {
   pbFilterForm: FormGroup;
   pbFilters: any;
   maxStartDate: any;
+  player2: any;
 
   constructor(
     private apiService: ApiService,
@@ -120,11 +121,14 @@ export class PlayBackComponent implements OnInit {
       open_area: [null],
       device: [null, [Validators.required]],
       date_filter: ['today'],
-      start_date: [{value: null, disabled: true}],
-      end_date: [{value: null, disabled: true}]
+      starttime: [{value: null, disabled: true}],
+      endtime: [{value: null, disabled: true}]
     });
 
     this.pbFilters = { device_type: 'Camera', customer_id: this.customerid }
+  }
+  ngOnDestroy(): void {
+    this.player2
   }
 
   ngOnInit(): void {
@@ -302,16 +306,23 @@ export class PlayBackComponent implements OnInit {
 
   onSubmitFilter() {
     const dt = this.devices;
-    console.log(dt);
-    if (!!dt) {
-      dt.forEach((ele, idx) => {
-        this.camIds += ele.device;
-        this.playCameras(ele.device);
-        if (idx !== dt.length - 1) {
-          this.camIds += ',';
-        }
-      });
-    }
+    const formData = this.pbFilterForm.value;
+    let starttime = dateFns.format(formData.starttime, 'yyyy-MM-dd hh:mm:ss')
+    let endtime = dateFns.format(formData.endtime, 'yyyy-MM-dd hh:mm:ss');
+    let time = {starttime: starttime, endtime: endtime};
+    console.log(starttime, endtime);
+    this.playCameras(formData.device, time);
+    this.camIds = formData.device;
+    console.log(dt, formData);
+    // if (!!dt) {
+    //   dt.forEach((ele, idx) => {
+    //     this.camIds += ele.device;
+    //     this.playCameras(ele.device);
+    //     if (idx !== dt.length - 1) {
+    //       this.camIds += ',';
+    //     }
+    //   });
+    // }
 
     if (!!this.camIds && this.camIds !== '') {
       this.getCameraViews();
@@ -321,10 +332,12 @@ export class PlayBackComponent implements OnInit {
     }
   }
 
-  playCameras(cameraID: any) {
-    console.log(cameraID);
+  playCameras(cameraID: any, time: any) {
     let url = new URL(`${environment.baseUrlLiveStream}/camera/stream/playback`);
+    url.searchParams.set('starttime', time.starttime);
+    url.searchParams.set('endtime', time.endtime);
     let payload = { ip_address: '51.144.150.199', camera_id: cameraID };
+
     this.apiService.post(url.href, payload).subscribe((resp: any) => {
       this.setupSocket(resp['socket_port'], cameraID);
     }, (err: any) => {
@@ -334,15 +347,16 @@ export class PlayBackComponent implements OnInit {
 
   setupSocket(port: any, device: any) {
     setTimeout(() => {
-      let url = `${environment.websocketUrl}/test?cameraId=${device}`;
+      let url = `${environment.websocketUrl}/?cameraId=${device}`;
       let idx = this.devices.findIndex(ele => {
         return ele.device === device;
       });
       var canvas = document.getElementById(this.devices[idx]?.id);
       // @ts-ignore JSMpeg defined via script
-      var player2 = new JSMpeg.Player(url, { canvas: canvas });
+      this.player2 = new JSMpeg.Player(url, { canvas: canvas });
     }, 1000);
   }
+
   getCameraViews() {
     this.loading = true;
     let url = new URL(`${environment.baseUrlSB}/building/views/`);
@@ -466,16 +480,21 @@ export class PlayBackComponent implements OnInit {
   onChangePeriod(ev: any) {
     console.log(ev.target.value);
     if (ev.target.value === 'range') {
-      this.pbFilterForm.get('start_date').enable();
-      this.pbFilterForm.get('end_date').enable();
+      this.pbFilterForm.get('starttime').enable();
+      this.pbFilterForm.get('endtime').enable();
     } else {
-      this.pbFilterForm.get('start_date').disable();
-      this.pbFilterForm.get('end_date').disable();
+      this.pbFilterForm.get('starttime').disable();
+      this.pbFilterForm.get('endtime').disable();
     }
   }
 
   onSelectDateRange(ev: any, type: any) {
-    console.log(ev, type);
+    if (type === 'start') {
+      this.pbFilterForm.get('start')
+      console.log(ev, type);
+    } else {
+
+    }
     this.maxStartDate = ev;
   }
 }

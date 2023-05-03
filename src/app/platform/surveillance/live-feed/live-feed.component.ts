@@ -46,6 +46,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
   rtsp: any;
   detailFilters: any;
   pc: RTCPeerConnection;
+  player2: any;
 
   constructor(
     private dialog: NgbModal,
@@ -202,10 +203,10 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     this.apiService.get(url.href).subscribe((resp: any) => {
       this.viewCounts = resp.data.data;
 
-      this.devices.forEach(dev => {
-        this.viewCounts.forEach((element: Object, idx) => {
-          if (element.hasOwnProperty(dev.device)) {
-            dev.views_count = element[dev.device];
+      this.viewCounts.forEach((element: any, idx) => {
+          this.devices.forEach(dev => {
+          if (element.camera_name === dev.device) {
+            dev['views_count'] = element['user_count'];
           }
         });
       });
@@ -265,7 +266,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
 
   setupSocket(port: any, device: any) {
     setTimeout(() => {
-      let url = `${environment.websocketUrl}/test?cameraId=${device}`;
+      let url = `${environment.websocketUrl}/?cameraId=${device}`;
       // let url = `ws://node-js-live-stream.appservices.hypernymbiz.com:4400/test?cameraId=CAM1`;
       // let url = `wss://staging.gateway.iot.vodafone.com.qa/sb_node_live_stream:443`;
       let idx = this.devices.findIndex(ele => {
@@ -275,7 +276,8 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
       // let player = new JSMpeg.VideoElement("#video-canvas", url)
       var canvas = document.getElementById(this.devices[idx]?.id);
       // @ts-ignore JSMpeg defined via script
-      var player2 = new JSMpeg.Player(url, { canvas: canvas });
+      this.player2 = new JSMpeg.Player(url, { canvas: canvas });
+      console.log(this.player2.source, this.player2.source.socket);
     }, 1000);
   }
 
@@ -365,6 +367,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.patchCameraViews();
+    this.player2.destroy();
   }
 
   start() {

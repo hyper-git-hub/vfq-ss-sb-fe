@@ -7,15 +7,16 @@ import { ApiService } from 'src/app/services/api.service';
 import { FormConfig } from 'src/app/shared/general-forms/models';
 import { TableConfig } from 'src/app/shared/general-table/model';
 import { environment } from 'src/environments/environment';
-import { DateUtils } from 'src/app/Utils/DateUtils';
 
 import {
+  ROUNDHUM, ROUNDTEMP,
   alertsEventsTableConfig, cameraStatusTableConfig, emPCTableConfig, fdTableConfig, fvTableConfig, gmAlertTableConfig,
   occupancyTableConfig, reportFilterFormConfig, smokeAlertTableConfig, socketsPCTableConfig, temperatureTableConfig,
   userActivityTableConfig, waterLeakageTableConfig, waterPCTableConfig, wtTableConfig
 } from './config';
 import { DatePipe } from '@angular/common';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { FORMATS } from 'src/app/shared/general-table/formats';
+
 
 @Component({
   selector: 'app-reports',
@@ -195,6 +196,7 @@ export class ReportsComponent implements OnInit {
       this.config = new TableConfig(waterLeakageTableConfig.config);
     } else if (val === 'temperature_report') {
       this.config = new TableConfig(temperatureTableConfig.config);
+      this.defineTempFormats();
     } else if (val === 'camera_status_report') {
       this.config = new TableConfig(cameraStatusTableConfig.config);
     } else if (val === 'footage_viewer_report') {
@@ -212,6 +214,11 @@ export class ReportsComponent implements OnInit {
     } else if (val === 'user_activity_report') {
       this.config = new TableConfig(userActivityTableConfig.config);
     }
+  }
+
+  defineTempFormats() {
+    FORMATS['round-temp'] = ROUNDTEMP;
+    FORMATS['round-hum'] = ROUNDHUM;
   }
 
   onSelectClass(ev: any) {
@@ -424,6 +431,20 @@ export class ReportsComponent implements OnInit {
     this.actions.next({ action: 'reload' });
   }
 
+  reloadReport() {
+    for (const key in this.deviceFilters) {
+      if (key === 'device') {
+        this.reportsFilters['device_id'] = this.deviceFilters[key];
+      } else {
+        this.reportsFilters[key] = this.deviceFilters[key];
+      }
+      // if (!!this.deviceFilters[key]) {
+      // }
+    }
+
+    this.actions.next({ action: 'reload' });
+  }
+
   onTableSignal(ev: any) {
     // console.log(ev);
     if (ev.type === 'onData') {
@@ -441,14 +462,14 @@ export class ReportsComponent implements OnInit {
     } else if (ev.type === 'onSorting') {
       this.deviceFilters.order = ev.data['direction'] === 'desc' ? 'descending' : 'ascending';
       this.deviceFilters.order_by = ev.data['column'];
-      this.showReport();
+      this.reloadReport();
     } else if (ev.type === 'onPagination') {
       this.deviceFilters.limit = ev.data['limit'];
       this.deviceFilters.offset = ev.data['offset'];
-      this.showReport();
+      this.reloadReport();
     } else if (ev.type === 'searchTable') {
       this.deviceFilters.search = ev.data;
-      this.showReport();
+      this.reloadReport();
     }
   }
 
@@ -462,8 +483,7 @@ export class ReportsComponent implements OnInit {
     this.reportsFilters = { limit: 10, offset: '0', use_case_id: 5, report_type: 'socket_power_consumption_report' };
     this.deviceFilters = { limit: 10, offset: '0', use_case_id: 5, report_type: 'socket_power_consumption_report' };
     setTimeout(() => {
-      this.showReport();
-
+      this.reloadReport();
     }, 200);
   }
 }
