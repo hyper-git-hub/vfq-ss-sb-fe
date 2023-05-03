@@ -22,7 +22,8 @@ export class LivefeedformComponent implements OnInit {
   livefeedTableConfig: TableConfig;
   actions: Subject<any> = new Subject();
   livefeedListingData: any[];
-  catagory: any
+  catagory: any;
+  data: any;
   viewList: any[] = []
   listLobby: any[] = [];
   listHall: any[] = [];
@@ -90,6 +91,32 @@ constructor(private modalRef: NgbActiveModal) {
 }
 
 ngOnInit(): void {
+console.log("data:",this.data)
+
+if(this.data.layout == 2)
+{
+  this.viewList = [
+    { id: '1', name: 'View 1' },
+    { id: '2', name: 'View 2' },
+    { id: '3', name: 'View 3' },
+    { id: '4', name: 'View 4' },
+  ];
+}
+if(this.data.layout == 3)
+{
+  this.viewList = [
+    { id: '1', name: 'View 1' },
+    { id: '2', name: 'View 2' },
+    { id: '3', name: 'View 3' },
+    { id: '4', name: 'View 4' },
+    { id: '5', name: 'View 5' },
+    { id: '6', name: 'View 6' },
+    { id: '7', name: 'View 7' },
+    { id: '8', name: 'View 8' },
+    { id: '9', name: 'View 9' }
+  ];
+}
+
 
 
 }
