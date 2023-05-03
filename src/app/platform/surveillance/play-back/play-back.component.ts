@@ -14,6 +14,7 @@ import { DateUtils } from 'src/app/Utils/DateUtils';
 import { environment, ports } from 'src/environments/environment';
 import { playbackFormConfig, playbackTimeFormConfig } from './Playback-config';
 import * as dateFns from 'date-fns';
+import { AlertService } from 'src/app/shared/alert/alert.service';
 
 
 @Component({
@@ -51,7 +52,7 @@ export class PlayBackComponent implements OnInit, OnDestroy {
   actions: Subject<any> = new Subject();
   camIds: string = '';
   viewCounts: any[];
-  
+
   cameraFeatures: any[];
   devices: any[];
   buildings: any[];
@@ -60,11 +61,13 @@ export class PlayBackComponent implements OnInit, OnDestroy {
   spaces: any[];
   rooms: any[];
   openAreas: any[];
+  videoData: any[];
 
   pbFilterForm: FormGroup;
   pbFilters: any;
   maxStartDate: any;
   player2: any;
+  ws: WebSocket;
 
   constructor(
     private apiService: ApiService,
@@ -120,9 +123,9 @@ export class PlayBackComponent implements OnInit, OnDestroy {
       room: [null],
       open_area: [null],
       device: [null, [Validators.required]],
-      date_filter: ['today'],
-      starttime: [{value: null, disabled: true}],
-      endtime: [{value: null, disabled: true}]
+      date_filter: ['range'],
+      starttime: [null, [Validators.required]],
+      endtime: [null, [Validators.required]]
     });
 
     this.pbFilters = { device_type: 'Camera', customer_id: this.customerid }
@@ -196,6 +199,9 @@ export class PlayBackComponent implements OnInit, OnDestroy {
       this.pbFilterForm.controls['space'].setValue(null);
       this.pbFilterForm.controls['room'].setValue(null);
       this.pbFilterForm.controls['open_area'].setValue(null);
+      this.pbFilters.floor = '';
+      this.pbFilters.space = '';
+      this.pbFilters.space_attribute = '';
       this.pbFilters.building = ev;
       this.getBuildingFloors(ev);
       this.getCameraDevices(this.pbFilters);
@@ -205,6 +211,7 @@ export class PlayBackComponent implements OnInit, OnDestroy {
   onAreaSelect(ev: any) {
     if (ev === 'floor') {
       this.pbFilterForm.get('floor').setValue(null);
+      this.pbFilters.open_area = '';
       if (this.pbFilters.building) {
         this.getBuildingFloors(this.pbFilters.building);
       }
@@ -224,7 +231,6 @@ export class PlayBackComponent implements OnInit, OnDestroy {
     if (!!ev) {
       this.pbFilterForm.controls['space'].reset();
       this.pbFilterForm.controls['room'].reset();
-      this.pbFilterForm.controls['open_area'].reset();
 
       this.spaces = [];
       this.rooms = [];
@@ -236,6 +242,8 @@ export class PlayBackComponent implements OnInit, OnDestroy {
 
   onSelectSpace(ev: any) {
     this.pbFilters.space = ev;
+    this.pbFilters.space_attribute = '';
+    this.pbFilterForm.controls['room'].setValue(null);
     if (!!this.pbFilters.floor && !!ev) {
       this.getRoomsBySpacesByFloor(this.pbFilters.floor, ev);
       this.getCameraDevices(this.pbFilters);
@@ -307,22 +315,18 @@ export class PlayBackComponent implements OnInit, OnDestroy {
   onSubmitFilter() {
     const dt = this.devices;
     const formData = this.pbFilterForm.value;
-    let starttime = dateFns.format(formData.starttime, 'yyyy-MM-dd hh:mm:ss')
-    let endtime = dateFns.format(formData.endtime, 'yyyy-MM-dd hh:mm:ss');
-    let time = {starttime: starttime, endtime: endtime};
+    if (!formData.starttime || !formData.endtime) {
+      AlertService.error('No date-time is selected', 'Please select date-time first').subscribe();
+      return;
+    }
+    let starttime = DateUtils.getUtcDateTimeEnd(dateFns.format(formData.starttime, 'yyyy-MM-dd hh:mm:ss'));
+    let endtime = DateUtils.getUtcDateTimeEnd(dateFns.format(formData.endtime, 'yyyy-MM-dd hh:mm:ss'));
+    let time = { starttime: starttime, endtime: endtime };
     console.log(starttime, endtime);
+
     this.playCameras(formData.device, time);
     this.camIds = formData.device;
     console.log(dt, formData);
-    // if (!!dt) {
-    //   dt.forEach((ele, idx) => {
-    //     this.camIds += ele.device;
-    //     this.playCameras(ele.device);
-    //     if (idx !== dt.length - 1) {
-    //       this.camIds += ',';
-    //     }
-    //   });
-    // }
 
     if (!!this.camIds && this.camIds !== '') {
       this.getCameraViews();
@@ -333,10 +337,11 @@ export class PlayBackComponent implements OnInit, OnDestroy {
   }
 
   playCameras(cameraID: any, time: any) {
-    let url = new URL(`${environment.baseUrlLiveStream}/camera/stream/playback`);
+    let url = new URL(`${environment.baseUrlLiveStream}/stream/playback`);
     url.searchParams.set('starttime', time.starttime);
     url.searchParams.set('endtime', time.endtime);
-    let payload = { ip_address: '51.144.150.199', camera_id: cameraID };
+    url.searchParams.set('camera_id', cameraID);
+    // let payload = { ip_address: '51.144.150.199', camera_id: cameraID };
 
     this.apiService.get(url.href).subscribe((resp: any) => {
       this.setupSocket(resp['socket_port'], cameraID);
@@ -347,13 +352,22 @@ export class PlayBackComponent implements OnInit, OnDestroy {
 
   setupSocket(port: any, device: any) {
     setTimeout(() => {
-      let url = `${environment.websocketUrl}playback/?cameraId=${device}`;
-      let idx = this.devices.findIndex(ele => {
-        return ele.device === device;
-      });
-      var canvas = document.getElementById(this.devices[idx]?.id);
+      let url = `${environment.websocketUrl}/playback/?cameraId=${device}`;
+      // let idx = this.devices.findIndex(ele => {
+      //   return ele.device === device;
+      // });
+
+      var canvas = document.getElementById(device);
       // @ts-ignore JSMpeg defined via script
       this.player2 = new JSMpeg.Player(url, { canvas: canvas });
+
+      this.ws = new WebSocket(`${environment.websocketUrl}/playback?cameraId=${device}`);
+      this.videoData = [];
+
+      this.ws.onmessage = (event) => {
+        // console.log(event.data);
+        this.videoData.push(event.data);
+      };
     }, 1000);
   }
 
@@ -366,10 +380,10 @@ export class PlayBackComponent implements OnInit, OnDestroy {
     this.apiService.get(url.href).subscribe((resp: any) => {
       this.viewCounts = resp.data.data;
 
-      this.devices.forEach(dev => {
-        this.viewCounts.forEach((element: Object, idx) => {
-          if (element.hasOwnProperty(dev.device)) {
-            dev.views_count = element[dev.device];
+      this.viewCounts.forEach((element: any, idx) => {
+        this.devices.forEach(dev => {
+          if (element.camera_name === dev.device) {
+            dev['views_count'] = element['user_count'];
           }
         });
       });
@@ -378,6 +392,21 @@ export class PlayBackComponent implements OnInit, OnDestroy {
       this.loading = false;
       this.toastr.error(err.error['message'], '');
     });
+  }
+
+  onDownload() {
+    console.log(this.videoData);
+    // const formData = this.pbFilterForm.value;
+
+    this.ws.close();
+    this.ws.onclose = () => {
+      const blob = new Blob(this.videoData, { type: "video/MP2T" });
+      const blobUrl = URL.createObjectURL(blob);
+      const downloadLink = document.createElement("a");
+      downloadLink.href = blobUrl;
+      downloadLink.download = "my_video.m2ts";
+      downloadLink.click();
+    };
   }
 
   getplaybackVedio(filter: any): void {
