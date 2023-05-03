@@ -338,7 +338,7 @@ export class PlayBackComponent implements OnInit, OnDestroy {
     url.searchParams.set('endtime', time.endtime);
     let payload = { ip_address: '51.144.150.199', camera_id: cameraID };
 
-    this.apiService.post(url.href, payload).subscribe((resp: any) => {
+    this.apiService.get(url.href).subscribe((resp: any) => {
       this.setupSocket(resp['socket_port'], cameraID);
     }, (err: any) => {
       this.toastr.error(err.error['message']);
@@ -347,7 +347,7 @@ export class PlayBackComponent implements OnInit, OnDestroy {
 
   setupSocket(port: any, device: any) {
     setTimeout(() => {
-      let url = `${environment.websocketUrl}/?cameraId=${device}`;
+      let url = `${environment.websocketUrl}playback/?cameraId=${device}`;
       let idx = this.devices.findIndex(ele => {
         return ele.device === device;
       });
