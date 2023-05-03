@@ -35,22 +35,22 @@ export const environment = {
   // signalR: 'https://func-vfq-dev.azurewebsites.net',
 
   // // New Staging URLs,
-  // baseUrlUser: 'https://at.admin.staging.iot.vodafone.com.qa',
-  // baseUrlSS: 'https://staging.gateway.iot.vodafone.com.qa/smartsurveillance',    // Staging SSgit add
-  // baseUrlSB: 'https://staging.gateway.iot.vodafone.com.qa/smart-building',
-  // baseUrlRA: 'https://staging.gateway.iot.vodafone.com.qa/role-access',
-  // baseUrlStreaming: 'https://staging.gateway.iot.vodafone.com.qa/sscamera',
-  // baseUrlDevice: 'https://staging.gateway.iot.vodafone.com.qa/device-manager',
-  // baseUrlAudit: 'https://staging.gateway.iot.vodafone.com.qa/platform-audit',
-  // baseUrlNotif: 'https://staging.gateway.iot.vodafone.com.qa/alert-notification',
-  // baseUrlDashboard: 'https://staging.gateway.iot.vodafone.com.qa/report-analytics/api',
-  // baseUrlLiveStream: 'https://staging.gateway.iot.vodafone.com.qa/live-stream',
-  // websocketUrl: 'wss://staging.gateway.iot.vodafone.com.qa/ws-live-stream',
-  // // baseUrlStreaming: 'https://staging.gateway.iot.vodafone.com.qa/sscamera', // Staging SS Streaming
-  // signalR: 'https://func-stag-all.azurewebsites.net',
-  // cobInventory: 'https://staging.gateway.iot.vodafone.com.qa/cob3inventory',
+//   baseUrlUser: 'https://at.admin.staging.iot.vodafone.com.qa',
+//   baseUrlSS: 'https://staging.gateway.iot.vodafone.com.qa/smartsurveillance',    // Staging SSgit add
+//   baseUrlSB: 'https://staging.gateway.iot.vodafone.com.qa/smart-building',
+//   baseUrlRA: 'https://staging.gateway.iot.vodafone.com.qa/role-access',
+//   baseUrlStreaming: 'https://staging.gateway.iot.vodafone.com.qa/sscamera',
+//   baseUrlDevice: 'https://staging.gateway.iot.vodafone.com.qa/device-manager',
+//   baseUrlAudit: 'https://staging.gateway.iot.vodafone.com.qa/platform-audit',
+//   baseUrlNotif: 'https://staging.gateway.iot.vodafone.com.qa/alert-notification',
+//   baseUrlDashboard: 'https://staging.gateway.iot.vodafone.com.qa/report-analytics/api',
+//   baseUrlLiveStream: 'https://staging.gateway.iot.vodafone.com.qa/live-stream',
+//   websocketUrl: 'wss://staging.gateway.iot.vodafone.com.qa/ws-live-stream',
+//   // baseUrlStreaming: 'https://staging.gateway.iot.vodafone.com.qa/sscamera', // Staging SS Streaming
+//   signalR: 'https://func-stag-all.azurewebsites.net',
+//   cobInventory: 'https://staging.gateway.iot.vodafone.com.qa/cob3inventory',
 
-  // translateUrl: '/assets/i18n/',
+//   translateUrl: '/assets/i18n/',
 };
 
 let prefix = ':';
