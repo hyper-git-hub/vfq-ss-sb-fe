@@ -1,6 +1,6 @@
 <app-breadcrumbs [breadCrumbs]="breadCrumbs"></app-breadcrumbs>
 
-<img *ngIf="loading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" width="150px" height="150px">
+<img *ngIf="loading || loadingStream" src="/assets/images/block-loader.gif" class="loader" alt="Loading" width="150px" height="150px">
 
 <div class="page-container w-100-p" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start start">
     <div fxLayout="row" class="w-100-p card round p-12">
@@ -92,7 +92,7 @@
                                 <div fxFlex="18.5">
                                     <!-- <label for="">Camera <span class="text-danger">*</span> </label> -->
                                     <ng-select placeholder="Select Camera" formControlName="device"
-                                        (change)="onSelectDevice($event)">
+                                        (change)="onSelectDevice($event)" [clearable]="false">
                                         <ng-option *ngFor="let device of devices"
                                             [value]="device.device">{{device.device_name}}
                                         </ng-option>
@@ -107,7 +107,7 @@
                         <fieldset class="form-fieldset w-100-p">
                             <legend class="TimeIntervalLegend1">Time Interval</legend>
 
-                            <div fxLayout="row" fxLayoutGap="16px">
+                            <!-- <div fxLayout="row" fxLayoutGap="16px">
                                 <div class="form-group mb-10">
                                     <div class="radio-custom fs-16">
                                         <input type="radio" id="today" value="today" formControlName="date_filter"
@@ -139,7 +139,7 @@
                                         <label for="range">Select a period</label>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="form-group mb-10" fxLayout="row" fxLayoutGap="8px">
                                 <div>
@@ -165,35 +165,40 @@
                         </fieldset>
 
                         <div class="w-100-p" fxLayoutAlign="end end">
-                            <div class="w-60-p " fxLayoutAlign="end end" fxLayoutGap="8px">
-                                <button fxFlex="25%" type="button" (click)="onSubmitFilter()"
+                            <div class="w-60-p" fxLayoutAlign="end end" fxLayoutGap="8px">
+                                <button fxFlex="25" type="button" (click)="onSubmitFilter()"
                                     [disabled]="!pbFilterForm.valid" class="btn btn-danger btn-block btn-round">
                                     Submit
                                 </button>
 
-                                <button fxFlex="25%" type="button" (click)="onDownload()" [hidden]="downloadHiddenOne"
-                                    class="btn btn-default btn-block btn-round">
+                                <button fxFlex="25" type="button" (click)="onDownload()" class="btn btn-default btn-block btn-round"
+                                    [disabled]="!pbFilterForm.valid">
                                     Download Video
                                 </button>
 
+                                <button fxFlex="25" type="button" (click)="shareLink()" class="btn btn-default btn-block btn-round"
+                                    [disabled]="!pbFilterForm.valid">
+                                    Share Link
+                                </button>
+
                                 <!-- <button #download fxFlex="25%" [hidden]="downloadHiddenTwo"
-                                 fileSaver [method]="'GET'" [fileName]="'videoName.mp4'"
+                                    fileSaver [method]="'GET'" [fileName]="'videoName.mp4'"
                                     [url]="downloadVideo"
                                     class="btn btn-default btn-block btn-round">
                                     Download Video</button> -->
-                                <a #download fxFlex="25%" [hidden]="downloadHiddenTwo" [href]="downloadVideo"
-                                    target="_blank" class="btn btn-default btn-block btn-round">
-                                    Download Video</a>
 
                                 <!-- <button  type="button" > -->
-                                <a [class.disabled]="!recordedVedio" class="btn btn-default btn-block btn-round"
-                                    fxFlex="25%" style="text-decoration:none; color: black; font-size: 16px;"
+                                <!-- <a class="btn btn-default btn-block btn-round"
+                                    fxFlex="25" style="text-decoration:none; color: black; font-size: 16px;"
                                     [href]="destination" target="_blank">
-                                    Get link</a>
+                                    Get link
+                                </a> -->
                                 <!-- </button> -->
-                                <button fxFlex="25%" type="button" (click)="onReset()"
+
+                                <button fxFlex="25" type="button" [disabled]="!pbFilterForm.valid" (click)="onReset()"
                                     class="btn btn-default btn-block btn-round">
-                                    Reset</button>
+                                    Reset
+                                </button>
                             </div>
                         </div>
 
@@ -210,7 +215,6 @@
         </div>
 
         <div class="panel-body p-10">
-            <!-- <canvas id="65" style="width: 100%; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"> </canvas> -->
             <canvas [id]="pbFilterForm.get('device').value"
                 style="width: 100%; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"> </canvas>
             <!-- <div *ngIf="recordedVedio" class="player-wrapper" style="width: 500px;height: 195px;">

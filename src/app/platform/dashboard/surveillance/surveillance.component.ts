@@ -4,7 +4,6 @@ import { ToastrService } from 'ngx-toastr';
 import { interval } from 'rxjs';
 import { takeWhile, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { BuildingService } from 'src/app/core/services/building.service';
 import { UserserviceService } from 'src/app/core/services/userservice.service';
 import { ApiService } from 'src/app/services/api.service';
 import { environment, ports } from 'src/environments/environment';
@@ -734,6 +733,8 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.patchCameraViews();
     // console.log();
-    this.player2.destroy();
+    if (!!this.player2) {
+      this.player2.destroy();
+    }
   }
 }
