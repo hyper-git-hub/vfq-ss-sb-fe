@@ -136,7 +136,9 @@ export class PlayBackComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.player2
+    if (this.player2) {
+      this.player2.close();
+    }
   }
 
   ngOnInit(): void {
