@@ -108,10 +108,6 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('userpassword', formData.password);
       }
 
-      const videoUrl = localStorage.getItem('videoUrl');
-      const go2Link = localStorage.getItem('go2Link');
-      // const uname = localStorage.getItem('uname');
-
       this.loginForm.value['email'] = this.loginForm.value['email'].toLowerCase();
 
       // delete this.loginForm.value['recaptcha'];
@@ -128,15 +124,8 @@ export class LoginComponent implements OnInit {
       const loginUrl = `${apiIdentifier.userMS}${this.port.userMS}/users/authentication/login`;
       this.apiService.post(loginUrl, payload).subscribe((apiResponse: any) => {
 
-        if (go2Link === 'true') {
-          localStorage.setItem('useremail', this.loginForm.value['email']);
-          localStorage.removeItem('videoUrl');
-          this.router.navigateByUrl(`/getlink?videoUrl=${videoUrl}`);
-          return;
-        }
-
-        localStorage.setItem('useremail', this.loginForm.value['email']);
         localStorage.setItem('token', apiResponse.data['Token']);
+        localStorage.setItem('useremail', this.loginForm.value['email']);
         this.signInFB(apiResponse.data['fb_auth_token']);
 
         this.wrongPasswordAttemptCounter = 0;
@@ -175,9 +164,8 @@ export class LoginComponent implements OnInit {
             });
             let u: any = JSON.parse(localStorage.getItem('user'));
             const write = resp.data['write'];
-            console.log("write:",write)
+
             this.permission = (write === 'WRITE' || write === true) ? true : false;
-            console.log("permission:",this.permission)
             localStorage.setItem('permission', JSON.stringify(this.permission));
             // const perm = { write: write === 'WRITE' ? true : false };
             // localStorage.setItem('permission', JSON.stringify(perm));
@@ -185,10 +173,35 @@ export class LoginComponent implements OnInit {
             // }
             localStorage.setItem('features', JSON.stringify(ft));
             localStorage.setItem('camera_features', JSON.stringify(camFt));
+
+            if (ft.length === 0) {
+              this.toastr.error('', `You don't have any feature association. Please contact to your administration`);
+              this.loading = false;
+              return;
+            }
+
+            const videoUrl = localStorage.getItem('videoUrl');
+            const starttime = localStorage.getItem('starttime');
+            const endtime = localStorage.getItem('endtime');
+            const go2Link = localStorage.getItem('goToLink');
+            if (go2Link === 'true') {
+              if (camFt.includes('cam_'+videoUrl)) {
+                localStorage.setItem('useremail', this.loginForm.value['email']);
+                localStorage.removeItem('videoUrl');
+                localStorage.removeItem('starttime');
+                localStorage.removeItem('endtime');
+                this.router.navigateByUrl(`/getlink?videoUrl=${videoUrl}&starttime=${starttime}&endtime=${endtime}`);
+                return;
+              } else {
+                this.loading = false;
+                this.toastr.error('', 'You don\'t have privilege to any Camera device');
+                return;
+              }
+            }
+``    
             
             // To move on first-time-login
             if (apiResponse.data.is_first_time_login) {
-              console.log("firsttime")
               localStorage.setItem('tempEmail', this.loginForm.value['email']);
               this.router.navigate(['/first-time-login'])
               return;

@@ -3,7 +3,7 @@
 }
 
 ::ng-deep.dropdown-toggle::after {
-    display:none;
+    display: none;
 }
 
 .dropdown-menu {
@@ -14,9 +14,13 @@
     min-height: 3rem;
 }
 
-.page-container-share-dashboard
-{
- padding: 0 30px;
+.page-container-share-dashboard {
+    padding: 0 30px;
 }
 
-
+.loader {
+    position: absolute;
+    top: 32%;
+    left: 42%;
+    z-index: 1;
+}
