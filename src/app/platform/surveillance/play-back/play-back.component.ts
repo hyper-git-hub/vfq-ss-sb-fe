@@ -319,8 +319,8 @@ export class PlayBackComponent implements OnInit, OnDestroy {
       AlertService.error('No date-time is selected', 'Please select date-time first').subscribe();
       return;
     }
-    let starttime = DateUtils.getUtcDateTimeEnd(dateFns.format(formData.starttime, 'yyyy-MM-dd hh:mm:ss'));
-    let endtime = DateUtils.getUtcDateTimeEnd(dateFns.format(formData.endtime, 'yyyy-MM-dd hh:mm:ss'));
+    let starttime = DateUtils.getUtcDateTimeEnd(dateFns.format(formData.starttime, 'yyyy-MM-dd HH:mm:ss'));
+    let endtime = DateUtils.getUtcDateTimeEnd(dateFns.format(formData.endtime, 'yyyy-MM-dd HH:mm:ss'));
     let time = { starttime: starttime, endtime: endtime };
     console.log(starttime, endtime);
 
@@ -337,22 +337,22 @@ export class PlayBackComponent implements OnInit, OnDestroy {
   }
 
   playCameras(cameraID: any, time: any) {
-    let url = new URL(`${environment.baseUrlLiveStream}/stream/playback`);
+    let url = new URL(`${environment.baseUrlLiveStream}/stream/playback/`);
     url.searchParams.set('starttime', time.starttime);
     url.searchParams.set('endtime', time.endtime);
     url.searchParams.set('camera_id', cameraID);
     // let payload = { ip_address: '51.144.150.199', camera_id: cameraID };
 
     this.apiService.get(url.href).subscribe((resp: any) => {
-      this.setupSocket(resp['socket_port'], cameraID);
+      this.setupSocket(resp.data['socketId'], cameraID);
     }, (err: any) => {
       this.toastr.error(err.error['message']);
     });
   }
 
-  setupSocket(port: any, device: any) {
+  setupSocket(socketId: any, device: any) {
     setTimeout(() => {
-      let url = `${environment.websocketUrl}/playback/?cameraId=${device}`;
+      let url = `${environment.websocketUrl}/playback/?cameraId=${device}&socketId=${socketId}`;
       // let idx = this.devices.findIndex(ele => {
       //   return ele.device === device;
       // });
