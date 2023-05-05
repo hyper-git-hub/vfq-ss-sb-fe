@@ -349,6 +349,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     const options: NgbModalOptions = { size: 'lg', scrollable: true };
     const dialogRef = this.dialog.open(LivefeedformComponent, options);
     dialogRef.componentInstance.title = 'Edit View';
+    dialogRef.componentInstance.data = this.views;
     dialogRef.componentInstance.catagory = 'edit';
   }
 
