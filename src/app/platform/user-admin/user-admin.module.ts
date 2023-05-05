@@ -28,6 +28,7 @@ import { UserBulkUploadComponent } from './user-bulk-upload/user-bulk-upload.com
 import { GeneralFormModule } from 'src/app/shared/general-forms/module';
 import { GraphsModule } from 'src/app/shared/graphs/graphs.module';
 import { UserConfigurationComponent } from './user-configuration/user-configuration.component';
+import { DualListModule } from 'src/app/shared/dual-list/dual-list-module';
  
 
 
@@ -64,7 +65,8 @@ import { UserConfigurationComponent } from './user-configuration/user-configurat
     NgbModule,
     FormsModule,
     PasswordStrengthModule,
-    GraphsModule
+    GraphsModule,
+    DualListModule,
     // ExportCSVModule
   ]
 })

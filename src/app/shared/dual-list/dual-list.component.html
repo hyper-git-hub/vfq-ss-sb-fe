@@ -1,0 +1,70 @@
+<div class="card h-140 w-100-p" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="space-between center"
+    style=" border: none;">
+    <div class="card" fxFlex="45" fxLayout="column" style="height: 100%; overflow: auto;" [formGroup]="generalForm">
+
+        <ng-container>
+            <ng-select class="w-100-p mb-16" placeholder="Select Cameras" [clearable]="false" [multiple]="true" formControlName="camPosition"
+                (change)="onSelectType($event)" >
+                <ng-option *ngFor="let item of camFeatures ; let idx=index"  class="item" [class.selected-item]="source[idx]?.selected"  [value]="item" >{{ item.feature_name }}
+                </ng-option>
+            </ng-select>
+            <div *ngFor="let item of features; let idx=index">
+                <div class="item" [class.selected-item]="features[idx]?.selected"
+                    (click)="onSelectSource(item, idx, item.feature_id)">
+                    {{item.feature_name}}</div>
+            </div>
+        </ng-container>
+    </div>
+
+    <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="4px">
+        <a class="btn btn-icon p-0 list-btn" [class.disabled]="disabled" (click)="reload()">
+            <span class="material-icons" ngbTooltip="Restore">
+                restore
+            </span>
+        </a>
+
+        <a class="btn btn-icon p-0 list-btn" (click)="addAll()" [class.disabled]="source?.length === 0 || disabled">
+            <span class="material-icons" ngbTooltip="Add All">
+                chevron_right
+            </span>
+            <span class="material-icons" style="margin-left: -18px;" ngbTooltip="Add All">
+                chevron_right
+            </span>
+        </a>
+
+        <a class="btn btn-icon p-0 list-btn" (click)="addSelected()" [class.disabled]="!sourceSelected || disabled">
+            <span class="material-icons" ngbTooltip="Add Selected">
+                chevron_right
+            </span>
+        </a>
+
+        <a class="btn btn-icon p-0 list-btn" (click)="removeSelected()"
+            [class.disabled]="!destinationSelected || disabled">
+            <span class="material-icons" ngbTooltip="Unselect">
+                chevron_left
+            </span>
+        </a>
+
+        <a class="btn btn-icon p-0 list-btn" (click)="removeAll()"
+            [class.disabled]="destination?.length === 0 || disabled">
+            <span class="material-icons" ngbTooltip="Unselect All">
+                chevron_left
+            </span><span class="material-icons" style="margin-left: -18px;" ngbTooltip="Unselect All">
+                chevron_left
+            </span>
+        </a>
+    </div>
+
+    <div class="card" fxFlex="45" style="height: 100%; overflow: auto;">
+        <ng-select class="w-100-p mb-16" placeholder="Select Cameras" [clearable]="false" [multiple]="true" (change)="onDropdownDestination($event)"  formControlName="camDestination">
+        <ng-option *ngFor="let item of dropdownDestination ; let idx=index"  class="item" [class.selected-item]="camFeatures[idx]?.selected"
+            [value]="item" >{{ item.feature_name }}
+        </ng-option>
+    </ng-select>
+        <ng-container *ngFor="let item of destination; let idx=index">
+            <div class="item" [class.selected-item]="destination[idx]?.selected"
+                (click)="onSelectDestination(item, idx, item.id)">
+                {{item.feature_name}}</div>
+        </ng-container>
+    </div>
+</div>

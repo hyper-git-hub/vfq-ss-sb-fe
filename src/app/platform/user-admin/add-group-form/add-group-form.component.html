@@ -88,9 +88,11 @@
                     <div class="col-md-12">
                         <div class="form-group margin-bottom-10 margin-top-10">
                             <h5><b>Choose Features for Group:</b></h5>
-                            <dual-list [source]="stations" [key]="key" [display]="display" [(destination)]="confirmed" [filter]="true"
+                            <app-dual-list [source]="sendData" [destination]="confirmed" 
+                                (signal)="onListSignal($event)"></app-dual-list>
+                            <!-- <dual-list [source]="stations" [key]="key" [display]="display" [(destination)]="confirmed" [filter]="true"
                                 height="265px">
-                            </dual-list>
+                            </dual-list> -->
                             <span class="error-message" *ngIf="confirmed?.length === 0 && submitted ">
                                 Please select features
                             </span>

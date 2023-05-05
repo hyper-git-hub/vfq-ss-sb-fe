@@ -22,6 +22,7 @@ export class AddGroupFormComponent implements OnInit {
   title: any;
   btnText: any;
   submitted: boolean = false;
+  sendData: any[] = [];
 
 
   apiResponse: any;
@@ -175,6 +176,9 @@ export class AddGroupFormComponent implements OnInit {
     return item.station;
   }
 
+  onListSignal(ev:any){
+    
+  }
 
   getGroupData(mainArray) {
     this.stations = [];
@@ -183,6 +187,7 @@ export class AddGroupFormComponent implements OnInit {
       element.station = element.feature_name;
       this.stations.push(element);
     });
+    this.sendData = this.stations
     this.initListBox();
   }
 
