@@ -22,6 +22,7 @@ export class DualListComponent implements OnInit {
     @Output() signal: EventEmitter<any>;
     selected: any[];
     selectedDropdown: any[] = [];
+    destinationDropdown: any[] = [];
     features: any[] = [];
     camFeatures: any[] = [];
     lastMove: any[];
@@ -58,10 +59,10 @@ export class DualListComponent implements OnInit {
         this.defaultSource = [];
         this.signal = new EventEmitter();
         this.generalForm = new FormGroup({
-           camPosition: new FormControl(null),
+            camPosition: new FormControl(null),
             camDestination: new FormControl(null),
-          });
-      
+        });
+
 
     }
 
@@ -75,7 +76,6 @@ export class DualListComponent implements OnInit {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['source']) {
             this.source = changes['source'].currentValue;
-            console.log(this.source);
             if (!!this.source) {
                 this.mainData = this.source
             }
@@ -150,15 +150,16 @@ export class DualListComponent implements OnInit {
         let idData: any[] = [];
         let idx: any[] = [];
         let id: number;
-        event.forEach(element => {
+        event.forEach((element, index) => {
             // idData = element.feature_id?.replace('cam_', '');
             // element.feature_id =element.feature_id?.replace('cam_', '');
             arr.push(element);
             idData.push(element.feature_id);
-            id = arr.findIndex(x => x.feature_id === element.feature_id)
-            idx.push(id)
+            // id = arr.findIndex(x => x.feature_id === element.feature_id)
+            idx.push(index)
         })
         console.log(idData, arr, idx);
+
         this.onSelectDropDown(arr, idx, idData)
 
     }
@@ -179,20 +180,22 @@ export class DualListComponent implements OnInit {
         })
         console.log(this.selectedDropdown);
         // this.camFeatures.splice(idx, 1);
-        this.camFeatures.forEach((element, index) => {
-            if (element == element.feature_id)
-                delete this.selectedDropdown[index];
-        });
+
+
+
+        // this.camFeatures.forEach((element, index) => {
+        //     if (element == element.feature_id)
+        //         delete this.selectedDropdown[index];
+        // });
+
+
         // this.camFeatures.forEach((value,index)=>{
         //     if(value.id==idfeature) this.camFeatures.splice(index,1);
         // });
         this.camFeatures.forEach(ele => {
             ele.selected ? this.sourceSelected = true : false;
         });
-        idx.forEach((ele: any) => {
-            this.camFeatures.splice(ele, 1);
-        });
-        console.log("this.camFeatures", this.camFeatures);
+
     }
 
     onSelectSource(item: any, idx: number, id: number) {
@@ -229,114 +232,178 @@ export class DualListComponent implements OnInit {
     }
     onDropdownDestination(event: any): void {
         console.log(event);
+        let arr: any[] = [];
+        let idData: any[] = [];
+        let idx: any[] = [];
+       
+        event.forEach((element, index) => {
+            // idData = element.feature_id?.replace('cam_', '');
+            // element.feature_id =element.feature_id?.replace('cam_', '');
+            arr.push(element);
+            idData.push(element.feature_id);
+            // id = arr.findIndex(x => x.feature_id === element.feature_id)
+            idx.push(index)
+        })
+        this.dropdownDestinationSelect (arr, idx, idData);
     }
     dropdownDestinationSelect(item: any, idx: any, id: any) {
-        this.destination[idx].selected = !this.destination[idx].selected;
+        console.log("the selected", item, idx, id);
+        let idfeature: any = id
+        let arr: any[] = item;
         this.destinationSelected = this.destination[idx].selected ? true : false;
-        if (this.destination[idx].selected) {
-            this.selected.push(this.destination[idx]);
-        }
-        else {
-            let i = this.selected.findIndex(ele => {
-                return ele.id === item.id;
-            });
-            this.selected.splice(i, 1);
-        }
+
+        // this.camFeatures[idx].selected = !this.camFeatures[idx].selected;
+        arr.forEach((element: any) => {
+            idfeature.filter(x => x.feature_id === element.feature_id);
+            if (idfeature.length > 0) {
+                element.selected = true;
+                this.destinationDropdown.push(element);
+
+            }
+        })
+        console.log(this.destinationDropdown);
+        this.destinationDropdown.forEach(ele => {
+            ele.destinationSelected ? this.destinationSelected = true : false;
+        });
+
     }
     addSelected() {
         let arr: any[] = [];
+        let idx: any[] = []
         console.log(this.selectedDropdown);
         if (this.selectedDropdown.length > 0) {
             this.selectedDropdown.forEach(element => {
                 arr.push(element)
+                this.selectedDropdown = []
                 element.selected = false;
                 this.sourceSelected = false;
-                this.dropdownDestination.push(element);
+                if (!this.dropdownDestination.includes(element)) {
+                    // arr.push(str);
+                    this.dropdownDestination.push(element);
+                }
                 this.generalForm.controls['camPosition']?.reset();
-                this.selectedDropdown=[]
-            })
-            // this.lastMoveDestination.push(arr);
-            console.log("this.selectedDropdown", this.dropdownDestination);
-        } else {
-            this.selected.forEach(element => {
-                this.destination.push(element);
-                this.lastMove.push(element);
 
-                element.selected = false;
-                this.sourceSelected = false;
-
-                let idx = this.features.findIndex(ele => {
-                    return element.id === ele.id;
+                let id: number = arr.findIndex(x => x.feature_id === element.feature_id)
+                idx.push(id)
+                idx.forEach((ele: any) => {
+                    this.camFeatures.splice(ele, 1);
                 });
 
-                if (idx !== -1) {
-                    this.features.splice(idx, 1);
-                }
             });
+            console.log("this.camFeatures", this.camFeatures);
+            console.log("this.dropdownDestination", this.dropdownDestination);
+
+           
+        } else {
+
         }
+
+        this.selected.forEach(element => {
+            this.destination.push(element);
+            this.lastMove.push(element);
+
+            element.selected = false;
+            this.sourceSelected = false;
+
+            let idx = this.features.findIndex(ele => {
+                return element.id === ele.id;
+            });
+
+            if (idx !== -1) {
+                this.features.splice(idx, 1);
+            }
+        });
+    
 
         this.selected = [];
 
-        this.signal.emit(this.destination);
+this.signal.emit(this.destination);
     }
 
-    addAll() {
-        this.source.forEach(element => {
-            this.destination.push(element);
-            this.lastMove.push(element);
-        });
-        this.source = [];
-        this.signal.emit(this.destination);
-    }
+addAll() {
+    this.features.forEach(element => {
+        this.destination.push(element);
+        this.lastMove.push(element);
+    });
+    this.camFeatures.forEach(element => {
+        this.dropdownDestination.push(element);
+        // this.lastMove.push(element);
+    });
+    this.mainData = [];
+    this.features = [];
+    this.camFeatures = [];
+    this.signal.emit(this.destination);
+}
 
-    removeSelected() {
-        let arr: any[] = [];
-        console.log(this.selectedDropdown);
-        if (this.selectedDropdown.length > 0) {
+removeSelected() {
+    let arr: any[] = [];
+        let idx: any[] = []
+        console.log(this.dropdownDestination);
+        if (this.dropdownDestination.length > 0) {
             this.selectedDropdown.forEach(element => {
                 arr.push(element)
+                this.destinationDropdown =[]
                 element.selected = false;
                 this.sourceSelected = false;
-                this.dropdownDestination.push(element);
-                this.generalForm.controls['camPosition']?.reset();
-                this.selectedDropdown=[]
-            })
-            // this.lastMoveDestination.push(arr);
-            console.log("this.selectedDropdown", this.dropdownDestination);
-        } else{
-            this.selected.forEach(element => {
-                this.source.push(element);
-                this.lastMove2.push(element);
-    
-                element.selected = false;
-                this.destinationSelected = false;
-    
-                let idx = this.destination.findIndex(ele => {
-                    return element.id === ele.id;
-                });
-    
-                if (idx !== -1) {
-                    this.destination.splice(idx, 1);
+                if (!this.camFeatures.includes(element)) {
+                    // arr.push(str);
+                    this.camFeatures.push(element);
                 }
-            });
-            this.selected = [];
-            this.signal.emit(this.destination);
-        }
-       
-    }
+                this.generalForm.controls['camDestination']?.reset();
 
-    removeAll() {
-        this.destination.forEach(element => {
+                let id: number = arr.findIndex(x => x.feature_id === element.feature_id)
+                idx.push(id)
+                idx.forEach((ele: any) => {
+                    this.dropdownDestination.splice(ele, 1);
+                });
+
+            });
+            console.log("this.camFeatures", this.camFeatures);
+            console.log("this.dropdownDestination", this.dropdownDestination);
+
+           
+        } else {
+
+        }
+        this.selected.forEach(element => {
             this.source.push(element);
             this.lastMove2.push(element);
+
+            element.selected = false;
+            this.destinationSelected = false;
+
+            let idx = this.destination.findIndex(ele => {
+                return element.id === ele.id;
+            });
+
+            if (idx !== -1) {
+                this.destination.splice(idx, 1);
+            }
         });
-        this.destination = [];
+        this.selected = [];
         this.signal.emit(this.destination);
-    }
-    ngOnDestroy() {
-        this.camFeatures = [];
-        this.features = [];
-        this.signal.emit({ type: 'destroy' });
-    }
+    
+
+}
+
+removeAll() {
+    this.destination.forEach(element => {
+        this.features.push(element);
+        this.lastMove2.push(element);
+    });
+    this.dropdownDestination.forEach(element => {
+        this.camFeatures.push(element);
+        this.lastMove2.push(element);
+        // this.lastMove.push(element);
+    });
+    this.destination = [];
+    this.dropdownDestination = [];
+    this.signal.emit(this.destination);
+}
+ngOnDestroy() {
+    this.camFeatures = [];
+    this.features = [];
+    this.signal.emit({ type: 'destroy' });
+}
 }
 

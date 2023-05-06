@@ -1,6 +1,6 @@
-<div class="card h-140 w-100-p" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="space-between center"
+<div class="card h-140 w-100-p dual-list" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="space-between center"
     style=" border: none;">
-    <div class="card" fxFlex="45" fxLayout="column" style="height: 100%; overflow: auto;" [formGroup]="generalForm">
+    <div class="card" fxFlex="45" fxLayout="column" style="height: 100%; border: 1px solid rgba(0,0,0,.125) !important; overflow: auto;" [formGroup]="generalForm">
 
         <ng-container>
             <ng-select class="w-100-p mb-16" placeholder="Select Cameras" [clearable]="false" [multiple]="true" formControlName="camPosition"
@@ -55,7 +55,7 @@
         </a>
     </div>
 
-    <div class="card" fxFlex="45" style="height: 100%; overflow: auto;">
+    <div class="card" fxFlex="45" style="height: 100%; overflow: auto;  border: 1px solid rgba(0,0,0,.125) !important">
         <ng-select class="w-100-p mb-16" placeholder="Select Cameras" [clearable]="false" [multiple]="true" (change)="onDropdownDestination($event)"  formControlName="camDestination">
         <ng-option *ngFor="let item of dropdownDestination ; let idx=index"  class="item" [class.selected-item]="camFeatures[idx]?.selected"
             [value]="item" >{{ item.feature_name }}
