@@ -13,50 +13,53 @@
         <div *ngIf="catagory === 'edit' " class="w-100-p" fxLayout="row wrap" style="height: 100%">
 
             <!--VIEW  EDIT -->
-            <form [formGroup]="editView" class="w-100-p">
+            <form [formGroup]="editView" (ngSubmit)="onSubmit()" class="w-100-p">
                 <!-- DropDown Mod-->
                 <ng-select class="  " style="width:40% ;margin: 15px; " [searchable]="false" [clearable]="false"
                     placeholder="Select View" (change)="onViewSelect($event)" formControlName="space">
                     <ng-option *ngFor="let item of displayData" [value]="item">{{ item.view_name }}
                     </ng-option>
                 </ng-select>
-                <div class="panel-body padding-15 w-100-p">
-
-
-                    <div class="table-responsive   vscroll" style="height: auto;">
-                        <table
-                            class="table nowrap margin-bottom-0 table-bordered  table-striped theme-table1  bg-white  table-condensed  text-wrap"
-                            id="ppp">
-                            <thead>
-                                <tr>
-                                    <th>Views</th>
-                                    <th>Cameras</th>
-                                    <th> Action </th>
-                                </tr>
-                            </thead>
-                            <tbody *ngIf="viewList.length>0">
-                                <tr *ngFor="let data of viewList ; let i = index">
-                                    <td>
-                                        {{data.view_no}}
-                                    </td>
-                                    <td> <ng-select class=" " [searchable]="false" [clearable]="false"
-                                            placeholder="Select Camera" (change)="onChangeCam($event)"
-                                            formControlName="camera_views" [(ngModel)]="data.camera_id">
-                                            <ng-option *ngFor="let items of cameras"
-                                                [value]="items.device">{{items.device_name }}
-                                            </ng-option>
-                                        </ng-select>
-                                    </td>
-                                    <td>
-                                        <a type="button" (click)="deleteRow(i)" class="btn btn-icon  btn-danger btn-xs "
-                                            data-toggle="modal" data-target=""> <i class="ri-delete-bin-6-line"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <ng-container formArrayName="addressedit">
+                    <div class="panel-body padding-15 w-100-p">
+                        <div *ngFor="let addressGroupEdit of editView.get('addressedit')['controls']; let i = index">
+                            <div class="table-responsive   vscroll" style="height: auto;" [formGroup]="addressGroupEdit">
+                                <table
+                                    class="table nowrap margin-bottom-0 table-bordered  table-striped theme-table1  bg-white  table-condensed  text-wrap"
+                                    id="ppp">
+                                    <thead>
+                                        <tr>
+                                            <th>Views</th>
+                                            <th>Cameras</th>
+                                            <th> Action </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngIf="viewList.length>0">
+                                        <tr *ngFor="let data of viewList ; let i = index">
+                                            <td>
+                                                {{data.view_no}}
+                                            </td>
+                                            <td> <ng-select class=" " [searchable]="false" [clearable]="false"
+                                                    placeholder="Select Camera" (change)="onChangeCam($event)"
+                                                    formControlName="camera_views">
+                                                    <ng-option *ngFor="let items of cameras"
+                                                        [value]="items.device">{{items.device_name }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </td>
+                                            <td>
+                                                <a type="button" (click)="deleteRow(i)"
+                                                    class="btn btn-icon  btn-danger btn-xs " data-toggle="modal"
+                                                    data-target=""> <i class="ri-delete-bin-6-line"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </ng-container>
             </form>
         </div>
 
@@ -82,7 +85,8 @@
                     </div>
                     <ng-container formArrayName="address">
                         <!-- <div *ngFor="let item of viewList; let i = index" class="col-md-12"> -->
-                        <div *ngFor="let addressGroup of addView.get('address')['controls']; let i = index" class="col-md-12">
+                        <div *ngFor="let addressGroup of addView.get('address')['controls']; let i = index"
+                            class="col-md-12">
                             <div class="row" [formGroup]="addressGroup">
                                 <div class="col-md-6">
                                     <div class="form-group ">
@@ -133,7 +137,7 @@
 
 </div>
 <div class="modal-footer">
-    <button type="submit" (click)="onSubmit()" [disabled]="addView.invalid || editView.invalid "
+    <button type="submit" (click)="onSubmit()" [disabled]="addView.invalid "
         class="btn btn-success btn-round btn-block1"><i class="ri-check-fill"></i>Save</button>
     <button type="button" (click)="onCloseModel()" class="btn btn-default btn-round btn-block1"><i
             class="ri-arrow-go-back-line"></i>

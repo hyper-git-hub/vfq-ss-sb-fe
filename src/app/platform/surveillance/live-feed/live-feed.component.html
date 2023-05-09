@@ -9,7 +9,7 @@
             </div>
 
             <div fxFlex="80" fxLayout="row" fxLayoutGap="2px" fxLayoutAlign="end start">
-             <ng-select placeholder="Select View " (change)="onChangeView($event)">
+             <ng-select placeholder="Select View " (change)="onChangeView($event)" [clearable]="false">
                     <ng-option *ngFor="let item of displayData "  [value]="item.display_phenomenun">
                         {{item.view_name}}
                     </ng-option>

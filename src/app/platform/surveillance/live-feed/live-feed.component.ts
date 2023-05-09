@@ -82,6 +82,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     }
 
     this.viewCounts = [];
+    this.final = [];
     this.views = { layout: 2 };
 
     this.breadCrumbs = [
@@ -160,7 +161,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
   getDisplay() {
     this.displayData = [];
     this.loading = true;
-    const slug = `${environment.baseUrlSB}/building/display/`;
+    const slug = `${environment.baseUrlSB}/building/display/?customer=${this.customerid}`;
 
     this.apiService.get(slug).subscribe((resp: any) => {
       this.displayData = resp.data['data'];
@@ -192,11 +193,11 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
         });
       });
       this.viewsDevices = this.devices;
-      // console.log("this.newdisplay:", this.viewsDevices)
+      console.log("this.newdisplay:", this.newdisplay)
 
-      if (this.newdisplay.length != 0) {
-        this.devices = this.newdisplay;
-        console.log("this.viewsDevices:", this.devices)
+      if (this.final.length > 0) {
+        this.devices = this.final;
+        console.log("this.devices get k andr:", this.devices)
       }
 
       // this.devices = resp.data['data'];
@@ -228,19 +229,21 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     console.log(" views selected == ", ev)
     const dt = ev;
     console.log("dt:", dt)
-    console.log("viewsDevices", this.viewsDevices)
+    console.log("viewsDevices", this.viewsDevices);
+    this.final = [];
     if (dt) {
       dt.forEach(element => {
         this.viewsDevices.forEach(elem => {
-          if (element.camera_id === elem.device_name) {
+          if (element.camera_id === elem.device) {
             this.final.push(elem);
             console.log("final:", this.final)
             // this.passEntry.emit(this.final);
           }
         });
       });
+      this.devices = this.final;
     }
-    this.getCameraDevices();
+    // this.getCameraDevices();
 
   }
 
@@ -410,11 +413,11 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(LivefeedformComponent, options);
     dialogRef.componentInstance.title = 'Add View';
     dialogRef.componentInstance.data = this.views;
-    // dialogRef.componentInstance.data1 = this.viewsDevices;
-    // dialogRef.componentInstance.passEntry.subscribe((receivedEntry) => {
-    // console.log(receivedEntry);
-    // this.newdisplay = receivedEntry;
-    // })
+    dialogRef.componentInstance.data1 = this.viewsDevices;
+    dialogRef.componentInstance.passEntry.subscribe((receivedEntry) => {
+    console.log(receivedEntry);
+    this.newdisplay = receivedEntry;
+    })
     // dialogRef.closed.subscribe((result) => {
     // this.getCameraDevices();
     // })

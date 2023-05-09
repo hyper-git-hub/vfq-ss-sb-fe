@@ -34,9 +34,11 @@ export class LivefeedformComponent implements OnInit {
   cameraList: any[] = []
   cameras: any[] = []
   viewCam: any[] = []
+  viewCamEdit: any[] = []
   devices: any[] = []
   finaViewCam: any[] = []
-  cameraName: any
+  cameraName: any;
+  customerId: any;
   @Output() passEntry: EventEmitter<any> = new EventEmitter();
 
   addView: FormGroup;
@@ -84,7 +86,9 @@ export class LivefeedformComponent implements OnInit {
     ];
     this.cameraFeatures = [];
     // this.devices = [];
-
+    let u: any = JSON.parse(localStorage.getItem('user'));
+    this.customerId = u.customer['customer_id'];
+    console.log("customer:",this.customerId)
 
 
 
@@ -96,8 +100,8 @@ export class LivefeedformComponent implements OnInit {
 
 
     this.editView = new FormGroup({
-      space: new FormControl(null,),
-      camera_views: new FormControl(null),
+      space: new FormControl(null,  [Validators.required]),
+      addressedit: fb.array([])
     });
 
 
@@ -124,6 +128,9 @@ export class LivefeedformComponent implements OnInit {
 
     console.log("data:", this.data)
     console.log("data1:", this.data1)
+    console.log("this.final :", this.final)
+
+ 
 
     if (this.data.layout == 2) {
       this.viewList = [
@@ -135,18 +142,21 @@ export class LivefeedformComponent implements OnInit {
       this.addNewAddressGroup();
       this.addNewAddressGroup();
       this.addNewAddressGroup();
+      this.addNewAddressGroupEdit();
+ 
+
     }
     if (this.data.layout == 3) {
       this.viewList = [
-        { id: '1', name: 'View 1' },
-        { id: '2', name: 'View 2' },
-        { id: '3', name: 'View 3' },
-        { id: '4', name: 'View 4' },
-        { id: '5', name: 'View 5' },
-        { id: '6', name: 'View 6' },
-        { id: '7', name: 'View 7' },
-        { id: '8', name: 'View 8' },
-        { id: '9', name: 'View 9' }
+        { view_no: '1', name: 'View 1' },
+        { view_no: '2', name: 'View 2' },
+        { view_no: '3', name: 'View 3' },
+        { view_no: '4', name: 'View 4' },
+        { view_no: '5', name: 'View 5' },
+        { view_no: '6', name: 'View 6' },
+        { view_no: '7', name: 'View 7' },
+        { view_no: '8', name: 'View 8' },
+        { view_no: '9', name: 'View 9' }
       ];
       this.addNewAddressGroup();
       this.addNewAddressGroup();
@@ -156,6 +166,14 @@ export class LivefeedformComponent implements OnInit {
       this.addNewAddressGroup();
       this.addNewAddressGroup();
       this.addNewAddressGroup();
+
+      this.addNewAddressGroupEdit();
+      this.addNewAddressGroupEdit();
+      this.addNewAddressGroupEdit();
+      this.addNewAddressGroupEdit();
+      this.addNewAddressGroupEdit();
+
+      
     }
   }
 
@@ -166,6 +184,14 @@ export class LivefeedformComponent implements OnInit {
       camera: []
     }))
   }
+
+  addNewAddressGroupEdit() {
+    const edit = this.editView.get('addressedit') as FormArray;
+    edit.push(this.fb.group({
+      camera_views: [],
+    }))
+  }
+
 
   onCloseModel() {
     this.modalRef.close(this.listData);
@@ -202,6 +228,7 @@ export class LivefeedformComponent implements OnInit {
           }
         });
       });
+      console.log("cameras:",this.cameras)
     }, (err: any) => {
       this.toastr.error(err.error['message'], 'Error getting cameras');
     });
@@ -210,7 +237,7 @@ export class LivefeedformComponent implements OnInit {
   getDisplay() {
     this.displayData = [];
     this.loading = true;
-    const slug = `${environment.baseUrlSB}/building/display/`;
+    const slug = `${environment.baseUrlSB}/building/display/?customer=${this.customerId}`;
 
     this.apiService.get(slug).subscribe((resp: any) => {
       this.displayData = resp.data['data'];
@@ -224,30 +251,44 @@ export class LivefeedformComponent implements OnInit {
   }
   onSubmit() {
     const formData = this.addView.value;
+    const formDataEdit = this.editView.value;
+    console.log("formDataEdit:",formDataEdit)
     this.viewCam = formData.address;
+    this.viewCamEdit = formData.addressedit;
+    console.log("viewCam:",this.viewCam)
+    console.log("viewCam:",this.viewCamEdit)
     let payload: any = {
       view_name: formData.name,
+      display_phenomenun: []
+    }
+    let payloadEdit: any = {
+      view_name: formDataEdit.name,
       display_phenomenun: []
     }
     if (this.addView.invalid) {
       return;
     }
 
-    if (this.editView.invalid) {
-      return;
-    }
+    // if (this.editView.invalid) {
+    //   return;
+    // }
 
     this.viewCam.forEach(element => {
       if (element.views && element.camera) {
         payload.display_phenomenun.push({ view_no: element.views, camera_id: element.camera })
         this.finaViewCam.push(payload.display_phenomenun)
       }
-
-
-
     });
+   
     console.log("this.catagory == > ", this.catagory)
     if (this.catagory === 'edit') {
+      this.viewCamEdit.forEach(element => {
+        if (element.views && element.camera) {
+          payload.display_phenomenun.push({ view_no: element.views, camera_id: element.camera })
+          this.finaViewCam.push(payload.display_phenomenun)
+        }
+      });
+
       console.log(" the val", this.editView.value)
     }
 
@@ -279,17 +320,16 @@ export class LivefeedformComponent implements OnInit {
   createDisplay(slug: string, finalpayload: any) {
     this.apiService.post(slug, finalpayload).subscribe((resp: any) => {
       const dt = resp.data.display_phenomenun;
-      // console.log("dt:", dt)
-      // console.log("devices:", this.devices)
-      // dt.forEach(element => {
-      //   this.data1.forEach(elem => {
-      //     if (element.camera_id === elem.device) {
-      //       this.final.push(elem);
-      //       console.log("final:", this.final)
-      //       this.passEntry.emit(this.final);
-      //     }
-      //   });
-      // });
+      console.log("dt:", dt)
+      dt.forEach(element => {
+        this.data1.forEach(elem => {
+          if (element.camera_id === elem.device) {
+            this.final.push(elem);
+            console.log("final:", this.final)
+            this.passEntry.emit(this.final);
+          }
+        });
+      });
       this.toastr.success(resp.message);
       // this.loading = false;
       this.modalRef.close();
@@ -300,6 +340,22 @@ export class LivefeedformComponent implements OnInit {
       // this.loading = false;
     });
   }
+
+  updateDisplay(devicename) {
+    // console.log(devicename)
+    let slug = `${environment.baseUrlDevice}/api/device`;
+    let payload: any = {
+      device_id: this.data.device,
+      device_name: devicename,
+    }
+    // console.log(payload)
+    this.apiService.patch(slug, payload).subscribe((resp: any) => {
+      this.toastr.success("Record updated successfully");
+      this.modalRef.close();
+    }, (err: any) => {
+      this.toastr.error(err.error.message);
+    });
+  }
   // onAreaSelect(ev: any) {
   //   console.log(" the Sec Area ", ev)
   // }
@@ -308,11 +364,27 @@ export class LivefeedformComponent implements OnInit {
   }
   camList = [];
   onViewSelect(ev: any) {
-    // console.log(" The Selected Area ", ev.display_phenomenun)
-    console.log(" data1", this.data1)
+    console.log(" The Selected Area ", ev.display_phenomenun)
+    console.log(" cameras", this.cameras)
     this.viewList = ev.display_phenomenun;
-    this.cameras = this.viewList
-    console.log(" cameras ", this.cameras)
+    // this.cameras = this.viewList
+    this.viewList.forEach(element => {
+      this.cameras.forEach(elem => {
+        if(element.camera_id === elem.device){
+          // this.cameras.push(elem);
+          this.final.push(element);
+            console.log("final:", this.final)
+            // console.log("cameras:", this.cameras)
+            this.viewList = this.final
+           this.editView.patchValue({
+               camera_views: this.cameras,
+             });
+        }
+        
+      });
+    
+  });
+    // console.log(" cameras ", this.cameras)
 
     // this.editView.patchValue({
     //   camera_views: ev.camera_id,
