@@ -115,6 +115,7 @@ export class AddGroupFormComponent implements OnInit {
   }
 
   openEdit() {
+    console.log(this.data)
     this.selectedGroupToEdit = this.data;
     this.selectedGroups = [];
 
@@ -143,31 +144,53 @@ export class AddGroupFormComponent implements OnInit {
       });
     }, 300);
 
+
+
     if (this.data.group_feature_list && this.data.group_feature_list?.length > 0) {
       let featureArray = [];
       let got = [];
-      let source = [];
+      let sourceData:any = [];
+      console.log("childPush source", sourceData)
 
       this.data.group_feature_list.forEach(element => {
         featureArray.push(element)
       });
+      console.log("featureArray", featureArray)
+      console.log("featureArray", this.data.stations)
 
       this.data.stations.forEach(child => {
         featureArray.forEach(elem => {
           if (elem === child.feature_id) {
             const childPush = { feature_id: child.feature_id, key: child.feature_id, name: child.feature_name, station: child.feature_name };
-            got.push(childPush)
+            let arr: any = [childPush]
+            arr.forEach((element:any) => {
+              if (!got.includes(element)) {
+                got.push(element)
+              }
+            })
+           
           } else {
-            const childPush = { feature_id: child.feature_id, key: child.feature_id, name: child.feature_name, station: child.feature_name };
-            source.push(childPush)
+            // const childPush = { feature_id: child.feature_id, key: child.feature_id, name: child.feature_name, station: child.feature_name };
+            // let arr: any[] = [childPush]
+            // arr.forEach((element:any) => {
+            //   if (!sourceData.includes(element)) {
+            //     sourceData.push(element)
+            //   }
+            // })
+            
           }
+          
         })
+        sourceData.push(child)
+
       })
 
-
+      console.log("childPush", got)
+      console.log("childPush source", sourceData)
 
       this.confirmed = got;
-      this.stations = source;
+      this.stations = sourceData;
+      this.sendData = this.stations
       this.initListBox();
     }
   }

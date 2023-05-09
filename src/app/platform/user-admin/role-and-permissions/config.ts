@@ -25,7 +25,7 @@ export class RoleTableConfig {
     
         
         rowActions: [
-            { icon: 'ri-pencil-line', type: 'icon', tooltip: 'Edit', action: 'onEdit', condition: RoleTableConfig.writeCondition },
+            { icon: 'ri-pencil-line', type: 'icon', tooltip: 'Edit', action: 'onEdit',  },
             { icon: 'ri-delete-bin-2-line', type: 'icon', tooltip: 'Delete', action: 'onDelete', btnColor: 'btn-danger', condition: RoleTableConfig.writeCondition },
             { icon: 'ri-settings-line', type: 'icon', tooltip: 'Setting', action: 'onSetting', btnColor: 'btn-warning', condition: RoleTableConfig.writeCondition }
         ],
