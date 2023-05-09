@@ -44,12 +44,15 @@ export class AddGroupFormComponent implements OnInit {
   confirmedStations: Array<any>;
   stations = [];
   selectedGroups = [];
+  dropDownGroup = [];
+  listGroup = [];
   associatedUserTrack = [];
 
   selectedGroupToEdit: any;
   moduleId: any;
   useCaseId: any;
   category: any;
+  
 
   subscription: Subscription;
   CompleteData: any[] = [];
@@ -177,7 +180,27 @@ export class AddGroupFormComponent implements OnInit {
   }
 
   onListSignal(ev:any){
-    
+    console.log(" the list signal", ev)
+    ev.forEach((element) => {
+      if (!this.listGroup.includes(element)) {
+        this.listGroup.push(element);
+    }
+  })
+  console.log(" the dropdown signal", this.dropDownGroup)
+
+  }
+  onDropdownSignal(ev:any){
+    console.log(" the dropdown signal", ev)
+   
+
+    ev.forEach((element) => {
+      element.feature_id =element.feature_id?.replace('cam_', '');
+      if (!this.dropDownGroup.includes(element)) {
+        this.dropDownGroup.push(element);
+    }
+  })
+  console.log(" the dropdown signal", this.dropDownGroup)
+
   }
 
   getGroupData(mainArray) {
@@ -203,7 +226,8 @@ export class AddGroupFormComponent implements OnInit {
 
   onSubmitAddGroup(formvalues) {
     this.submitted = true;
-
+    this.selectedGroups.push(this.dropDownGroup , this.listGroup)
+console.log("this.selectedGroup",this.selectedGroups)
     if (this.addGroupForm.invalid) { //this.validate() || this.groupForm.invalid
       return;
     }

@@ -89,7 +89,7 @@
                         <div class="form-group margin-bottom-10 margin-top-10">
                             <h5><b>Choose Features for Group:</b></h5>
                             <app-dual-list [source]="sendData" [destination]="confirmed" 
-                                (signal)="onListSignal($event)"></app-dual-list>
+                                (signal)="onListSignal($event)" (dropdown)="onDropdownSignal($event)"></app-dual-list>
                             <!-- <dual-list [source]="stations" [key]="key" [display]="display" [(destination)]="confirmed" [filter]="true"
                                 height="265px">
                             </dual-list> -->
