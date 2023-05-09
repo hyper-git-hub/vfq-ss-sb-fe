@@ -247,7 +247,6 @@ export class DualListComponent implements OnInit {
                         this.camFeatures.splice(i, 1);
                     }
                 })
-                console.log("the data",data)
                 this.dropdown.emit(this.dropdownDestination);
             });
         } else {

@@ -143,8 +143,6 @@ export class AddGroupFormComponent implements OnInit {
       });
     }, 300);
 
-
-
     if (this.data.group_feature_list && this.data.group_feature_list?.length > 0) {
       let featureArray = [];
       let got = [];
@@ -170,7 +168,6 @@ export class AddGroupFormComponent implements OnInit {
 
       this.confirmed = got;
       this.stations = source;
-
       this.initListBox();
     }
   }
@@ -180,26 +177,21 @@ export class AddGroupFormComponent implements OnInit {
   }
 
   onListSignal(ev: any) {
-    console.log(" the list signal", ev)
     ev.forEach((element) => {
       if (!this.listGroup.includes(element)) {
         this.listGroup.push(element);
       }
     })
-    console.log(" the dropdown signal", this.dropDownGroup)
 
   }
   onDropdownSignal(ev: any) {
-    console.log(" the dropdown signal", ev)
 
 
     ev.forEach((element) => {
-      element.feature_id = element.feature_id?.replace('cam_', '');
       if (!this.dropDownGroup.includes(element)) {
         this.dropDownGroup.push(element);
       }
     })
-    console.log(" the dropdown signal", this.dropDownGroup)
 
   }
 
@@ -226,21 +218,15 @@ export class AddGroupFormComponent implements OnInit {
 
   onSubmitAddGroup(formvalues) {
     this.submitted = true;
-    let arry: any[] = this.dropDownGroup.concat(this.listGroup);
+    let arry: any[] = this.listGroup.concat(this.dropDownGroup);
     this.selectedGroups = arry;
-    console.log("this.selectedGroup", this.selectedGroups)
     if (this.addGroupForm.invalid) { //this.validate() || this.groupForm.invalid
       return;
     }
-
     let menulist = [];
     for (let i = 0; i < this.selectedGroups.length; i++) {
       menulist.push(this.selectedGroups[i].feature_id)
     }
-
-    console.log("this.menulist", menulist)
-
-
     if (menulist.length == 0) {
       if (this.btnText == 'Save') {
         return;
@@ -268,7 +254,6 @@ export class AddGroupFormComponent implements OnInit {
       "permission": formvalues.permission
     }
 
-    console.log(dataToSend)
     // this.disableSubmitButton();
     this.userservice.addGroup(dataToSend, this.urlPort.monolith).subscribe((response: any) => {
 
@@ -374,7 +359,6 @@ export class AddGroupFormComponent implements OnInit {
   }
 
   assetAssociateUserChanged(event) {
-    // console.log(event.itemValue)
     if (event && event.itemValue) {
       let selectedValue = event.itemValue.id;
       if (this.associatedUserTrack && this.associatedUserTrack.length > 0) {
