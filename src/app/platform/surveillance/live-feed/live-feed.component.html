@@ -9,8 +9,8 @@
             </div>
 
             <div fxFlex="80" fxLayout="row" fxLayoutGap="2px" fxLayoutAlign="end start">
-             <ng-select placeholder="Select View " (change)="onChangeView($event)" [clearable]="false">
-                    <ng-option *ngFor="let item of displayData "  [value]="item.display_phenomenun">
+             <ng-select placeholder="Select View" (change)="onChangeView($event)" [clearable]="false" [formControl]="camView">
+                    <ng-option *ngFor="let item of displayData"  [value]="item.id">
                         {{item.view_name}}
                     </ng-option>
                 </ng-select>

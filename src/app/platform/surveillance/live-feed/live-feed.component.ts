@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -49,8 +49,9 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
   vidUrl = 'https://demo.flashphoner.com:8888/embed_player?urlServer=wss://demo.flashphoner.com:8443&streamName=';
   rtsp: any;
   detailFilters: any;
-  pc: RTCPeerConnection;
   player2: any;
+
+  camView: FormControl = new FormControl(null);
 
   constructor(
     private dialog: NgbModal,
@@ -138,7 +139,6 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     // this.playCameras();
     this.getUserPrefrence();
     this.getCameraDevices();
-    this.getDisplay();
     // this.getCameraDetails(this.detailFilters);
   }
 
@@ -156,8 +156,6 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     });
   }
 
-
-
   getDisplay() {
     this.displayData = [];
     this.loading = true;
@@ -165,8 +163,12 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
 
     this.apiService.get(slug).subscribe((resp: any) => {
       this.displayData = resp.data['data'];
-      console.log("displayData:", this.displayData)
-
+      const dt = resp.data['data'];
+      if (dt && dt.length) {
+        this.camView.setValue(dt[0].id);
+        this.onChangeView(dt[0].id);
+      }
+      // console.log("displayData:", this.displayData)
       this.loading = false;
     }, (err: any) => {
       this.loading = false;
@@ -193,12 +195,12 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
         });
       });
       this.viewsDevices = this.devices;
-      console.log("this.newdisplay:", this.newdisplay)
 
       if (this.final.length > 0) {
         this.devices = this.final;
-        console.log("this.devices get k andr:", this.devices)
       }
+
+      this.getDisplay();
 
       // this.devices = resp.data['data'];
       // const dt = resp.data['data'];
@@ -226,17 +228,15 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
   }
 
   onChangeView(ev: any) {
-    console.log(" views selected == ", ev)
-    const dt = ev;
-    console.log("dt:", dt)
-    console.log("viewsDevices", this.viewsDevices);
+    const dt = this.displayData.find(ele => {
+      return ele.id === ev;
+    });
     this.final = [];
-    if (dt) {
-      dt.forEach(element => {
+    if (dt.display_phenomenun.length > 0) {
+      dt.display_phenomenun.forEach(element => {
         this.viewsDevices.forEach(elem => {
           if (element.camera_id === elem.device) {
             this.final.push(elem);
-            console.log("final:", this.final)
             // this.passEntry.emit(this.final);
           }
         });
@@ -332,7 +332,6 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
       var canvas = document.getElementById(this.devices[idx]?.id);
       // @ts-ignore JSMpeg defined via script
       this.player2 = new JSMpeg.Player(url, { canvas: canvas });
-      console.log(this.player2.source, this.player2.source.socket);
     }, 1000);
   }
 
@@ -400,12 +399,15 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
 
 
   onEditlivefeed(ev?: any) {
-    const options: NgbModalOptions = { size: 'lg', scrollable: true };
+    const options: NgbModalOptions = { size: 'md', scrollable: true };
     const dialogRef = this.dialog.open(LivefeedformComponent, options);
     dialogRef.componentInstance.title = 'Edit View';
     dialogRef.componentInstance.data = this.views;
     dialogRef.componentInstance.data1 = this.viewsDevices;
     dialogRef.componentInstance.catagory = 'edit';
+    dialogRef.closed.subscribe(() => {
+      this.getDisplay();
+    });
   }
 
   onAddlivefeed(ev?: any) {
@@ -415,8 +417,8 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.data = this.views;
     dialogRef.componentInstance.data1 = this.viewsDevices;
     dialogRef.componentInstance.passEntry.subscribe((receivedEntry) => {
-    console.log(receivedEntry);
-    this.newdisplay = receivedEntry;
+      // console.log(receivedEntry);
+      this.newdisplay = receivedEntry;
     })
     // dialogRef.closed.subscribe((result) => {
     // this.getCameraDevices();
@@ -434,109 +436,8 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.patchCameraViews();
-    this.player2.destroy();
-  }
-
-  start() {
-    let stream: any = new MediaStream();
-    let config: any = {
-      sdpSemantics: 'unified-plan',
-      iceServers: [{ urls: ['stun:stun.l.google.com:19302'] }]
-    };
-
-    this.pc = new RTCPeerConnection(config);
-    let v = document.getElementById('vid') as HTMLVideoElement;
-
-    // connect audio / video
-    this.pc.addEventListener('track', function (evt) {
-      stream.addTrack(evt.track);
-      v.src = stream;
-    });
-
-    document.getElementById('start').style.display = 'none';
-    this.negotiate();
-    document.getElementById('stop').style.display = 'inline-block';
-  }
-
-  negotiate(): any {
-    this.pc.addTransceiver('video', { direction: 'recvonly' });
-    this.pc.addTransceiver('audio', { direction: 'recvonly' });
-    return this.pc.createOffer().then(function (offer) {
-      return this.pc.setLocalDescription(offer);
-    }).then(function () {
-      // wait for ICE gathering to complete
-      return new Promise<void>(function (resolve) {
-        if (this.pc.iceGatheringState === 'complete') {
-          resolve();
-        } else {
-          function checkState() {
-            if (this.pc.iceGatheringState === 'complete') {
-              this.pc.removeEventListener('icegatheringstatechange', checkState);
-              resolve();
-            }
-          }
-          this.pc.addEventListener('icegatheringstatechange', checkState);
-        }
-      });
-    }).then(function () {
-      var offer = this.pc.localDescription;
-      return fetch('http://127.0.0.1:8000/offer', {
-        body: JSON.stringify({
-          sdp: offer.sdp,
-          type: offer.type,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        method: 'POST'
-      });
-    }).then(function (response) {
-      return response.json();
-    }).then(function (answer) {
-      return this.pc.setRemoteDescription(answer);
-    }).catch(function (e) {
-      alert(e);
-    });
-  }
-
-
-
-
-
-
-  playVlc(rtsp: string) {
-    let div = document.createElement("div");
-    div.setAttribute("id", '11');
-    div.setAttribute("width", '450px');
-    div.setAttribute("height", '340px');
-
-    let embed = document.createElement("embed");
-    embed.setAttribute("type", "application/x-vlc-plugin");
-    embed.setAttribute("controls", "false");
-    embed.setAttribute("pluginspage", "http://www.videolan.org");
-    embed.setAttribute("width", "450px !important");
-    embed.setAttribute("height", "340px !important");
-    embed.setAttribute("loop", "no");
-    embed.setAttribute("target", rtsp);
-
-    let object = document.createElement("object");
-    object.setAttribute("classid", "clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921");
-    object.setAttribute("target", "http://download.videolan.org/pub/videolan/vlc/last/win32/axvlc.cab");
-    object.setAttribute("width", "450px !important");
-    object.setAttribute("height", "340px !important");
-
-    div.append(embed);
-    div.append(object);
-
-    let videoDiv = document.getElementById('rtsp-video');
-    videoDiv.append(div);
-
-    // object.css("display:none");
-    // let config = JSON.parse( `[
-    //   "rtsp://system:Vodafone@51.144.150.199:9100/dss/monitor/param/cameraid=1000000%240%26substream=1?token=5776",
-    //   "rtsp://username:password@your.ip.address:554/Streaming/Channels/201",
-    //   "rtsp://username:password@your.ip.address:554/Streaming/Channels/301",
-    //   "rtsp://username:password@your.ip.address:554/Streaming/Channels/402"
-    // ]`);
+    if (this.player2) {
+      this.player2.destroy();
+    }
   }
 }
