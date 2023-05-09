@@ -226,17 +226,19 @@ export class AddGroupFormComponent implements OnInit {
 
   onSubmitAddGroup(formvalues) {
     this.submitted = true;
-    this.selectedGroups.push(this.dropDownGroup, this.listGroup)
+    let arry: any[] = this.dropDownGroup.concat(this.listGroup);
+    this.selectedGroups = arry;
     console.log("this.selectedGroup", this.selectedGroups)
     if (this.addGroupForm.invalid) { //this.validate() || this.groupForm.invalid
       return;
     }
 
     let menulist = [];
-    for (let i = 0; i < this.confirmed.length; i++) {
-      menulist.push(this.confirmed[i].feature_id)
+    for (let i = 0; i < this.selectedGroups.length; i++) {
+      menulist.push(this.selectedGroups[i].feature_id)
     }
 
+    console.log("this.menulist", menulist)
 
 
     if (menulist.length == 0) {
@@ -265,6 +267,8 @@ export class AddGroupFormComponent implements OnInit {
       "use_case": 5,
       "permission": formvalues.permission
     }
+
+    console.log(dataToSend)
     // this.disableSubmitButton();
     this.userservice.addGroup(dataToSend, this.urlPort.monolith).subscribe((response: any) => {
 
