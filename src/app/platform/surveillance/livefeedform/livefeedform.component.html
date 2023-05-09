@@ -4,28 +4,67 @@
 </div>
 <div class="modal-body">
 
-
-
     <div class="card w-100-p" style="border: none; height: 100%">
-        <img *ngIf="loading" src="/assets/images/block-loader.gif" alt="Loading" srcset="" width="150px" height="150px"
+        <img *ngIf="loading" src="/assets/images/block-loader.gif" alt="Loading" width="150px" height="150px"
             style="position: absolute; top: 30%; left: 42%" />
 
         <div *ngIf="catagory === 'edit' " class="w-100-p" fxLayout="row wrap" style="height: 100%">
 
+            <div class="w-100-p" [formGroup]="editView">
+                <ng-select class="w-40-p m-16 ml-0" [clearable]="false" [searchable]="false" placeholder="Select View"
+                    (change)="onViewSelect($event)" formControlName="space">
+                    <ng-option *ngFor="let item of displayData" [value]="item">
+                        {{ item.view_name }}
+                    </ng-option>
+                </ng-select>
+
+                <div class="table-responsive vscroll" style="height: auto;">
+                    <table class="table" id="ttt">
+                        <thead>
+                            <tr>
+                                <th>Views</th>
+                                <th>Cameras</th>
+                                <th> Action </th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="viewList.length > 0">
+                            <tr *ngFor="let data of viewList; let i = index">
+                                <td>
+                                    View {{data.view_no}}
+                                </td>
+                                <td>
+                                    <ng-select [searchable]="false" [clearable]="false" placeholder="Select Camera"
+                                        (change)="onChangeCam($event)" [(ngModel)]="data.camera_id" [ngModelOptions]="{standalone: true}">
+                                        <ng-option *ngFor="let items of cameras"
+                                            [value]="items.device">{{items.device_name }}
+                                        </ng-option>
+                                    </ng-select>
+                                </td>
+                                <td>
+                                    <a type="button" (click)="deleteRow(i)" class="btn btn-icon btn-danger btn-xs">
+                                        <i class="ri-delete-bin-6-line"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!--VIEW  EDIT -->
-            <form [formGroup]="editView" (ngSubmit)="onSubmit()" class="w-100-p">
-                <!-- DropDown Mod-->
-                <ng-select class="  " style="width:40% ;margin: 15px; " [searchable]="false" [clearable]="false"
+            <!-- <form [formGroup]="editView" (ngSubmit)="onSubmit()" class="w-100-p">
+                <ng-select style="width:40%; margin: 15px;" [searchable]="false" [clearable]="false"
                     placeholder="Select View" (change)="onViewSelect($event)" formControlName="space">
                     <ng-option *ngFor="let item of displayData" [value]="item">{{ item.view_name }}
                     </ng-option>
                 </ng-select>
+
                 <ng-container formArrayName="addressedit">
                     <div class="panel-body padding-15 w-100-p">
                         <div *ngFor="let addressGroupEdit of editView.get('addressedit')['controls']; let i = index">
-                            <div class="table-responsive   vscroll" style="height: auto;" [formGroup]="addressGroupEdit">
+                            <div class="table-responsive vscroll" style="height: auto;" [formGroup]="addressGroupEdit">
                                 <table
-                                    class="table nowrap margin-bottom-0 table-bordered  table-striped theme-table1  bg-white  table-condensed  text-wrap"
+                                    class="table nowrap margin-bottom-0 table-bordered table-striped theme-table1 bg-white table-condensed text-wrap"
                                     id="ppp">
                                     <thead>
                                         <tr>
@@ -37,11 +76,12 @@
                                     <tbody *ngIf="viewList.length>0">
                                         <tr *ngFor="let data of viewList ; let i = index">
                                             <td>
-                                                {{data.view_no}}
+                                                View {{data.view_no}}
                                             </td>
-                                            <td> <ng-select class=" " [searchable]="false" [clearable]="false"
+                                            <td>
+                                                <ng-select [searchable]="false" [clearable]="false"
                                                     placeholder="Select Camera" (change)="onChangeCam($event)"
-                                                    formControlName="camera_views">
+                                                    formControlName="camera_views" [(ngModel)]="data.camera_id">
                                                     <ng-option *ngFor="let items of cameras"
                                                         [value]="items.device">{{items.device_name }}
                                                     </ng-option>
@@ -49,8 +89,8 @@
                                             </td>
                                             <td>
                                                 <a type="button" (click)="deleteRow(i)"
-                                                    class="btn btn-icon  btn-danger btn-xs " data-toggle="modal"
-                                                    data-target=""> <i class="ri-delete-bin-6-line"></i>
+                                                    class="btn btn-icon btn-danger btn-xs">
+                                                    <i class="ri-delete-bin-6-line"></i>
                                                 </a>
                                             </td>
                                         </tr>
@@ -60,7 +100,7 @@
                         </div>
                     </div>
                 </ng-container>
-            </form>
+            </form> -->
         </div>
 
 
@@ -94,8 +134,8 @@
                                         <ng-select class=" margin-bottom-10" [searchable]="false" [clearable]="false"
                                             placeholder="Select Space" (change)="onChangeView($event)"
                                             formControlName="views">
-                                            <ng-option *ngFor="let items of viewList" [value]="items.id">{{ items.name
-                                                }}
+                                            <ng-option *ngFor="let items of viewList" [value]="items.id">
+                                                {{ items.name }}
                                             </ng-option>
                                         </ng-select>
                                         <!-- <div *ngIf="addView.controls['views'].hasError('required') && addView.controls['views'].touched"
@@ -111,8 +151,8 @@
                                         <ng-select class=" margin-bottom-10" [searchable]="false" [clearable]="false"
                                             placeholder="Select Cameras" (change)="onChangeCam($event)"
                                             formControlName="camera">
-                                            <ng-option *ngFor="let items of cameras" [value]="items.device">{{
-                                                items.device_name }}
+                                            <ng-option *ngFor="let items of cameras" [value]="items.device">
+                                                {{ items.device_name }}
                                             </ng-option>
                                         </ng-select>
                                         <!-- <div *ngIf="addView.controls['camera'].hasError('required') && addView.controls['camera'].touched"
@@ -137,7 +177,11 @@
 
 </div>
 <div class="modal-footer">
-    <button type="submit" (click)="onSubmit()" [disabled]="addView.invalid "
+    <button *ngIf="catagory === 'edit' " type="submit" (click)="onUpdate()"
+        class="btn btn-success btn-round btn-block1">
+        <i class="ri-check-fill"></i>Save
+    </button>
+    <button *ngIf="catagory !== 'edit' " type="submit" (click)="onSubmit()" [disabled]="addView.invalid "
         class="btn btn-success btn-round btn-block1"><i class="ri-check-fill"></i>Save</button>
     <button type="button" (click)="onCloseModel()" class="btn btn-default btn-round btn-block1"><i
             class="ri-arrow-go-back-line"></i>
