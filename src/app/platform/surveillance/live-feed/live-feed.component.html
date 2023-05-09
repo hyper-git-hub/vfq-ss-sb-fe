@@ -9,9 +9,9 @@
             </div>
 
             <div fxFlex="80" fxLayout="row" fxLayoutGap="2px" fxLayoutAlign="end start">
-             <ng-select placeholder="Hallways">
-                    <ng-option *ngFor="let item of hallways" [value]="item.id">
-                        {{item.name}}
+             <ng-select placeholder="Select View " (change)="onChangeView($event)" [clearable]="false">
+                    <ng-option *ngFor="let item of displayData "  [value]="item.display_phenomenun">
+                        {{item.view_name}}
                     </ng-option>
                 </ng-select>
                 <button type="button" class="btn btn-primary btn-xs" (click)="onEditlivefeed()">Edit</button>

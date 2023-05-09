@@ -20,12 +20,15 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
 
   loading: boolean;
   breadCrumbs: any[];
-  hallways: any[];
+  // hallways: any[];
   camera: any[];
   devices: any[];
+  viewsDevices: any[];
   socketPorts: any[];
   building: any[];
+  final: any[];
   camerasData: any[];
+  displayData: any[];
   viewCounts: any[];
   cameraFeatures: any[];
 
@@ -37,6 +40,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
   camIds: string;
   cameraid: any;
   mainArray = [];
+  newdisplay = [];
   unAssignedUsers: any[] = [];
   // @Output() titleHeading = new EventEmitter<any>();
   // @Output() sectionValue = new EventEmitter<any>();
@@ -78,6 +82,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     }
 
     this.viewCounts = [];
+    this.final = [];
     this.views = { layout: 2 };
 
     this.breadCrumbs = [
@@ -120,11 +125,11 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
       { id: 2, name: 'camera 2' },
     ];
 
-    this.hallways = [
-      { id: 1, name: 'Hallways' },
-      { id: 2, name: 'Lobby' },
-      { id: 2, name: 'Stairs' },
-    ];
+    // this.hallways = [
+    //   { id: 1, name: 'Hallways' },
+    //   { id: 2, name: 'Lobby' },
+    //   { id: 2, name: 'Stairs' },
+    // ];
 
     this.socketPorts = [];
   }
@@ -133,6 +138,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     // this.playCameras();
     this.getUserPrefrence();
     this.getCameraDevices();
+    this.getDisplay();
     // this.getCameraDetails(this.detailFilters);
   }
 
@@ -140,9 +146,27 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     this.loading = true;
     const slug = `${environment.baseUrlSB}/building/user-preferences/`;
 
-    this.apiService.patch(slug, {guid: this.userGuid}).subscribe((resp: any) => {
+    this.apiService.patch(slug, { guid: this.userGuid }).subscribe((resp: any) => {
       this.views = resp.data;
-      
+
+      this.loading = false;
+    }, (err: any) => {
+      this.loading = false;
+      this.toastr.error(err.error['message'], 'Error getting layout preferances');
+    });
+  }
+
+
+
+  getDisplay() {
+    this.displayData = [];
+    this.loading = true;
+    const slug = `${environment.baseUrlSB}/building/display/?customer=${this.customerid}`;
+
+    this.apiService.get(slug).subscribe((resp: any) => {
+      this.displayData = resp.data['data'];
+      console.log("displayData:", this.displayData)
+
       this.loading = false;
     }, (err: any) => {
       this.loading = false;
@@ -168,6 +192,14 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
           }
         });
       });
+      this.viewsDevices = this.devices;
+      console.log("this.newdisplay:", this.newdisplay)
+
+      if (this.final.length > 0) {
+        this.devices = this.final;
+        console.log("this.devices get k andr:", this.devices)
+      }
+
       // this.devices = resp.data['data'];
       // const dt = resp.data['data'];
 
@@ -193,6 +225,28 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     });
   }
 
+  onChangeView(ev: any) {
+    console.log(" views selected == ", ev)
+    const dt = ev;
+    console.log("dt:", dt)
+    console.log("viewsDevices", this.viewsDevices);
+    this.final = [];
+    if (dt) {
+      dt.forEach(element => {
+        this.viewsDevices.forEach(elem => {
+          if (element.camera_id === elem.device) {
+            this.final.push(elem);
+            console.log("final:", this.final)
+            // this.passEntry.emit(this.final);
+          }
+        });
+      });
+      this.devices = this.final;
+    }
+    // this.getCameraDevices();
+
+  }
+
   getCameraViews() {
     this.loading = true;
     let url = new URL(`${environment.baseUrlSB}/building/views/`);
@@ -205,7 +259,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
       this.viewCounts = resp.data.data;
 
       this.viewCounts.forEach((element: any, idx) => {
-          this.devices.forEach(dev => {
+        this.devices.forEach(dev => {
           if (element.camera_name === dev.device) {
             dev['views_count'] = element['user_count'];
           }
@@ -349,6 +403,8 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     const options: NgbModalOptions = { size: 'lg', scrollable: true };
     const dialogRef = this.dialog.open(LivefeedformComponent, options);
     dialogRef.componentInstance.title = 'Edit View';
+    dialogRef.componentInstance.data = this.views;
+    dialogRef.componentInstance.data1 = this.viewsDevices;
     dialogRef.componentInstance.catagory = 'edit';
   }
 
@@ -357,7 +413,16 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(LivefeedformComponent, options);
     dialogRef.componentInstance.title = 'Add View';
     dialogRef.componentInstance.data = this.views;
+    dialogRef.componentInstance.data1 = this.viewsDevices;
+    dialogRef.componentInstance.passEntry.subscribe((receivedEntry) => {
+    console.log(receivedEntry);
+    this.newdisplay = receivedEntry;
+    })
+    // dialogRef.closed.subscribe((result) => {
+    // this.getCameraDevices();
+    // })
     dialogRef.componentInstance.catagory = 'add';
+
   }
 
   openSingleCamera(ev: any) {
