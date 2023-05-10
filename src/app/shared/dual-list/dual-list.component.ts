@@ -277,7 +277,7 @@ export class DualListComponent implements OnInit {
                         this.camFeatures.splice(i, 1);
                     }
                 })
-                this.dropdown.emit(this.dropdownDestination);
+                
             });
         } else {
         }
@@ -302,6 +302,7 @@ export class DualListComponent implements OnInit {
         });
         this.selected = [];
         this.signal.emit(this.destinationList);
+        this.dropdown.emit(this.dropdownDestination);
     }
 
     addAll() {
@@ -348,7 +349,6 @@ export class DualListComponent implements OnInit {
                 //     this.destinationDropdown.splice(ele, 1);
                 // });
             });
-            this.dropdown.emit(this.dropdownDestination);
         } else {
 
         }
@@ -372,6 +372,8 @@ export class DualListComponent implements OnInit {
         });
         this.selected = [];
         this.signal.emit(this.destinationList);
+        this.dropdown.emit(this.dropdownDestination);
+
     }
 
     removeAll() {
@@ -390,11 +392,11 @@ export class DualListComponent implements OnInit {
         this.dropdown.emit(this.dropdownDestination);
 
     }
-    ngOnDestroy() {
-        this.camFeatures = [];
-        this.features = [];
-        this.signal.emit({ type: 'destroy' });
-        this.dropdown.emit({ type: 'destroy' });
-    }
+    // ngOnDestroy() {
+    //     // this.camFeatures = [];
+    //     // this.features = [];
+    //     this.signal.emit({ type: 'destroy' });
+    //     this.dropdown.emit({ type: 'destroy' });
+    // }
 }
 

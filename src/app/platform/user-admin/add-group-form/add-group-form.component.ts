@@ -57,6 +57,8 @@ export class AddGroupFormComponent implements OnInit {
   subscription: Subscription;
   CompleteData: any[] = [];
   mainArray: any[] = [];
+  listdropdown : any[] = [];
+  listtable : any[] = [];
   listOfAssociatedUsers: any[];
   unAssignedUsers: any[];
   access = [
@@ -79,6 +81,8 @@ export class AddGroupFormComponent implements OnInit {
 
     this.data = null;
     this.confirmed = [];
+    this.listdropdown = [];
+    this.listtable = [];
     this.listOfAssociatedUsers = [];
     this.unAssignedUsers = [];
   }
@@ -197,16 +201,19 @@ export class AddGroupFormComponent implements OnInit {
 
   onListSignal(event: any) {
     console.log(event)
-    event.forEach((element) => {
+    this.listtable = event;
+    this.listtable?.forEach((element) => {
       if (!this.listGroup.includes(element)) {
         this.listGroup.push(element);
       }
     })
+    console.log("listGroup", this.listGroup)
   }
-
+  
   onDropdownSignal(ev: any) {
     console.log(ev)
-    ev.forEach((element) => {
+    this.listdropdown = ev;
+    this.listdropdown?.forEach((element) => {
       if (!this.dropDownGroup.includes(element)) {
         this.dropDownGroup.push(element);
       }
@@ -241,7 +248,7 @@ export class AddGroupFormComponent implements OnInit {
     console.log("dropDownGroup", this.dropDownGroup)
     console.log("listGroup", this.listGroup)
     console.log("confirmed", this.confirmed)
-    
+
     if (this.dropDownGroup?.length && this.listGroup?.length) {
       arry = this.listGroup.concat(this.dropDownGroup);
     }
