@@ -69,7 +69,7 @@ export class PlayBackComponent implements OnInit, OnDestroy {
   pbFilters: any;
   maxStartDate: any;
   player2: any;
-  time: any;
+  time: any = {starttime: '', endtime: ''};
   ws: WebSocket;
 
   constructor(
@@ -447,22 +447,23 @@ export class PlayBackComponent implements OnInit, OnDestroy {
     this.videoData = [];
     const ws = new WebSocket(`${environment.websocketUrl}/playback?socketId=${socketId}`);
     ws.onmessage = (event) => {
-      console.log(event.data);
-      if (event.data) {
-        this.videoData.push(event.data);
-      } else {
-        ws.close();
-        ws.onclose = () => {
-          const blob = new Blob(this.videoData, { type: "video/MP2T" });
-          const blobUrl = URL.createObjectURL(blob);
-          const downloadBtn = document.createElement("a");
-          downloadBtn.href = blobUrl;
-          downloadBtn.download = `Playback Cam-${camId} ${this.time.starttime} - ${this.time.endttime}.m2ts`;
-          downloadBtn.click();
-        };
-        this.loadingStream = false;
-        this.setDownloads();
-      }
+      this.videoData.push(event.data);
+      // if (event) {
+      // } else {
+      //   console.log(this.videoData);
+      //   ws.close();
+      // }
+    };
+
+    ws.onclose = () => {
+      const blob = new Blob(this.videoData, { type: "video/MP2T" });
+      const blobUrl = URL.createObjectURL(blob);
+      const downloadBtn = document.createElement("a");
+      downloadBtn.href = blobUrl;
+      downloadBtn.download = `Playback Cam-${camId} ${this.time.starttime} - ${this.time.endttime}.m2ts`;
+      downloadBtn.click();
+      this.loadingStream = false;
+      this.setDownloads();
     };
   }
 
@@ -593,10 +594,12 @@ export class PlayBackComponent implements OnInit, OnDestroy {
 
   onSelectDateRange(ev: any, type: any) {
     if (type === 'start') {
-      this.pbFilterForm.get('start')
-      console.log(ev, type);
+      let starttime = DateUtils.getUtcDateTimeEnd(dateFns.format(ev, 'yyyy-MM-dd HH:mm:ss'));
+      this.time['starttime'] = starttime;
+      // console.log(ev, type);
     } else {
-
+      let endtime = DateUtils.getUtcDateTimeEnd(dateFns.format(ev, 'yyyy-MM-dd HH:mm:ss'));
+      this.time['endtime'] = endtime;
     }
     this.maxStartDate = ev;
   }
