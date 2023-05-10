@@ -32,7 +32,9 @@ export class DualListComponent implements OnInit {
     lastMoveDestination: any[];
     dummyData: any[];
     mainData: any[];
+    defaultData: any[];
     dropdownId: any[] = [];
+    destinationList: any[] = [];
     generalForm: FormGroup;
 
     dropdownDestination: any[];
@@ -81,7 +83,14 @@ export class DualListComponent implements OnInit {
                 this.mainData = this.source
             }
         }
+        // if (changes['destination']) {
+        //     this.destination = changes['destination'].currentValue;
+        //     if (!!this.destination) {
+        //         this.defaultData = this.destination
+        //     }
+        // }
         this.extectData(this.mainData)
+
     }
 
     extectData(data: any): void {
@@ -93,6 +102,26 @@ export class DualListComponent implements OnInit {
                 this.features.push(element);
             }
         });
+        console.log(this.destination.length, this.destination)
+        if (this.destination.length > 0) {
+            if (!!this.destination) {
+                this.defaultData = this.destination
+            }
+            this.updateData(this.defaultData)
+        }
+    }
+    updateData(data: any): void {
+        console.log(" the data has been updated", data)
+        data.forEach(element => {
+            if (element.feature_id.includes('cam_')) {
+                this.dropdownDestination.push(element);
+            }
+            else {
+                this.destinationList.push(element);
+            }
+        });
+            
+    
     }
 
     setDefault() {
@@ -112,6 +141,7 @@ export class DualListComponent implements OnInit {
             this.signal.emit(this.destination);
         }, 100);
     }
+
 
     reload() {
         this.signal.emit({ type: 'reload' });
@@ -191,10 +221,10 @@ export class DualListComponent implements OnInit {
     }
 
     onSelectDestination(item: any, idx: number, id: number) {
-        this.destination[idx].selected = !this.destination[idx].selected;
-        this.destinationSelected = this.destination[idx].selected ? true : false;
-        if (this.destination[idx].selected) {
-            this.selected.push(this.destination[idx]);
+        this.destinationList[idx].selected = !this.destinationList[idx].selected;
+        this.destinationSelected = this.destinationList[idx].selected ? true : false;
+        if (this.destinationList[idx].selected) {
+            this.selected.push(this.destinationList[idx]);
         }
         else {
             let i = this.selected.findIndex(ele => {
@@ -243,7 +273,7 @@ export class DualListComponent implements OnInit {
                 }
                 this.generalForm.controls['camPosition']?.reset();
                 let data: any = this.camFeatures.filter((a, i) => {
-                    if (element.feature_id === a.feature_id){
+                    if (element.feature_id === a.feature_id) {
                         this.camFeatures.splice(i, 1);
                     }
                 })
@@ -252,7 +282,7 @@ export class DualListComponent implements OnInit {
         } else {
         }
         this.selected.forEach(element => {
-            this.destination.push(element);
+            this.destinationList.push(element);
             this.lastMove.push(element);
             element.selected = false;
             this.sourceSelected = false;
@@ -260,18 +290,24 @@ export class DualListComponent implements OnInit {
                 return element.id === ele.id;
             });
 
-            if (idx !== -1) {
-                this.features.splice(idx, 1);
-            }
+            // if (idx !== -1) {
+            //     this.features.splice(idx, 1);
+            // }
+
+            let data: any = this.features.filter((a, i) => {
+                if (element.feature_id === a.feature_id) {
+                    this.features.splice(i, 1);
+                }
+            })
         });
         this.selected = [];
-        this.signal.emit(this.destination);
+        this.signal.emit(this.destinationList);
     }
 
     addAll() {
         this.features.forEach(element => {
-            if (!this.destination.includes(element)) {
-                this.destination.push(element);
+            if (!this.destinationList.includes(element)) {
+                this.destinationList.push(element);
             }
             this.lastMove.push(element);
         });
@@ -283,7 +319,7 @@ export class DualListComponent implements OnInit {
         this.mainData = [];
         this.features = [];
         this.camFeatures = [];
-        this.signal.emit(this.destination);
+        this.signal.emit(this.destinationList);
         this.dropdown.emit(this.dropdownDestination);
 
     }
@@ -302,7 +338,7 @@ export class DualListComponent implements OnInit {
                 }
                 this.generalForm.controls['camDestination']?.reset();
                 let data: any = this.dropdownDestination.filter((a, i) => {
-                    if (element.feature_id === a.feature_id){
+                    if (element.feature_id === a.feature_id) {
                         this.dropdownDestination.splice(i, 1);
                     }
                 })
@@ -317,23 +353,29 @@ export class DualListComponent implements OnInit {
 
         }
         this.selected.forEach(element => {
-            this.source.push(element);
+            this.features.push(element);
             this.lastMove2.push(element);
             element.selected = false;
             this.destinationSelected = false;
-            let idx = this.destination.findIndex(ele => {
+            let idx = this.destinationList.findIndex(ele => {
                 return element.id === ele.id;
             });
-            if (idx !== -1) {
-                this.destination.splice(idx, 1);
-            }
+            // if (idx !== -1) {
+            //     this.destinationList.splice(idx, 1);
+            // }
+
+            let data: any = this.destinationList.filter((a, i) => {
+                if (element.feature_id === a.feature_id) {
+                    this.destinationList.splice(i, 1);
+                }
+            })
         });
         this.selected = [];
-        this.signal.emit(this.destination);
+        this.signal.emit(this.destinationList);
     }
 
     removeAll() {
-        this.destination.forEach(element => {
+        this.destinationList.forEach(element => {
             this.features.push(element);
             this.lastMove2.push(element);
         });
@@ -342,9 +384,9 @@ export class DualListComponent implements OnInit {
             this.lastMove2.push(element);
             // this.lastMove.push(element);
         });
-        this.destination = [];
+        this.destinationList = [];
         this.dropdownDestination = [];
-        this.signal.emit(this.destination);
+        this.signal.emit(this.destinationList);
         this.dropdown.emit(this.dropdownDestination);
 
     }

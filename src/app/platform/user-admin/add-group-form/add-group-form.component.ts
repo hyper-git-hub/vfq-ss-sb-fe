@@ -149,26 +149,21 @@ export class AddGroupFormComponent implements OnInit {
     if (this.data.group_feature_list && this.data.group_feature_list?.length > 0) {
       let featureArray = [];
       let got = [];
-      let sourceData:any = [];
-      console.log("childPush source", sourceData)
-
+      let sourceData: any = [];
       this.data.group_feature_list.forEach(element => {
         featureArray.push(element)
       });
-      console.log("featureArray", featureArray)
-      console.log("featureArray", this.data.stations)
 
       this.data.stations.forEach(child => {
         featureArray.forEach(elem => {
           if (elem === child.feature_id) {
-            const childPush = { feature_id: child.feature_id, key: child.feature_id, name: child.feature_name, station: child.feature_name };
+            const childPush = { feature_id: child.feature_id, key: child.feature_id, feature_name: child.feature_name, station: child.feature_name };
             let arr: any = [childPush]
-            arr.forEach((element:any) => {
+            arr.forEach((element: any) => {
               if (!got.includes(element)) {
                 got.push(element)
               }
             })
-           
           } else {
             // const childPush = { feature_id: child.feature_id, key: child.feature_id, name: child.feature_name, station: child.feature_name };
             // let arr: any[] = [childPush]
@@ -177,20 +172,21 @@ export class AddGroupFormComponent implements OnInit {
             //     sourceData.push(element)
             //   }
             // })
-            
           }
-          
         })
         sourceData.push(child)
-
       })
-
-      console.log("childPush", got)
+      got.forEach(element => {
+        let data: any = sourceData.filter((a, i) => {
+          if (element.feature_id === a.feature_id) {
+            sourceData.splice(i, 1);
+          }
+        })
+      })
       console.log("childPush source", sourceData)
-
       this.confirmed = got;
       this.stations = sourceData;
-      this.sendData = this.stations
+      this.sendData = sourceData;
       this.initListBox();
     }
   }
@@ -199,23 +195,23 @@ export class AddGroupFormComponent implements OnInit {
     return item.station;
   }
 
-  onListSignal(ev: any) {
-    ev.forEach((element) => {
+  onListSignal(event: any) {
+    console.log(event)
+    event.forEach((element) => {
       if (!this.listGroup.includes(element)) {
         this.listGroup.push(element);
       }
     })
-
   }
+
   onDropdownSignal(ev: any) {
-
-
+    console.log(ev)
     ev.forEach((element) => {
       if (!this.dropDownGroup.includes(element)) {
         this.dropDownGroup.push(element);
       }
     })
-
+    console.log("Drop", this.dropDownGroup)
   }
 
   getGroupData(mainArray) {
@@ -241,8 +237,17 @@ export class AddGroupFormComponent implements OnInit {
 
   onSubmitAddGroup(formvalues) {
     this.submitted = true;
-    let arry: any[] = this.listGroup.concat(this.dropDownGroup);
+    let arry: any[] = [];
+    console.log("dropDownGroup", this.dropDownGroup)
+    console.log("listGroup", this.listGroup)
+    console.log("confirmed", this.confirmed)
+    
+    if (this.dropDownGroup?.length && this.listGroup?.length) {
+      arry = this.listGroup.concat(this.dropDownGroup);
+    }
+
     this.selectedGroups = arry;
+    console.log("selectedGroups", this.selectedGroups)
     if (this.addGroupForm.invalid) { //this.validate() || this.groupForm.invalid
       return;
     }
@@ -307,11 +312,14 @@ export class AddGroupFormComponent implements OnInit {
       "status": 1
     }
 
+    console.log("update", dataToSendEdit);
+
     let finalesectedGroup: any = [];
 
     this.selectedGroups.forEach(element => {
-      finalesectedGroup.push(element.id)
+      finalesectedGroup.push(element.feature_id)
     });
+    console.log("selectedGroups", this.selectedGroups)
 
     // dataToSendEdit['users'] = this.getIdsFromJSONArray(this.selectedGroups);
     let dataToSendUnAssign = {

@@ -61,8 +61,8 @@
             [value]="item" >{{ item.feature_name }}
         </ng-option>
     </ng-select>
-        <ng-container *ngFor="let item of destination; let idx=index">
-            <div class="item" [class.selected-item]="destination[idx]?.selected"
+        <ng-container *ngFor="let item of destinationList; let idx=index">
+            <div class="item" [class.selected-item]="destinationList[idx]?.selected"
                 (click)="onSelectDestination(item, idx, item.id)">
                 {{item.feature_name}}</div>
         </ng-container>
