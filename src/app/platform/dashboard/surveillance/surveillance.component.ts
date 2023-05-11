@@ -25,6 +25,7 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
   devices: any[];
   cameraFeatures: any[];
   viewCounts: any[];
+  downloadCounts: any[];
   building: any[] = [];
   cardDetails: any = {};
   floor: any[] = [];
@@ -295,21 +296,20 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
       if (resp['data'] && resp['data'].data && resp['data'].data.length > 0) {
         this.building = resp['data'].data;
         this.selectedBuilding.setValue(this.building[0].id);
-        this.getDashboardSliderCards(this.building[0].id)
+        this.getDashboardSliderCards(this.building[0].id);
       }
     });
   }
 
   getDashboardSliderCards(ev?: any) {
     this.cardsLoading = true;
-    const slug = `${environment.baseUrlSB}${ports.monolith}/building/building_detail/?id=${ev}`;
-    this.apiService.get(slug).subscribe((data: any) => {
-      if (data['data'] && data['data'] && data['data'].data.length > 0) {
-        let dt = data['data'].data[0];
-        let floors = dt.floors.length;
-        this.totalFloors = floors > 1 ? `${floors} Floors` : `${floors} Floor`;
-        this.sliderArray = dt.building_devices;
-      }
+    // const slug = `${environment.baseUrlSB}${ports.monolith}/building/building_detail/?id=${ev}`;
+    const slug = `${environment.baseUrlDashboard}${ports.monolith}/analytics/cards?dashboard_id=${this.pageIdForGraph}&card_id=DSTC&building_id=${ev}`;
+    this.apiService.get(slug).subscribe((resp: any) => {
+      let dt = resp.data[0]['data'];
+      let floors = dt[0] && dt[0]?.floors ? dt[0].floors : '';
+      this.totalFloors = floors > 1 ? `${floors} Floors` : `${floors} Floor`;
+      this.sliderArray = dt;
       this.cardsLoading = false;
     }, (err: any) => {
       this.cardsLoading = false;
@@ -411,6 +411,7 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
 
       if (!!this.camIds && this.camIds !== '') {
         this.getCameraViews();
+        this.getCameraDownloads();
       } else {
         this.loading = false;
         this.toastr.info('No camera device assigned to this customer');
@@ -418,6 +419,31 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
     }, (err: any) => {
       this.loading = false;
       this.toastr.error(err.error['message'], 'Error getting cameras');
+    });
+  }
+
+  getCameraDownloads() {
+    this.loading = true;
+    let url = new URL(`${environment.baseUrlSB}/building/downloads/`);
+    url.searchParams.set('camera_ids', this.camIds);
+    url.searchParams.set('guid', this.userGuid);
+    // url.searchParams.set('type', 'mobile');
+
+    this.apiService.get(url.href).subscribe((resp: any) => {
+      this.downloadCounts = resp.data.data;
+
+      this.downloadCounts.forEach((element: any, idx) => {
+        this.devices.forEach(dev => {
+          if (element.camera_name === dev.device) {
+            dev['download_count'] = element['user_count'];
+          }
+        });
+      });
+
+      this.loading = false;
+    }, (err: any) => {
+      this.loading = false;
+      this.toastr.error(err.error['message'], '');
     });
   }
 
