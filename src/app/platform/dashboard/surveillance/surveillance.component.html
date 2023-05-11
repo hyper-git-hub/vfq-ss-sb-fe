@@ -62,7 +62,7 @@
             <div class="row no-space">
                 <div class="col-md-3" style="margin-bottom: 10px;">
                     <div class="vertical-align text-center relative h-150 bg-white">
-                        <div class="vertical-align-middle">
+                        <div class="vertical-align-middle w-100-p pl-12">
                             <div class="counter-label mb-0">
                                 <ng-select placeholder="Building" (change)="getDashboardSliderCards($event)" [clearable]="false"
                                     [formControl]="selectedBuilding">
@@ -94,14 +94,14 @@
 
                                     <div class="h-80 p-16 pt-0" fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="space-between center">
                                         <div fxFlex fxLayout="column" class="text-center">
-                                            <div class="fs-24 fw-550 text-center white" style="margin-top: -18px;">{{card?.device_type__count}}</div>
+                                            <div class="fs-24 fw-550 text-center white" style="margin-top: -18px;">{{card?.total}}</div>
                                         </div>
                                     </div>
-                                    <!-- <div class="h-24 p-16 pt-0" fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="space-between center">
+                                    <div class="h-24 p-16 pt-0" fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="space-between center">
                                         <div fxFlex fxLayout="column" class="text-center">
-                                            <div class="fs-12 fw-550 text-center white" style="margin-top: -16px; background: #B90303 !important;">25 Online</div>
+                                            <div class="fs-12 fw-550 text-center white" style="margin-top: -16px; background: #B90303 !important;">{{['0', 0].includes(card.online) ? '0' : card.online }} Online</div>
                                         </div>
-                                    </div> -->
+                                    </div>
                                 </div>
                             </ng-container>
                         </div>
@@ -173,13 +173,14 @@
                                         </ng-template>
                                         </li> -->
         
-                                        <!-- <li class="pr-8">
-                                            <a [ngbPopover]="popContent" [popoverTitle]="popTitle" popoverClass="pb" placement="bottom">
+                                        <li class="pr-8">
+                                            <!-- [ngbPopover]="popContent" [popoverTitle]="popTitle" -->
+                                            <a  popoverClass="pb" placement="bottom">
                                                 <i class="ri-download-fill download">
-                                                    <span style="margin-bottom: 20px;">&nbsp;{{item.downloads['count']}}</span>
+                                                    <span style="margin-bottom: 20px;">&nbsp;{{cam['download_count']}}</span>
                                                 </i>
                                             </a>
-                                            <ng-template #popTitle>
+                                            <!-- <ng-template #popTitle>
                                                 <div class="w-100" fxLayoutAlign="space-between center">
                                                     <div>Download</div>
                                                     <div class="download-title">{{item.downloads['count']}}</div>
@@ -192,8 +193,8 @@
                                                         <hr *ngIf="!last" style="margin: 2px 0; padding: 0 4px;">
                                                     </ng-container>
                                                 </div>
-                                            </ng-template>
-                                        </li> -->
+                                            </ng-template> -->
+                                        </li>
         
                                         <li>
                                             <!-- [ngbPopover]="popContent1" [popoverTitle]="popTitle1" -->
