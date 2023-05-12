@@ -116,8 +116,6 @@ export class LivefeedformComponent implements OnInit {
   }
 
 
-
-
   ngOnInit(): void {
     this.getCameraDevices();
     this.addNewAddressGroup();
@@ -130,9 +128,11 @@ export class LivefeedformComponent implements OnInit {
         { id: '3', name: 'View 3' },
         { id: '4', name: 'View 4' },
       ];
-      this.addNewAddressGroup();
-      this.addNewAddressGroup();
-      this.addNewAddressGroup();
+      for(let i=1; i<this.viewList.length; i++)
+      {
+        this.addNewAddressGroup();
+      }
+    
       this.addNewAddressGroupEdit();
 
     }
@@ -148,22 +148,17 @@ export class LivefeedformComponent implements OnInit {
         { view_no: '8', name: 'View 8' },
         { view_no: '9', name: 'View 9' }
       ];
-      this.addNewAddressGroup();
-      this.addNewAddressGroup();
-      this.addNewAddressGroup();
-      this.addNewAddressGroup();
-      this.addNewAddressGroup();
-      this.addNewAddressGroup();
-      this.addNewAddressGroup();
-      this.addNewAddressGroup();
+
+      for(let i=1; i<this.viewList.length; i++)
+      {
+        this.addNewAddressGroup();
+      }
 
       this.addNewAddressGroupEdit();
       this.addNewAddressGroupEdit();
       this.addNewAddressGroupEdit();
       this.addNewAddressGroupEdit();
       this.addNewAddressGroupEdit();
-
-
     }
   }
 
