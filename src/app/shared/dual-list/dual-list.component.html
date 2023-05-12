@@ -1,4 +1,4 @@
-<div class="card h-140 w-100-p dual-list" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="space-between center"
+<div class="card h-240 w-100-p dual-list" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="space-between center"
     style=" border: none;"  [formGroup]="generalForm" >
     <div class="card" fxFlex="45" fxLayout="column" style="height: 100%; border: 1px solid rgba(0,0,0,.125) !important; overflow: auto;">
 
@@ -17,13 +17,13 @@
     </div>
 
     <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="4px">
-        <a class="btn btn-icon p-0 list-btn" [class.disabled]="disabled" (click)="reload()">
+        <!-- <a class="btn btn-icon p-0 list-btn" [class.disabled]="disabled" (click)="reload()">
             <span class="material-icons" ngbTooltip="Restore">
                 restore
             </span>
-        </a>
+        </a> -->
 
-        <a class="btn btn-icon p-0 list-btn" (click)="addAll()" [class.disabled]="source?.length === 0 || disabled">
+        <a class="btn btn-icon p-0 list-btn" (click)="addAll()" [class.disabled]="(camFeatures?.length === 0 && features?.length === 0) || disabled">
             <span class="material-icons" ngbTooltip="Add All">
                 chevron_right
             </span>
@@ -46,7 +46,7 @@
         </a>
 
         <a class="btn btn-icon p-0 list-btn" (click)="removeAll()"
-            [class.disabled]="destination?.length === 0 || disabled">
+            [class.disabled]=" (destinationList?.length === 0 && dropdownDestination?.length === 0) || disabled">
             <span class="material-icons" ngbTooltip="Unselect All">
                 chevron_left
             </span><span class="material-icons" style="margin-left: -18px;" ngbTooltip="Unselect All">

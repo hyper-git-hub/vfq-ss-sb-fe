@@ -29,6 +29,8 @@ export class DualListComponent implements OnInit {
     camFeatures: any[] = [];
     lastMove: any[];
     lastMove2: any[] = [];
+    lastModeDrop: any[] = [];
+    lastModeDrop2: any[] = [];
     lastMoveDestination: any[];
     dummyData: any[];
     mainData: any[];
@@ -102,7 +104,6 @@ export class DualListComponent implements OnInit {
                 this.features.push(element);
             }
         });
-        console.log(this.destination.length, this.destination)
         if (this.destination.length > 0) {
             if (!!this.destination) {
                 this.defaultData = this.destination
@@ -111,7 +112,6 @@ export class DualListComponent implements OnInit {
         }
     }
     updateData(data: any): void {
-        console.log(" the data has been updated", data)
         data.forEach(element => {
             if (element.feature_id.includes('cam_')) {
                 this.dropdownDestination.push(element);
@@ -120,8 +120,8 @@ export class DualListComponent implements OnInit {
                 this.destinationList.push(element);
             }
         });
-            
-    
+
+
     }
 
     setDefault() {
@@ -144,34 +144,67 @@ export class DualListComponent implements OnInit {
 
 
     reload() {
-        this.signal.emit({ type: 'reload' });
-        // if (this.lastMove.length > 0)
-        // {
-        //     this.lastMove.forEach(element =>
-        //     {
-        //         let idx = this.destination.findIndex(ele => {
-        //             return element.id === ele.id;
-        //         });
+        // this.signal.emit({ type: 'reload' });
+        // List Values 
+        if (this.lastMove?.length > 0) {
+            this.lastMove.forEach(element => {
+                let idx = this.destinationList.findIndex(ele => {
+                    return element.feature_id === ele.feature_id;
+                });
+                this.destinationList.splice(idx, 1);
+                if(!this.features.includes(element)){
+                    this.features.push(element);
+                }
+                this.lastMove2.push(element);
+            });
+            this.lastMove = [];
+        } else
+        if (this.lastMove2?.length > 0) {
+            this.lastMove2.forEach(element => {
+                let idx = this.features.findIndex(ele => {
+                    return element.feature_id === ele.feature_id;
+                });
 
-        //         this.destination.splice(idx, 1);
-        //         this.source.push(element);
-        //     });
-        // }
-        // this.lastMove = [];
+                this.features.splice(idx, 1);
+                if(!this.destinationList.includes(element)) {
+                    this.destinationList.push(element);
+                }
+                this.lastMove.push(element);
+            });
+            this.lastMove2 = [];
+        }
 
-        // if (this.lastMove2.length > 0)
-        // {
-        //     this.lastMove2.forEach(element =>
-        //     {
-        //         let idx = this.source.findIndex(ele => {
-        //             return element.id === ele.id;
-        //         });
+        // Drop Down list 
+        if (this.lastModeDrop?.length > 0) {
+            this.lastModeDrop.forEach(element => {
+                let idx = this.dropdownDestination.findIndex(ele => {
+                    return element.feature_id === ele.feature_id;
+                });
+                this.dropdownDestination.splice(idx, 1);
+                if(!this.camFeatures.includes(element)){
+                    this.camFeatures.push(element);
+                }
+                this.lastModeDrop2.push(element);
+            });
+         
+            this.lastModeDrop = [];
+        }
+        else if (this.lastModeDrop2?.length > 0) {
+            this.lastModeDrop2.forEach(element => {
+                let idx = this.camFeatures.findIndex(ele => {
+                    return element.feature_id === ele.feature_id;
+                });
 
-        //         this.source.splice(idx, 1);
-        //         this.destination.push(element);
-        //     });
-        // }
-        // this.lastMove2 = [];
+                this.camFeatures.splice(idx, 1);
+                if(!this.dropdownDestination.includes(element)) {
+                    this.dropdownDestination.push(element);
+                }
+                this.lastModeDrop2.push(element);
+            });
+            this.lastModeDrop2 = [];
+        }
+
+
     }
     onSelectType(event: any): void {
         let arr: any[] = [];
@@ -270,14 +303,21 @@ export class DualListComponent implements OnInit {
                 this.sourceSelected = false;
                 if (!this.dropdownDestination.includes(element)) {
                     this.dropdownDestination.push(element);
+
                 }
+
+                if (!this.lastModeDrop.includes(element)) {
+                    this.lastModeDrop.push(element);
+
+                }
+
                 this.generalForm.controls['camPosition']?.reset();
                 let data: any = this.camFeatures.filter((a, i) => {
                     if (element.feature_id === a.feature_id) {
                         this.camFeatures.splice(i, 1);
                     }
                 })
-                
+
             });
         } else {
         }
@@ -289,10 +329,6 @@ export class DualListComponent implements OnInit {
             let idx = this.features.findIndex(ele => {
                 return element.id === ele.id;
             });
-
-            // if (idx !== -1) {
-            //     this.features.splice(idx, 1);
-            // }
 
             let data: any = this.features.filter((a, i) => {
                 if (element.feature_id === a.feature_id) {
@@ -316,6 +352,7 @@ export class DualListComponent implements OnInit {
             if (!this.dropdownDestination.includes(element)) {
                 this.dropdownDestination.push(element);
             }
+            this.lastModeDrop.push(element);
         });
         this.mainData = [];
         this.features = [];
@@ -336,6 +373,9 @@ export class DualListComponent implements OnInit {
                 this.destinationSelected = false;
                 if (!this.camFeatures.includes(element)) {
                     this.camFeatures.push(element);
+                }
+                if (!this.lastModeDrop2.includes(element)) {
+                    this.lastModeDrop2.push(element);
                 }
                 this.generalForm.controls['camDestination']?.reset();
                 let data: any = this.dropdownDestination.filter((a, i) => {
@@ -378,12 +418,16 @@ export class DualListComponent implements OnInit {
 
     removeAll() {
         this.destinationList.forEach(element => {
-            this.features.push(element);
+            if(!this.features.includes(element)){
+                this.features.push(element);
+            }
             this.lastMove2.push(element);
         });
         this.dropdownDestination.forEach(element => {
-            this.camFeatures.push(element);
-            this.lastMove2.push(element);
+            if(!this.camFeatures.includes(element)){
+                this.camFeatures.push(element);
+            }
+            this.lastModeDrop2.push(element);
             // this.lastMove.push(element);
         });
         this.destinationList = [];
@@ -392,11 +436,6 @@ export class DualListComponent implements OnInit {
         this.dropdown.emit(this.dropdownDestination);
 
     }
-    // ngOnDestroy() {
-    //     // this.camFeatures = [];
-    //     // this.features = [];
-    //     this.signal.emit({ type: 'destroy' });
-    //     this.dropdown.emit({ type: 'destroy' });
-    // }
+
 }
 

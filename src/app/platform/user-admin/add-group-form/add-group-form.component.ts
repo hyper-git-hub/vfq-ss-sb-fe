@@ -119,7 +119,6 @@ export class AddGroupFormComponent implements OnInit {
   }
 
   openEdit() {
-    console.log(this.data)
     this.selectedGroupToEdit = this.data;
     this.selectedGroups = [];
 
@@ -187,7 +186,6 @@ export class AddGroupFormComponent implements OnInit {
           }
         })
       })
-      console.log("childPush source", sourceData)
       this.confirmed = got;
       this.stations = sourceData;
       this.sendData = sourceData;
@@ -200,25 +198,21 @@ export class AddGroupFormComponent implements OnInit {
   }
 
   onListSignal(event: any) {
-    console.log(event)
     this.listtable = event;
     this.listtable?.forEach((element) => {
       if (!this.listGroup.includes(element)) {
         this.listGroup.push(element);
       }
     })
-    console.log("listGroup", this.listGroup)
   }
   
   onDropdownSignal(ev: any) {
-    console.log(ev)
     this.listdropdown = ev;
     this.listdropdown?.forEach((element) => {
       if (!this.dropDownGroup.includes(element)) {
         this.dropDownGroup.push(element);
       }
     })
-    console.log("Drop", this.dropDownGroup)
   }
 
   getGroupData(mainArray) {
@@ -245,16 +239,13 @@ export class AddGroupFormComponent implements OnInit {
   onSubmitAddGroup(formvalues) {
     this.submitted = true;
     let arry: any[] = [];
-    console.log("dropDownGroup", this.dropDownGroup)
-    console.log("listGroup", this.listGroup)
-    console.log("confirmed", this.confirmed)
+
 
     if (this.dropDownGroup?.length && this.listGroup?.length) {
       arry = this.listGroup.concat(this.dropDownGroup);
     }
 
     this.selectedGroups = arry;
-    console.log("selectedGroups", this.selectedGroups)
     if (this.addGroupForm.invalid) { //this.validate() || this.groupForm.invalid
       return;
     }
@@ -319,14 +310,12 @@ export class AddGroupFormComponent implements OnInit {
       "status": 1
     }
 
-    console.log("update", dataToSendEdit);
 
     let finalesectedGroup: any = [];
 
     this.selectedGroups.forEach(element => {
       finalesectedGroup.push(element.feature_id)
     });
-    console.log("selectedGroups", this.selectedGroups)
 
     // dataToSendEdit['users'] = this.getIdsFromJSONArray(this.selectedGroups);
     let dataToSendUnAssign = {
