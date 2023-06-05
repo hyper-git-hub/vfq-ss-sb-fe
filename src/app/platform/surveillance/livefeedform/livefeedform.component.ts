@@ -363,6 +363,7 @@ export class LivefeedformComponent implements OnInit {
   }
   camList = [];
   onViewSelect(ev: any) {
+    this.final = [];
     this.selectedViewID = ev.id;
     this.selectedViewName = ev.view_name;
     // console.log(" The Selected Area ", ev);
