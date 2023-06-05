@@ -3,26 +3,31 @@
     <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
 </div>
 
-<div class="modal-body h-430 pos-relative">
-    <iframe *ngIf="rtsp" [src]="rtsp" height="100%" width="100%" frameborder="0" scrolling='no'
-        allowfullscreen='allowfullscreen'>
-    </iframe>
+<img *ngIf="loading" src="/assets/images/block-loader.gif" class="loader" alt="Loading" width="150px" height="150px">
 
-    <div class="w-126 h-126 pos-absolute bottom-16 right-16" style="background: #282828">
-        <div class="white px-6 py-0">
-            <label for="zoom" class="mb-0">Zoom</label>
-            <input type="range" id="zoom" min="0" max="2" value="1" class="slider">
-        </div>
-        <div class="w-72 h-72" fxLayout="row wrap">
-            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-left-up-fill"></i></div>
-            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-up-fill"></i></div>
-            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-right-up-fill"></i></div>
-            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-left-fill"></i></div>
-            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"></div>
-            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-right-fill"></i></div>
-            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-left-down-fill"></i></div>
-            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-down-fill"></i></div>
-            <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"><i class="ri-arrow-right-down-fill"></i></div>
+<div class="modal-body p-8 h-100-p pos-relative" style="min-height: 100%">
+    <!-- <iframe *ngIf="rtsp" [src]="rtsp" height="100%" width="100%" frameborder="0" scrolling='no'
+        allowfullscreen='allowfullscreen'>
+    </iframe> -->
+    <canvas [id]="cameraId" style="width: 100%; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"> </canvas>
+
+    <div class="w-104 h-142 pos-absolute bottom-10 right-10 control-center">
+        <div class="w-100-p h-100-p controls round" style="background: #282828">
+            <div class="white px-6 py-0">
+                <label for="zoom" class="mb-0">Zoom {{zoomLevel == '1' ? 'In' : 'Out'}}</label>
+                <input type="range" id="zoom" min="1" max="2" value="1" class="slider" (change)="onZoomCamera($event, cameraId)">
+            </div>
+            <div class="w-96 h-96 white" fxLayout="row wrap" style="margin-left: 4px">
+                <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('5', cameraId)" fxLayoutAlign="center center"><i class="ri-arrow-left-up-fill"></i></div>
+                <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('1', cameraId)" fxLayoutAlign="center center"><i class="ri-arrow-up-fill"></i></div>
+                <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('7', cameraId)" fxLayoutAlign="center center"><i class="ri-arrow-right-up-fill"></i></div>
+                <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('3', cameraId)" fxLayoutAlign="center center"><i class="ri-arrow-left-fill"></i></div>
+                <div class="w-33-p h-17 tilt-icon" fxLayoutAlign="center center"></div>
+                <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('4', cameraId)" fxLayoutAlign="center center"><i class="ri-arrow-right-fill"></i></div>
+                <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('6', cameraId)" fxLayoutAlign="center center"><i class="ri-arrow-left-down-fill"></i></div>
+                <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('2', cameraId)" fxLayoutAlign="center center"><i class="ri-arrow-down-fill"></i></div>
+                <div class="w-33-p h-17 tilt-icon pointer" (click)="moveCamera('8', cameraId)" fxLayoutAlign="center center"><i class="ri-arrow-right-down-fill"></i></div>
+            </div>
         </div>
     </div>
 </div>

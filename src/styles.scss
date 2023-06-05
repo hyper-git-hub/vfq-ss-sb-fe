@@ -39,6 +39,17 @@ body {
   height: 100%;
 }
 
+.modal-xlhw {
+  max-width: 1200px !important;
+  height: 88%;
+  // min-width: ;
+
+  .modal-content {
+    height: inherit;
+    min-height: 100%;
+  }
+}
+
 .onoffswitch {
   position: relative;
   width: 50px;
