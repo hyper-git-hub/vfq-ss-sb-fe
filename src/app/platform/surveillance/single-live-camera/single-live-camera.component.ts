@@ -29,7 +29,9 @@ export class SingleLiveCameraComponent implements OnInit, OnDestroy {
   customerid: any;
   camerasData: any[];
   loading: boolean;
-  cameraid: any
+  cameraId: any
+
+  zoomLevel: any;
 
   urlPort = ports;
 
@@ -69,81 +71,15 @@ export class SingleLiveCameraComponent implements OnInit, OnDestroy {
       },
     ]
 
-    this.urlLinks = [
-      {
-        id: 1,
-        camera: 'One',
-        viewCount: 10,
-        downloadCount: 19,
-        // url: 'http://20.103.238.54:94/liveserver/654/out.m3u8'
-      },
-      {
-        id: 2,
-        camera: 'Two',
-        viewCount: 10,
-        downloadCount: 19,
-        // url: 'http://20.103.238.54:94/liveserver/654/out.m3u8'
-      },
-      {
-        id: 3,
-        camera: 'Three',
-        viewCount: 10,
-        downloadCount: 19,
-        // url: 'http://20.103.238.54:94/liveserver/654/out.m3u8'
-      },
-    ]
-
     this.livefeed = this.formBuilder.group({
       first_name: [null],
     });
-
-    this.camerasData = [
-      {
-        imageURL: './assets/images/cctv.png',
-        downloadCount: 19,
-        viewCount: 10,
-        cameraName: 'Camera 1',
-        name: 'Asad',
-      },
-      {
-        imageURL: './assets/images/cctv.png',
-        downloadCount: 19,
-        viewCount: 10,
-        cameraName: 'Camera 2',
-        name: 'Ali ',
-      },
-    ]
-
-    this.building = [
-      { id: 1, name: 'building 1' },
-      { id: 2, name: 'building 2' },
-    ];
-
-    this.camera = [
-      { id: 1, name: 'camera 1' },
-      { id: 2, name: 'camera 2' },
-    ];
-    this.hallways = [
-      { id: 1, name: 'Hallways' },
-      { id: 2, name: 'Lobby' },
-      { id: 2, name: 'Stairs' },
-    ];
   }
 
   ngOnInit(): void {
-    this.getuserprefrence();
-    this.runCameras();
+    // this.runCameras();
+    this.playCameras(this.cameraId);
     // this.getCameraDetails(this.detailFilters);
-  }
-
-  getuserprefrence() {
-    this.views = null;
-    const slug = `${environment.baseUrlSS}/user-preference?guid=${this.userGuid}`;
-    this.apiService.get(slug).subscribe((resp: any) => {
-      this.views = resp.data;
-    }, (err: any) => {
-      this.toastr.error(err.error['message'], 'Error getting layout preferances');
-    });
   }
 
   runCameras() {
@@ -157,46 +93,57 @@ export class SingleLiveCameraComponent implements OnInit, OnDestroy {
     });
   }
 
-  getCameraDetails(filters: any): void {
-    this.camerasData = [];
-    let url = new URL(`${environment.baseUrlSS}/manage-camera`);
-    for (const key in filters) {
-      if (!!filters[key]) {
-        url.searchParams.set(key, filters[key]);
-      }
-    }
-    // let params = `customer_id=${this.customerid}&live=${true}&guid=${this.userGuid}`;
-    // this.userservice.getCameraDetail(params, this.urlPort.monolith)
-    // const url = `${environment.baseUrlSS}/manage-camera?customer_id=${this.customerid}&live=${true}&guid=${this.userGuid}`
-    this.apiService.get(url.href).subscribe((resp: any) => {
-      const dt = resp.data;
-      this.cameraid = dt.map(t => t.id);
-      dt.forEach(element => {
-        this.camerasData.push({
-          camera_name: element.camera_name,
-          camera_id: element.camera_id,
-          url: `https://dev.gateway.iot.vodafone.com.qa/ss-camera/liveserver/${element.camera_id}/out.m3u8`,
-          views: element.views,
-          downloads: element.downloads
-        });
-      });
-      //  this.loading = false;
-
+  playCameras(cameraID: any = 'CAM1') {
+    let url = new URL(`${environment.baseUrlLiveStream}/camera/stream`);
+    let payload = { ip_address: '51.144.150.199', camera_id: cameraID };
+    this.apiService.post(url.href, payload).subscribe((resp: any) => {
+      this.setupSocket(resp['socket_port'], cameraID);
     }, (err: any) => {
-      //  this.loading = false;
+      this.toastr.error(err.error['message'], 'Unable to play camera stream');
     });
   }
 
-  updateLayout(value: any) {
-    let payload = { layout: value };
-    // let params = `guid=${this.userGuid}`;
-    // this.userservice.saveViews(payload, params, this.urlPort.monolith).subscribe((data: any) => {
-    const slug = `${environment.baseUrlSS}/user-preference?guid=${this.userGuid}`;
-    this.apiService.patch(slug, payload).subscribe((resp: any) => {
-      this.toastr.success(resp.message, '');
-      this.getuserprefrence();
-    }, err => {
-      this.toastr.error(err.error.message, 'Error updating layout');
+  setupSocket(port: any, device: any) {
+    setTimeout(() => {
+      let url = `${environment.websocketUrl}/?cameraId=${device}`;
+      // let url = `ws://node-js-live-stream.appservices.hypernymbiz.com:4400/test?cameraId=CAM1`;
+      // let url = `wss://staging.gateway.iot.vodafone.com.qa/sb_node_live_stream:443`;
+      // let idx = this.devices.findIndex(ele => {
+      //   return ele.device === device;
+      // });
+      // @ts-ignore JSMpeg defined via script
+      // let player = new JSMpeg.VideoElement("#video-canvas", url)
+      var canvas = document.getElementById(device);
+      // @ts-ignore JSMpeg defined via script
+      this.player2 = new JSMpeg.Player(url, { canvas: canvas });
+    }, 1000);
+  }
+
+  moveCamera(ev: any, camId: any) {
+    this.loading = true;
+    const slug = `${environment.baseUrlStreaming}/surveillance/cameraptz/`;
+    let payload = { stepY: '1', direct: ev, stepX: '1', command: '1', camera_id: camId };
+
+    this.apiService.post(slug, payload).subscribe((resp: any) => {
+      this.loading = false;
+    }, (err: any) => {
+      this.loading = false;
+      this.toastr.error(err.error['message'], 'Unable to move camera');
+    });
+  }
+
+  onZoomCamera(ev: any, camId: any) {
+    let zoomLevel = ev.target.value;
+    this.zoomLevel = ev.target.value;
+    this.loading = true;
+    const slug = `${environment.baseUrlStreaming}/surveillance/cameraptz/`;
+    let payload = { direct: zoomLevel, command: "1", step: "1", camera_id: camId };
+
+    this.apiService.post(slug, payload).subscribe((resp: any) => {
+      this.loading = false;
+    }, (err: any) => {
+      this.loading = false;
+      this.toastr.error(err.error['message'], `Unable to zoom ${zoomLevel == '1' ? 'in' : 'out'}`);
     });
   }
 

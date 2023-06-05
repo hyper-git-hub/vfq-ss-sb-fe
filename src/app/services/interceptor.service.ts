@@ -91,11 +91,13 @@ export class InterceptorService implements HttpInterceptor {
           //   timeOut: 3000,
           // })
         } else if (err.status === 500) {
-          this.toastr.error('Something went wrong', '', {
-            progressBar: true,
-            progressAnimation: "decreasing",
-            timeOut: 3000,
-          })
+          if (!req.url.includes('https://staging.gateway.iot.vodafone.com.qa/live-stream/camera/stream')) {
+            this.toastr.error('Something went wrong', '', {
+              progressBar: true,
+              progressAnimation: "decreasing",
+              timeOut: 3000,
+            })
+          }
         } else if (err.status === 400) {
           // this.toastr.error('Something went wrong', '', {
           //   progressBar: true,

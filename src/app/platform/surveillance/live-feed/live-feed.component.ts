@@ -303,6 +303,10 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
       this.devices = this.final;
 
     }
+
+    this.devices.forEach(ele => {
+      this.playCameras(ele.device);
+    })
     this.getCameraViews();
     this.getCameraDownloads();
 
@@ -311,9 +315,6 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
   getCameraViews() {
     this.loading = true;
     let url = new URL(`${environment.baseUrlSB}/building/views/`);
-    if (this.camIds != '') {
-      url.searchParams.set('camera_ids', this.camIds);
-    }
     if (this.camIds != '') {
       url.searchParams.set('camera_ids', this.camIds);
     }
@@ -335,9 +336,8 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
       this.toastr.error(err.error['message'], '');
     });
   }
-  getCameraViewsforDisplay(cam_id) {
-    
 
+  getCameraViewsforDisplay(cam_id) {
     this.loading = true;
     let url = new URL(`${environment.baseUrlSB}/building/views/`);
     if (cam_id != '') {
@@ -411,7 +411,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     this.apiService.post(url.href, payload).subscribe((resp: any) => {
       this.setupSocket(resp['socket_port'], cameraID);
     }, (err: any) => {
-      this.toastr.error(err.error['message']);
+      this.toastr.error(err.error['message'], 'Unable to play camera stream');
     });
   }
 
@@ -510,24 +510,25 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     const options: NgbModalOptions = { size: 'sm', scrollable: true };
     const dialogRef = this.dialog.open(LivefeedformComponent, options);
     dialogRef.componentInstance.title = 'Add View';
+    dialogRef.componentInstance.catagory = 'add';
     dialogRef.componentInstance.data = this.views;
     dialogRef.componentInstance.data1 = this.viewsDevices;
-    dialogRef.componentInstance.passEntry.subscribe((receivedEntry) => {
-      // console.log(receivedEntry);
-      this.newdisplay = receivedEntry;
-    })
-    // dialogRef.closed.subscribe((result) => {
-    // this.getCameraDevices();
+    // dialogRef.componentInstance.passEntry.subscribe((receivedEntry) => {
+    //   // console.log(receivedEntry);
+    //   this.newdisplay = receivedEntry;
     // })
-    dialogRef.componentInstance.catagory = 'add';
+    dialogRef.closed.subscribe((result) => {
+      this.getDisplay();
+    })
 
   }
 
   openSingleCamera(ev: any) {
-    const options: NgbModalOptions = { size: 'lg', scrollable: false };
+    const options: NgbModalOptions = { size: 'xlhw', scrollable: false };
     const dialogRef = this.dialog.open(SingleLiveCameraComponent, options);
 
     dialogRef.componentInstance.title = ev.device_name ? ev.device_name : ev.device;
+    dialogRef.componentInstance.cameraId = ev.device;
   }
 
   ngOnDestroy(): void {

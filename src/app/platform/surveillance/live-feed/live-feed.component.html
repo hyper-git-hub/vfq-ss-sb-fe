@@ -9,7 +9,7 @@
             </div>
 
             <div fxFlex="80" fxLayout="row" fxLayoutGap="2px" fxLayoutAlign="end start">
-             <ng-select placeholder="Select View" (change)="onChangeView($event)" [clearable]="false" [formControl]="camView">
+                <ng-select class="w-15-p" placeholder="Select View" (change)="onChangeView($event)" [clearable]="false" [formControl]="camView">
                     <ng-option *ngFor="let item of displayData"  [value]="item.id">
                         {{item.view_name}}
                     </ng-option>
@@ -27,7 +27,8 @@
                     <div *ngFor="let item of devices; let i = index" class="h-300 mb-8" 
                         [ngClass]="views.layout === 2 ? 'col-md-6' : views.layout === 3 ? 'col-md-4' : 'col-md-3'">
 
-                        <canvas [id]="item.id" style="width: 100%; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"> </canvas>
+                        <canvas [id]="item.id" style="width: 100%; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"
+                            (click)="openSingleCamera(item);"> </canvas>
 
                         <!-- <video *ngIf="rtsp" id="test_video" controls [autoplay]="true">
                             <source [src]="rtsp">
@@ -132,7 +133,6 @@
                         <div class="camera-name">
                             {{item.device_name ? item.device_name : item.device}}
                         </div>
-
 
                         <div class="w-104 h-142 pos-absolute bottom-4 right-18 control-center">
                             <div class="w-100-p h-100-p controls round" style="background: #282828">
