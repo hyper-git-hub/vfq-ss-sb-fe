@@ -319,11 +319,9 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     this.selectedCamera = this.cameras.find(ele => {
       return ele.device === ev;
     });
-    console.log(this.selectedCamera);
   }
  
   showFootage(idx: number) {
-    console.log(idx);
     this.devices.splice(idx, 1, this.selectedCamera);
     this.globalIndex = idx;
     this.getCameraViewCount(this.selectedCamera.device, idx);
@@ -333,7 +331,6 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
   }
 
   getCameraViewCount(camId: string, idx: number) {
-    console.log(camId, idx);
     this.loading = true;
     let url = new URL(`${environment.baseUrlSB}/building/views/`);
     if (camId != '') {
@@ -371,7 +368,6 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
   }
 
   getCameraDownloadCount(camId: string, idx: number) {
-    console.log(camId, idx);
     this.loading = true;
     let url = new URL(`${environment.baseUrlSB}/building/downloads/`);
     url.searchParams.set('camera_ids', camId);
