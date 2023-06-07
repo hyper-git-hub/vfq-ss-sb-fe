@@ -1,18 +1,68 @@
 <div class="modal-header">
-    <h4 class="modal-title titleHead" id="modal-basic-title">{{title}}</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
     <button type="button" tabindex="-1" class="close" (click)="onCloseModel()">×</button>
 </div>
+<img *ngIf="loading" src="/assets/images/block-loader.gif" alt="Loading" width="150px" height="150px"
+    style="position: absolute; top: 30%; left: 35%; z-index: 1;"/>
+
 <div class="modal-body">
-
     <div class="card w-100-p" style="border: none; height: 100%">
-        <img *ngIf="loading" src="/assets/images/block-loader.gif" alt="Loading" width="150px" height="150px"
-            style="position: absolute; top: 30%; left: 42%" />
 
-        <div *ngIf="catagory === 'edit' " class="w-100-p" fxLayout="row wrap" style="height: 100%">
+        <!--VIEW ADD -->
+        <form *ngIf="category === 'add'" [formGroup]="addView" class="w-100-p" fxLayout="row wrap">
+            <div class="w-100-p">
+                <div class="form-group">
+                    <label>View Name</label> <span class="text-danger">*</span>
+                    <input type="text" class="form-control" required="true" formControlName="name" placeholder="Name">
+                    <div *ngIf="addView.controls['name'].hasError('required') && addView.controls['name'].touched"
+                        class="text-danger">
+                        Please provide View Name
+                    </div>
+                </div>
+            </div>
+            <ng-container formArrayName="views">
+                <div *ngFor="let viewGroup of addView.get('views')['controls']; let i = index" class="w-100-p">
+                    <div fxLayout="row" fxLayoutGap="8px" [formGroup]="viewGroup">
+                        <div fxFlex="49">
+                            <div class="form-group ">
+                                <label>Views</label> <span class="text-danger">*</span>
+                                <ng-select [searchable]="false" [clearable]="false" placeholder="Select Space"
+                                    (change)="onChangeView($event)" formControlName="views">
+                                    <ng-option *ngFor="let view of viewList" [value]="view.id">
+                                        {{ view.name }}
+                                    </ng-option>
+                                </ng-select>
+                                <!-- <div *ngIf="addView.controls['views'].hasError('required') && addView.controls['views'].touched"
+                                    class="text-danger">
+                                    Please provide Space
+                                </div> -->
+                            </div>
+                        </div>
+                        <div fxFlex="49">
+                            <div class="form-group ">
+                                <label>Camera</label> <span class="text-danger">*</span>
+                                <ng-select [searchable]="false" [clearable]="false" placeholder="Select Camera"
+                                    (change)="onChangeCam($event)" formControlName="camera">
+                                    <ng-option *ngFor="let cam of cameras" [value]="cam.device">
+                                        {{ cam.device_name }}
+                                    </ng-option>
+                                </ng-select>
+                                <!-- <div *ngIf="addView.controls['camera'].hasError('required') && addView.controls['camera'].touched"
+                                    class="text-danger">
+                                    Please provide Camera
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </form>
 
-            <div class="w-100-p" [formGroup]="editView">
+        <!-- View Edit -->
+        <div *ngIf="category === 'edit'" class="w-100-p" fxLayout="row wrap" style="height: 100%">
+            <div class="w-100-p">
                 <ng-select class="w-40-p m-16 ml-0" [clearable]="false" [searchable]="false" placeholder="Select View"
-                    (change)="onViewSelect($event)" formControlName="space">
+                    (change)="onViewSelect($event)">
                     <ng-option *ngFor="let item of displayData" [value]="item">
                         {{ item.view_name }}
                     </ng-option>
@@ -24,14 +74,12 @@
                             <tr>
                                 <th>Views</th>
                                 <th>Cameras</th>
-                                <th> Action </th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody *ngIf="viewList.length > 0">
                             <tr *ngFor="let data of viewList; let i = index">
-                                <td>
-                                    View {{data.view_no}}
-                                </td>
+                                <td>View {{data.view_no}}</td>
                                 <td>
                                     <ng-select [searchable]="false" [clearable]="false" placeholder="Select Camera"
                                         (change)="onChangeCam($event)" [(ngModel)]="data.camera_id" [ngModelOptions]="{standalone: true}">
@@ -41,7 +89,7 @@
                                     </ng-select>
                                 </td>
                                 <td>
-                                    <a type="button" (click)="deleteRow(i)" class="btn btn-icon btn-danger btn-xs">
+                                    <a type="button" (click)="deleteView(i)" class="btn btn-icon btn-danger btn-xs">
                                         <i class="ri-delete-bin-6-line"></i>
                                     </a>
                                 </td>
@@ -50,140 +98,19 @@
                     </table>
                 </div>
             </div>
-
-            <!--VIEW  EDIT -->
-            <!-- <form [formGroup]="editView" (ngSubmit)="onSubmit()" class="w-100-p">
-                <ng-select style="width:40%; margin: 15px;" [searchable]="false" [clearable]="false"
-                    placeholder="Select View" (change)="onViewSelect($event)" formControlName="space">
-                    <ng-option *ngFor="let item of displayData" [value]="item">{{ item.view_name }}
-                    </ng-option>
-                </ng-select>
-
-                <ng-container formArrayName="addressedit">
-                    <div class="panel-body padding-15 w-100-p">
-                        <div *ngFor="let addressGroupEdit of editView.get('addressedit')['controls']; let i = index">
-                            <div class="table-responsive vscroll" style="height: auto;" [formGroup]="addressGroupEdit">
-                                <table
-                                    class="table nowrap margin-bottom-0 table-bordered table-striped theme-table1 bg-white table-condensed text-wrap"
-                                    id="ppp">
-                                    <thead>
-                                        <tr>
-                                            <th>Views</th>
-                                            <th>Cameras</th>
-                                            <th> Action </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody *ngIf="viewList.length>0">
-                                        <tr *ngFor="let data of viewList ; let i = index">
-                                            <td>
-                                                View {{data.view_no}}
-                                            </td>
-                                            <td>
-                                                <ng-select [searchable]="false" [clearable]="false"
-                                                    placeholder="Select Camera" (change)="onChangeCam($event)"
-                                                    formControlName="camera_views" [(ngModel)]="data.camera_id">
-                                                    <ng-option *ngFor="let items of cameras"
-                                                        [value]="items.device">{{items.device_name }}
-                                                    </ng-option>
-                                                </ng-select>
-                                            </td>
-                                            <td>
-                                                <a type="button" (click)="deleteRow(i)"
-                                                    class="btn btn-icon btn-danger btn-xs">
-                                                    <i class="ri-delete-bin-6-line"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </ng-container>
-            </form> -->
-        </div>
-
-
-        <!--VIEW ADD -->
-        <div *ngIf="catagory=== 'add'" class="w-100-p" fxLayout="row wrap" style="height: 100%">
-            <form [formGroup]="addView" (ngSubmit)="onSubmit()">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group ">
-                                    <label>View Name</label> <span class="text-danger">*</span>
-                                    <input type="text" class="form-control" required="true" formControlName="name"
-                                        placeholder="Name">
-                                    <div *ngIf="addView.controls['name'].hasError('required') && addView.controls['name'].touched"
-                                        class="text-danger">
-                                        Please provide View Name
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <ng-container formArrayName="address">
-                        <!-- <div *ngFor="let item of viewList; let i = index" class="col-md-12"> -->
-                        <div *ngFor="let addressGroup of addView.get('address')['controls']; let i = index"
-                            class="col-md-12">
-                            <div class="row" [formGroup]="addressGroup">
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label>Views</label> <span class="text-danger">*</span>
-                                        <ng-select class=" margin-bottom-10" [searchable]="false" [clearable]="false"
-                                            placeholder="Select Space" (change)="onChangeView($event)"
-                                            formControlName="views">
-                                            <ng-option *ngFor="let items of viewList" [value]="items.id">
-                                                {{ items.name }}
-                                            </ng-option>
-                                        </ng-select>
-                                        <!-- <div *ngIf="addView.controls['views'].hasError('required') && addView.controls['views'].touched"
-                                            class="text-danger">
-                                            Please provide Space
-                                        </div> -->
-
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label>Camera</label> <span class="text-danger">*</span>
-                                        <ng-select class=" margin-bottom-10" [searchable]="false" [clearable]="false"
-                                            placeholder="Select Cameras" (change)="onChangeCam($event)"
-                                            formControlName="camera">
-                                            <ng-option *ngFor="let items of cameras" [value]="items.device">
-                                                {{ items.device_name }}
-                                            </ng-option>
-                                        </ng-select>
-                                        <!-- <div *ngIf="addView.controls['camera'].hasError('required') && addView.controls['camera'].touched"
-                                            class="text-danger">
-                                            Please provide Camera
-                                        </div> -->
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </ng-container>
-                </div>
-            </form>
-
-
         </div>
     </div>
-
-
-
-
 </div>
+
 <div class="modal-footer">
-    <button *ngIf="catagory === 'edit' " type="submit" (click)="onUpdate()"
-        class="btn btn-success btn-round btn-block1">
+    <button *ngIf="category === 'edit'" type="submit" (click)="onUpdate()" class="btn btn-success btn-round">
+        <i class="ri-check-fill"></i> Update
+    </button>
+    <button *ngIf="category !== 'edit'" type="submit" (click)="onSubmit()" [disabled]="addView.invalid "
+        class="btn btn-success btn-round">
         <i class="ri-check-fill"></i>Save
     </button>
-    <button *ngIf="catagory !== 'edit' " type="submit" (click)="onSubmit()" [disabled]="addView.invalid "
-        class="btn btn-success btn-round btn-block1"><i class="ri-check-fill"></i>Save</button>
-    <button type="button" (click)="onCloseModel()" class="btn btn-default btn-round btn-block1"><i
-            class="ri-arrow-go-back-line"></i>
-        Back</button>
+    <button type="button" (click)="onCloseModel()" class="btn btn-default btn-round">
+        <i class="ri-arrow-go-back-line"></i> Back
+    </button>
 </div>

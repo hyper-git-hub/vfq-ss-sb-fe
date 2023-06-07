@@ -470,33 +470,28 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     });
   }
 
-  onEditlivefeed(ev?: any) {
+  onAddlivefeed(ev?: any) {
     const options: NgbModalOptions = { size: 'md', scrollable: true };
     const dialogRef = this.dialog.open(LivefeedformComponent, options);
-    dialogRef.componentInstance.title = 'Edit View';
+
     dialogRef.componentInstance.data = this.views;
-    dialogRef.componentInstance.data1 = this.viewsDevices;
-    dialogRef.componentInstance.catagory = 'edit';
-    dialogRef.closed.subscribe(() => {
+    
+    dialogRef.closed.subscribe((result) => {
       this.getDisplay('refresh');
     });
   }
 
-  onAddlivefeed(ev?: any) {
-    const options: NgbModalOptions = { size: 'sm', scrollable: true };
+  onEditlivefeed(ev?: any) {
+    const options: NgbModalOptions = { size: 'md', scrollable: true };
     const dialogRef = this.dialog.open(LivefeedformComponent, options);
-    dialogRef.componentInstance.title = 'Add View';
-    dialogRef.componentInstance.catagory = 'add';
+    
+    dialogRef.componentInstance.title = 'Edit View';
+    dialogRef.componentInstance.category = 'edit';
     dialogRef.componentInstance.data = this.views;
-    dialogRef.componentInstance.data1 = this.viewsDevices;
-    // dialogRef.componentInstance.passEntry.subscribe((receivedEntry) => {
-    //   // console.log(receivedEntry);
-    //   this.newdisplay = receivedEntry;
-    // })
-    dialogRef.closed.subscribe((result) => {
-      this.getDisplay('refresh');
-    })
 
+    dialogRef.closed.subscribe(() => {
+      this.getDisplay('refresh');
+    });
   }
 
   openSingleCamera(ev: any) {
