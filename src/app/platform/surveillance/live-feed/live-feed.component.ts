@@ -39,6 +39,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
   zoomLevel: any;
   camIds: string;
   cameraid: any;
+  selectedCamera: any;
   globalIndex:any
   mainArray = [];
   newdisplay = [];
@@ -168,14 +169,14 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     });
   }
 
-  getDisplay() {
+  getDisplay(type?: string) {
     this.loading = true;
     const slug = `${environment.baseUrlSB}/building/display/?customer=${this.customerid}`;
 
     this.apiService.get(slug).subscribe((resp: any) => {
       this.displayData = resp.data['data'];
       const dt = resp.data['data'];
-      if (dt && dt.length) {
+      if ((dt && dt.length) && type !== 'refresh') {
         this.camView.setValue(dt[0].id);
         this.onChangeView(dt[0].id);
       }
@@ -205,6 +206,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     }
 
     if (!!devs && devs.length > 0) {
+      this.camIds = '';
       devs.forEach((ele, idx) => {
         this.camIds += ele.device;
         this.playCameras(ele.device);
@@ -215,25 +217,12 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     }
 
     if (!!this.camIds && this.camIds !== '') {
-      console.log('called');
       this.getCameraViews();
       this.getCameraDownloads();
     } else {
       this.loading = false;
       this.toastr.info('No camera device assigned to this customer');
     }
-    // this.devices.forEach((ele, idx) => {
-    //   this.camIds += ele.device;
-    //   this.playCameras(ele.device);
-    //   if (idx !== this.devices.length - 1) {
-    //     this.camIds += ',';
-    //   }
-    //   // this.playCameras(ele.device);
-    // })
-    // setTimeout(() => {
-    //   this.getCameraViews();
-    //   this.getCameraDownloads();
-    // }, 500);
   }
 
   getCameraViews() {
@@ -271,13 +260,15 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     this.apiService.get(url.href).subscribe((resp: any) => {
       this.downloadCounts = resp.data.data;
 
-      this.downloadCounts.forEach((element: any, idx) => {
-        this.devices.forEach(dev => {
-          if (element.camera_name === dev.device) {
-            dev['download_count'] = element['user_count'];
-          }
+      if (this.downloadCounts && this.downloadCounts.length > 0) {
+        this.downloadCounts.forEach((element: any, idx) => {
+          this.devices.forEach(dev => {
+            if (element.camera_name === dev.device) {
+              dev['download_count'] = element['user_count'];
+            }
+          });
         });
-      });
+      }
 
       this.loading = false;
     }, (err: any) => {
@@ -325,36 +316,52 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
 
   onSelectCamera(ev: any) {
     this.cam_id = ev;
+    this.selectedCamera = this.cameras.find(ele => {
+      return ele.device === ev;
+    });
+    console.log(this.selectedCamera);
   }
  
-  showFootage(ind) {
-    this.globalIndex=  ind;
-    this.getCameraViewsforDisplay(this.cam_id);
+  showFootage(idx: number) {
+    console.log(idx);
+    this.devices.splice(idx, 1, this.selectedCamera);
+    this.globalIndex = idx;
+    this.getCameraViewCount(this.selectedCamera.device, idx);
+    this.getCameraDownloadCount(this.selectedCamera.device, idx);
+    this.playCameras(this.selectedCamera.device)
+    // this.getCameraViewsforDisplay(this.cam_id);
   }
 
-  getCameraViewsforDisplay(cam_id) {
+  getCameraViewCount(camId: string, idx: number) {
+    console.log(camId, idx);
     this.loading = true;
     let url = new URL(`${environment.baseUrlSB}/building/views/`);
-    if (cam_id != '') {
-      url.searchParams.set('camera_ids', cam_id);
+    if (camId != '') {
+      url.searchParams.set('camera_ids', camId);
     }
     url.searchParams.set('guid', this.userGuid);
 
     this.apiService.get(url.href).subscribe((resp: any) => {
-      this.viewCounts = resp.data.data;
+      const dt = resp.data['data'];
+      if (dt && dt.length > 0) {
+        if (this.devices[idx].device === dt[0]['camera_name']) {
+          this.devices[idx].views_count = dt[0]['user_count'];
+        }
+      }
 
-      this.viewCounts.forEach((element: any) => {
+      // this.viewCounts = resp.data.data;
+      // this.viewCounts.forEach((element: any) => {
 
-        this.mainDevices.filter((elem) => {
-          if (element.camera_name === elem.device) {
-            elem['views_count'] = element['user_count'];
+      //   this.mainDevices.filter((elem) => {
+      //     if (element.camera_name === elem.device) {
+      //       elem['views_count'] = element['user_count'];
      
-            this.devices.splice(this.globalIndex,1 ,elem)
-          }
-        })
+      //       this.devices.splice(this.globalIndex,1 ,elem)
+      //     }
+      //   })
 
-      })
-      this.getCameraDownloads();
+      // })
+      // this.getCameraDownloads();
 
       this.loading = false;
     }, (err: any) => {
@@ -363,44 +370,29 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     });
   }
 
-  // getCameraDetails(filters: any): void {
-  //   this.camerasData = [];
-  //   let url = new URL(`${environment.baseUrlSS}/manage-camera`);
-  //   for (const key in filters) {
-  //     if (!!filters[key]) {
-  //       url.searchParams.set(key, filters[key]);
-  //     }
-  //   }
+  getCameraDownloadCount(camId: string, idx: number) {
+    console.log(camId, idx);
+    this.loading = true;
+    let url = new URL(`${environment.baseUrlSB}/building/downloads/`);
+    url.searchParams.set('camera_ids', camId);
+    url.searchParams.set('guid', this.userGuid);
+    url.searchParams.set('type', 'mobile');
 
-  //   this.apiService.get(url.href).subscribe((resp: any) => {
-  //     const dt = resp.data;
-  //     this.cameraid = dt.map(t => t.id);
-  //     dt.forEach(element => {
-  //       this.camerasData.push({
-  //         camera_name: element.camera_name,
-  //         camera_id: element.camera_id,
-  //         url: `https://dev.gateway.iot.vodafone.com.qa/ss-camera/liveserver/${element.camera_id}/out.m3u8`,
-  //         views: element.views,
-  //         downloads: element.downloads
-  //       });
-  //     });
-  //     //  this.loading = false;
-
-  //   }, (err: any) => {
-  //     //  this.loading = false;
-  //   });
-  // }
+    this.apiService.get(url.href).subscribe((resp: any) => {
+      const dt = resp.data['data'];
+      if (dt && dt.length > 0) {
+        if (this.devices[idx].device === dt[0]['camera_name']) {
+          this.devices[idx].download_count = dt[0]['user_count'];
+        }
+      }
+      this.loading = false;
+    }, (err: any) => {
+      this.loading = false;
+      this.toastr.error(err.error['message'], '');
+    });
+  }
 
   playCameras(cameraID: any = 'CAM1') {
-    // setTimeout(() => {
-    //   // @ts-ignore JSMpeg defined via script
-    //   // let player = new JSMpeg.VideoElement("#video-canvas", url)
-    //   var canvas = document.getElementById('56');
-    //   // @ts-ignore JSMpeg defined via script
-    //   var player2 = new JSMpeg.Player('wss://staging.gateway.iot.vodafone.com.qa/sb_node_live_stream:443', { canvas: canvas });
-
-    // }, 1200);
-
     let url = new URL(`${environment.baseUrlLiveStream}/camera/stream`);
     let payload = { ip_address: '51.144.150.199', camera_id: cameraID };
     this.apiService.post(url.href, payload).subscribe((resp: any) => {
@@ -484,11 +476,6 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     });
   }
 
-  open(content: any) {
-    this.dialog.open(content);
-  }
-
-
   onEditlivefeed(ev?: any) {
     const options: NgbModalOptions = { size: 'md', scrollable: true };
     const dialogRef = this.dialog.open(LivefeedformComponent, options);
@@ -497,7 +484,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.data1 = this.viewsDevices;
     dialogRef.componentInstance.catagory = 'edit';
     dialogRef.closed.subscribe(() => {
-      this.getDisplay();
+      this.getDisplay('refresh');
     });
   }
 
@@ -513,7 +500,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     //   this.newdisplay = receivedEntry;
     // })
     dialogRef.closed.subscribe((result) => {
-      this.getDisplay();
+      this.getDisplay('refresh');
     })
 
   }

@@ -59,14 +59,16 @@
                                     </a>
                                     <ng-template #settingPopUp>
                                     <div class="w-150" fxLayoutAlign="space-between center">
-                                        <ng-select placeholder="Building" class="w-100-p" (change)="onSelectBuilding($event)">
+                                        <ng-select placeholder="Building" dropdownPosition="bottom" class="w-100-p"
+                                            (change)="onSelectBuilding($event)">
                                             <ng-option *ngFor="let items of buildings" [value]="items.id">
                                                 {{items.name}}
                                             </ng-option>
                                         </ng-select>
                                     </div>
                                     <div class="w-150" fxLayoutAlign="space-between center">
-                                        <ng-select placeholder="Camera" class="w-100-p pt-12" (change)="onSelectCamera($event)">
+                                        <ng-select placeholder="Camera" dropdownPosition="bottom" class="w-100-p pt-12"
+                                            (change)="onSelectCamera($event)">
                                             <ng-option *ngFor="let items of cameras" [value]="items.device">
                                                 {{ items.device_name }}
                                             </ng-option>
@@ -74,7 +76,8 @@
                                     </div>
                                     <div class="pt-12">
                                         <button type="button" (click)="showFootage(i)" class="btn btn-danger btn-block btn-round">
-                                            Show Fotage</button>
+                                            Show Fotage
+                                        </button>
                                     </div>
                                 </ng-template>
                                 </li>
@@ -82,7 +85,7 @@
                                  <li class="pr-8">
                                     <a  popoverClass="pb" placement="bottom">
                                         <i class="ri-download-fill download">
-                                            <span style="margin-bottom: 20px;">&nbsp;{{item.download_count}}</span>
+                                            <span style="margin-bottom: 20px;">&nbsp;{{item.download_count || 0}}</span>
                                         </i>
                                     </a>
 
