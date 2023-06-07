@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+
 import { AuthService } from 'src/app/core/services/auth.service';
-import { UserserviceService } from 'src/app/core/services/userservice.service';
 import { ApiService } from 'src/app/services/api.service';
 import { environment, ports } from 'src/environments/environment';
 import { LivefeedformComponent } from '../livefeedform/livefeedform.component';
@@ -58,8 +58,6 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
 
   constructor(
     private dialog: NgbModal,
-    private formBuilder: FormBuilder,
-    private userservice: UserserviceService,
     private authService: AuthService,
     private toastr: ToastrService,
     private apiService: ApiService,
