@@ -75,7 +75,7 @@ export class LivefeedformComponent implements OnInit {
     if (this.data) {
       let layout = this.data.layout;
       for(let i = 0; i < layout * layout; i++) {
-        this.viewList.push({ view_no: `${i+1}`, name: `View ${i+1}` });
+        this.viewList.push({ id: `${i+1}`, view_no: `${i+1}`, name: `View ${i+1}` });
         this.addViewGroup();
       }
       // this.editViewGroup();
@@ -174,6 +174,9 @@ export class LivefeedformComponent implements OnInit {
         payload.display_phenomenun.push({ view_no: element.views, camera_id: element.camera })
       }
     });
+
+    // console.log(views, payload);
+    // return;
 
     let slug = `${environment.baseUrlSB}/building/display/`;
     this.apiService.post(slug, payload).subscribe((resp: any) => {
