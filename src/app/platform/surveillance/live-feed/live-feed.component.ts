@@ -292,9 +292,10 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
   getCameraforBuilding(building_id?: any) {
     let url = new URL(`${environment.baseUrlSB}/building/smart_devices/`);
     url.searchParams.set('device_type', 'camera')
-    url.searchParams.set('building', building_id)
     url.searchParams.set('customer_id', this.customerid)
-
+    if (building_id) {
+      url.searchParams.set('building', building_id)
+    }
 
     this.apiService.get(url.href).subscribe((resp: any) => {
       this.cameras = [];

@@ -28,7 +28,7 @@
                         [ngClass]="views.layout === 2 ? 'col-md-6' : views.layout === 3 ? 'col-md-4' : 'col-md-3'">
 
                         <canvas [id]="item.id" style="width: 100%; height: 100%; border: 2px solid #e6e6e6; border-radius: 4px;"
-                            (click)="openSingleCamera(item);"> </canvas>
+                            (click)="openSingleCamera(item);" class="pointer" title="click to expand view"> </canvas>
 
                         <!-- <video *ngIf="rtsp" id="test_video" controls [autoplay]="true">
                             <source [src]="rtsp">
@@ -75,7 +75,8 @@
                                         </ng-select>
                                     </div>
                                     <div class="pt-12">
-                                        <button type="button" (click)="showFootage(i)" class="btn btn-danger btn-block btn-round">
+                                        <button type="button" (click)="showFootage(i)" class="btn btn-danger btn-block btn-round"
+                                            [disabled]="!this.selectedCamera">
                                             Show Fotage
                                         </button>
                                     </div>

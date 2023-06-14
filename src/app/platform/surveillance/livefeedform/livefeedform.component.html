@@ -77,23 +77,29 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody *ngIf="viewList.length > 0">
-                            <tr *ngFor="let data of viewList; let i = index">
-                                <td>View {{data.view_no}}</td>
-                                <td>
-                                    <ng-select [searchable]="false" [clearable]="false" placeholder="Select Camera"
-                                        (change)="onChangeCam($event)" [(ngModel)]="data.camera_id" [ngModelOptions]="{standalone: true}">
-                                        <ng-option *ngFor="let items of cameras"
-                                            [value]="items.device">{{items.device_name }}
-                                        </ng-option>
-                                    </ng-select>
-                                </td>
-                                <td>
-                                    <a type="button" (click)="deleteView(i)" class="btn btn-icon btn-danger btn-xs">
-                                        <i class="ri-delete-bin-6-line"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                        <tbody>
+                            <ng-container *ngIf="viewList.length > 0">
+                                <tr *ngFor="let data of viewList; let i = index">
+                                    <td>View {{data.view_no}}</td>
+                                    <td>
+                                        <ng-select [searchable]="false" [clearable]="false" placeholder="Select Camera"
+                                            (change)="onChangeCam($event)" [(ngModel)]="data.camera_id" [ngModelOptions]="{standalone: true}">
+                                            <ng-option *ngFor="let items of cameras"
+                                                [value]="items.device">{{items.device_name }}
+                                            </ng-option>
+                                        </ng-select>
+                                    </td>
+                                    <td>
+                                        <a type="button" (click)="deleteView(i)" class="btn btn-icon btn-danger btn-xs">
+                                            <i class="ri-delete-bin-6-line"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="viewList.length === 0">
+                                <tr colspan="3">No view selected yet to edit</tr>
+                            </ng-container>
+                            
                         </tbody>
                     </table>
                 </div>

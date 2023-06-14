@@ -1,11 +1,11 @@
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { TableConfig } from 'src/app/shared/general-table/model';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+
+import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/app/services/api.service';
+
 
 @Component({
   selector: 'app-livefeedform',
@@ -72,7 +72,7 @@ export class LivefeedformComponent implements OnInit {
     this.getCameraDevices();
     this.getDisplay();
 
-    if (this.data) {
+    if (this.data && this.category == 'add') {
       let layout = this.data.layout;
       for(let i = 0; i < layout * layout; i++) {
         this.viewList.push({ id: `${i+1}`, view_no: `${i+1}`, name: `View ${i+1}` });
@@ -111,7 +111,13 @@ export class LivefeedformComponent implements OnInit {
   }
 
   onChangeView(ev: any) {
-    // console.log(" the Sec Area == ", ev)
+    let idx = this.viewList.findIndex(ele => {
+      return ele.id === ev;
+    });
+
+    if (idx != -1) {
+      this.viewList.splice(idx, 1);
+    }
   }
 
   onChangeCam(ev: any) {
