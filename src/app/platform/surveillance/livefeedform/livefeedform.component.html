@@ -84,7 +84,7 @@
                                     <td>
                                         <ng-select [searchable]="false" [clearable]="false" placeholder="Select Camera"
                                             (change)="onChangeCam($event)" [(ngModel)]="data.camera_id" [ngModelOptions]="{standalone: true}">
-                                            <ng-option *ngFor="let items of cameras"
+                                            <ng-option *ngFor="let items of selectedCameras"
                                                 [value]="items.device">{{items.device_name }}
                                             </ng-option>
                                         </ng-select>

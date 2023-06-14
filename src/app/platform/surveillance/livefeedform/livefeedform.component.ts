@@ -24,6 +24,7 @@ export class LivefeedformComponent implements OnInit {
   cameras: any[];
   displayData: any[];
   viewList: any[];
+  selectedCameras: any[];
   cameraFeatures: any[];  
   
   data: any;
@@ -44,6 +45,7 @@ export class LivefeedformComponent implements OnInit {
     this.cameras = [];
     this.displayData = [];
     this.viewList = [];
+    this.selectedCameras = [];
     this.cameraFeatures = [];
 
     let u: any = JSON.parse(localStorage.getItem('user'));
@@ -80,19 +82,6 @@ export class LivefeedformComponent implements OnInit {
       }
       // this.editViewGroup();
     }
-
-    // if (this.data.layout == 3) {
-    //   for(let i = 0; i < 9; i++) {
-    //     this.viewList.push({ view_no: `${i+1}`, name: `View ${i+1}` });
-    //     this.addViewGroup();
-    //   }
-
-    //   // this.editViewGroup();
-    //   // this.editViewGroup();
-    //   // this.editViewGroup();
-    //   // this.editViewGroup();
-    //   // this.editViewGroup();
-    // }
   }
 
   addViewGroup() {
@@ -108,26 +97,6 @@ export class LivefeedformComponent implements OnInit {
     edit.push(this.fb.group({
       camera_views: [],
     }))
-  }
-
-  onChangeView(ev: any) {
-    let idx = this.viewList.findIndex(ele => {
-      return ele.id === ev;
-    });
-
-    if (idx != -1) {
-      this.viewList.splice(idx, 1);
-    }
-  }
-
-  onChangeCam(ev: any) {
-    let idx = this.cameras.findIndex(ele => {
-      return ele.device === ev;
-    });
-
-    if (idx != -1) {
-      this.cameras.splice(idx, 1);
-    }
   }
 
   getCameraDevices() {
@@ -213,22 +182,74 @@ export class LivefeedformComponent implements OnInit {
   }
 
   onViewSelect(ev: any) {
-    const views: any[] = [];
+    this.viewList = [];
+    this.selectedCameras = [];
+    // const views: any[] = [];
+
+    this.cameras.forEach(ele => {
+      this.selectedCameras.push(ele);
+    });
     this.selectedViewID = ev.id;
     this.selectedViewName = ev.view_name;
-    this.viewList = ev.display_phenomenun;
+    // this.viewList = ev.display_phenomenun;
+    const v = ev.display_phenomenun;
+    const layout = this.data.layout;
 
-    ev.display_phenomenun.forEach(element => {
-      this.cameras.forEach(elem => {
-        if (element.camera_id === elem.device) {
-          views.push(element);
-          this.viewList = views;
-          // this.editView.patchValue({
-          //   camera_views: element.camera_id
-          // });
+    for(let i = 0; i < layout * layout; i++) {
+      this.viewList.push({ id: `${i+1}`, view_no: `${i+1}`, name: `View ${i+1}` });
+    }
+
+    v.forEach(element => {
+      this.viewList.forEach(ele => {
+        if (element.view_no === ele.view_no) {
+          ele['camera_id'] = element.camera_id;
+          this.onSelectCamera(element);
         }
       });
     });
+
+
+    // ev.display_phenomenun.forEach(element => {
+    //   this.cameras.forEach(elem => {
+    //     if (element.camera_id === elem.device) {
+    //       views.push(element);
+    //       this.viewList = views;
+    //       // this.editView.patchValue({
+    //       //   camera_views: element.camera_id
+    //       // });
+    //     }
+    //   });
+    // });
+  }
+
+  onChangeView(ev: any) {
+    let idx = this.viewList.findIndex(ele => {
+      return ele.id === ev;
+    });
+
+    if (idx != -1) {
+      this.viewList.splice(idx, 1);
+    }
+  }
+
+  onChangeCam(ev: any) {
+    let idx = this.cameras.findIndex(ele => {
+      return ele.device === ev;
+    });
+
+    if (idx != -1) {
+      this.cameras.splice(idx, 1);
+    }
+  }
+
+  onSelectCamera(ev: any) {
+    let idx = this.selectedCameras.findIndex(ele => {
+      return ev.device == ele.camera_id;
+    });
+
+    if (idx != -1) {
+      this.selectedCameras.splice(idx, 1);
+    }
   }
 
   onCloseModel() {
