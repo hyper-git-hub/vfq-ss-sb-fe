@@ -389,8 +389,8 @@ export class SurveillanceComponent implements OnInit, OnDestroy {
       const devs: any[] = [];
       const d = resp.data['data'];
       d.forEach(dev => {
-        this.cameraFeatures.forEach(ele => {
-          if (dev.device === ele) {
+        this.cameraFeatures.forEach((ele, idx) => {
+          if (dev.device === ele && idx < 3) {
             this.devices.push(dev);
             devs.push(dev);
           }

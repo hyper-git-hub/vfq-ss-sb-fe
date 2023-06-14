@@ -52,7 +52,7 @@
                             <ul style="list-style: none;display: flex;">
                                 <li style="padding-right: 8px;">
                                     <a [ngbPopover]="settingPopUp" [popoverTitle]="" placement="bottom"
-                                        [autoClose]="false">
+                                        [autoClose]="false" (click)="selectedCamera = null">
                                         <i class="ri-settings-5-fill"
                                             style="background-color: #ca090970; color: white; padding: 7px;  border-radius: 5px;">
                                         </i>
@@ -76,7 +76,7 @@
                                     </div>
                                     <div class="pt-12">
                                         <button type="button" (click)="showFootage(i)" class="btn btn-danger btn-block btn-round"
-                                            [disabled]="!this.selectedCamera">
+                                            [disabled]="!selectedCamera">
                                             Show Fotage
                                         </button>
                                     </div>

@@ -326,6 +326,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     this.getCameraViewCount(this.selectedCamera.device, idx);
     this.getCameraDownloadCount(this.selectedCamera.device, idx);
     this.playCameras(this.selectedCamera.device)
+    this.selectedCamera = null;
     // this.getCameraViewsforDisplay(this.cam_id);
   }
 
