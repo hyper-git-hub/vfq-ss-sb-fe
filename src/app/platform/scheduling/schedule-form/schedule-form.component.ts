@@ -4,6 +4,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { DateUtils } from 'src/app/Utils/DateUtils';
 import { ApiService } from 'src/app/services/api.service';
 import { environment } from 'src/environments/environment';
 
@@ -421,8 +422,10 @@ export class ScheduleFormComponent implements OnInit {
     let payload = {
       device_id: formData.device,
       schedule_name: formData.schedule_name,
-      start_time: formData.start_time,
-      end_time: formData.end_time,
+      start_time: DateUtils.getUTCTime(formData.start_time),
+      end_time: DateUtils.getUTCTime(formData.end_time),
+      // start_time: formData.start_time,
+      // end_time: formData.end_time,
       repeat: formData.repeat,
       start_date: this.days,
       state: formData.state,
