@@ -146,7 +146,7 @@ export class PlayBackComponent implements OnInit, OnDestroy {
     this.userGuid = this.user?.guid;
     this.customerid = this.user.customer.customer_id;
     // this.getCameralisting();
-    this.getCameraDevices(this.pbFilters);
+    // this.getCameraDevices(this.pbFilters);
     this.getBuildings();
   }
 
