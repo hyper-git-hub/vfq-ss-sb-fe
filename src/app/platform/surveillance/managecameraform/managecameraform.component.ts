@@ -104,7 +104,7 @@ export class ManagecameraformComponent implements OnInit {
             this.onEditModal();
             const dt = this.data;
             if (!!dt.open_area) {
-                this.cameraForm.get('area').setValue('open_area');
+                this.cameraForm.get('area').setValue('openArea');
                 this.getBuildingOpenAreas(dt.building);
             } else {
                 this.cameraForm.get('area').setValue('floor');
@@ -209,7 +209,7 @@ export class ManagecameraformComponent implements OnInit {
     }
 
     getBuildingSpacesByFloor(ev: any) {
-        const slug = `${environment.baseUrlSB}/building/space/?floor_id=${ev}`;
+        const slug = `${environment.baseUrlSB}/building/spacename/?floor_id=${ev}`;
         this.apiService.get(slug).subscribe((resp: any) => {
             this.spaces = resp.data['data'];
 
@@ -391,8 +391,8 @@ export class ManagecameraformComponent implements OnInit {
             days: this.selectedDays.join(),
             overflow: formData.overflow,
             underflow: formData.underflow,
-            start_time: formData.start_time + ':00',
-            end_time: formData.end_time + ':00',
+            start_time: formData.start_time,
+            end_time: formData.end_time,
             motion: formData.motion,
             occupancy: formData.occupancy,
             repeat: formData.repeat,

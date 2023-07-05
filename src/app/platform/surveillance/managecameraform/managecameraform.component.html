@@ -149,7 +149,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon">Start Time</span>
                                                     <input type="time" class="form-control" id="startTime"
-                                                        formControlName="start_time">
+                                                        formControlName="start_time" step="2">
                                                 </div>
                                                 <div class="text-danger" *ngIf="cameraForm.controls['start_time'].hasError('required') && cameraForm.controls['start_time'].touched">
                                                     Please set start time
@@ -161,7 +161,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon">End Time</span>
                                                     <input type="time" class="form-control" id="endTime"
-                                                        formControlName="end_time">
+                                                        formControlName="end_time" step="2">
                                                 </div>
                                                 <div class="text-danger" *ngIf="cameraForm.controls['end_time'].hasError('required') && cameraForm.controls['end_time'].touched">
                                                     Please set end time

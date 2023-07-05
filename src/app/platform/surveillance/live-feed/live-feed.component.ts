@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+
 import { AuthService } from 'src/app/core/services/auth.service';
-import { UserserviceService } from 'src/app/core/services/userservice.service';
 import { ApiService } from 'src/app/services/api.service';
 import { environment, ports } from 'src/environments/environment';
 import { LivefeedformComponent } from '../livefeedform/livefeedform.component';
@@ -23,9 +23,8 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
   camera: any[];
   devices: any[];
   viewsDevices: any[];
-  MainDevices: any[];
+  mainDevices: any[];
   buildings: any[];
-  final: any[];
   cameras: any[] = []
   displayData: any[];
   viewCounts: any[];
@@ -40,6 +39,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
   zoomLevel: any;
   camIds: string;
   cameraid: any;
+  selectedCamera: any;
   globalIndex:any
   mainArray = [];
   newdisplay = [];
@@ -58,8 +58,6 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
 
   constructor(
     private dialog: NgbModal,
-    private formBuilder: FormBuilder,
-    private userservice: UserserviceService,
     private authService: AuthService,
     private toastr: ToastrService,
     private apiService: ApiService,
@@ -85,7 +83,6 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     }
 
     this.viewCounts = [];
-    this.final = [];
     this.views = { layout: 2 };
 
     this.breadCrumbs = [
@@ -100,24 +97,6 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
         icon: ""
       },
     ]
-
-    // this.camerasData = [
-    //   {
-    //     imageURL: './assets/images/cctv.png',
-    //     downloadCount: 19,
-    //     viewCount: 10,
-    //     cameraName: 'Camera 1',
-    //     name: 'Asad',
-    //   },
-    //   {
-    //     imageURL: './assets/images/cctv.png',
-    //     downloadCount: 19,
-    //     viewCount: 10,
-    //     cameraName: 'Camera 2',
-    //     name: 'Ali ',
-    //   },
-    // ]
-
   }
 
   ngOnInit(): void {
@@ -125,128 +104,29 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     this.getUserPrefrence();
     this.getCameraDevices();
     this.getBuildingList();
-    this.getCameraDownloads();
+    // this.getCameraDownloads();
     
     // this.getCameraDetails(this.detailFilters);
   }
 
-  getCameraDownloads() {
-    this.loading = true;
-    let url = new URL(`${environment.baseUrlSB}/building/downloads/`);
-    url.searchParams.set('camera_ids', this.camIds);
-    url.searchParams.set('guid', this.userGuid);
-    // url.searchParams.set('type', 'mobile');
-
-    this.apiService.get(url.href).subscribe((resp: any) => {
-      this.downloadCounts = resp.data.data;
-
-      this.downloadCounts.forEach((element: any, idx) => {
-        this.devices.forEach(dev => {
-          if (element.camera_name === dev.device) {
-            dev['download_count'] = element['user_count'];
-          }
-        });
-      });
-
-      this.loading = false;
-    }, (err: any) => {
-      this.loading = false;
-      this.toastr.error(err.error['message'], '');
-    });
-  }
   getUserPrefrence() {
     this.loading = true;
     const slug = `${environment.baseUrlSB}/building/user-preferences/`;
 
     this.apiService.patch(slug, { guid: this.userGuid }).subscribe((resp: any) => {
       this.views = resp.data;
-
       this.loading = false;
     }, (err: any) => {
       this.loading = false;
       this.toastr.error(err.error['message'], 'Error getting layout preferances');
     });
   }
-
-  getDisplay() {
-    this.displayData = [];
-    this.loading = true;
-    const slug = `${environment.baseUrlSB}/building/display/?customer=${this.customerid}`;
-
-    this.apiService.get(slug).subscribe((resp: any) => {
-      this.displayData = resp.data['data'];
-      const dt = resp.data['data'];
-      if (dt && dt.length) {
-        this.camView.setValue(dt[0].id);
-        this.onChangeView(dt[0].id);
-      }
-      this.loading = false;
-    }, (err: any) => {
-      this.loading = false;
-      this.toastr.error(err.error['message'], 'Error getting layout preferances');
-    });
-  }
-
-  onSelectBuilding(ev: any) {
-    this.getCameraforBuilding(ev);
-  }
-
-
-  getBuildingList() {
-    let slug = `${environment.baseUrlSB}/building/`;
-
-    this.apiService.get(slug).subscribe((resp: any) => {
-      this.buildings = resp.data['data'];
-    }, (err: any) => {
-      this.toastr.error(err.error['message'], 'Error getting data for filters');
-    });
-  }
-  getCameraforBuilding(building_id?: any) {
-    let url = new URL(`${environment.baseUrlSB}/building/smart_devices/`);
-    url.searchParams.set('device_type', 'camera')
-    url.searchParams.set('building', building_id)
-    url.searchParams.set('customer_id', this.customerid)
-
-
-    this.apiService.get(url.href).subscribe((resp: any) => {
-      this.cameras = [];
-      const d = resp.data['data'];
-      d.forEach(dev => {
-        this.cameraFeatures.forEach(ele => {
-          if (dev.device === ele) {
-            this.cameras.push(dev);
-          }
-        });
-      });
-    
-
-      if (!!this.camIds && this.camIds !== '') {
-      } else {
-        this.loading = false;
-        this.toastr.info('No camera device assigned to this customer');
-      }
-    }, (err: any) => {
-      this.loading = false;
-      this.toastr.error(err.error['message'], 'Error getting cameras');
-    });
-  }
-  onSelectCamera(ev: any) {
-    this.cam_id = ev;
-  }
- 
-  showFootage(ind) {
-    this.globalIndex=  ind;
-   
-    this.getCameraViewsforDisplay(this.cam_id);
-  }
-
 
   getCameraDevices() {
     this.loading = true;
     let url = new URL(`${environment.baseUrlSB}/building/smart_devices/`);
     url.searchParams.set('device_type', 'camera');
-
-    // url.searchParams.set('customer_id', this.customerid);
+    url.searchParams.set('customer_id', this.customerid);
 
     this.apiService.get(url.href).subscribe((resp: any) => {
       this.devices = [];
@@ -261,29 +141,47 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
         });
       });
       this.viewsDevices = this.devices;
-      this.MainDevices = this.devices;
+      this.mainDevices = this.devices;
 
       this.getDisplay();
 
-      if (!!devs && devs.length > 0) {
-        devs.forEach((ele, idx) => {
-          this.camIds += ele.device;
-          this.playCameras(ele.device);
-          if (idx !== devs.length - 1) {
-            this.camIds += ',';
-          }
-        });
-      }
+      // if (!!devs && devs.length > 0) {
+      //   devs.forEach((ele, idx) => {
+      //     this.camIds += ele.device;
+      //     this.playCameras(ele.device);
+      //     if (idx !== devs.length - 1) {
+      //       this.camIds += ',';
+      //     }
+      //   });
+      // }
 
-      if (!!this.camIds && this.camIds !== '') {
-        this.getCameraViews();
-      } else {
-        this.loading = false;
-        this.toastr.info('No camera device assigned to this customer');
-      }
+      // if (!!this.camIds && this.camIds !== '') {
+      //   this.getCameraViews();
+      // } else {
+      //   this.loading = false;
+      //   this.toastr.info('No camera device assigned to this customer');
+      // }
     }, (err: any) => {
       this.loading = false;
       this.toastr.error(err.error['message'], 'Error getting cameras');
+    });
+  }
+
+  getDisplay(type?: string) {
+    this.loading = true;
+    const slug = `${environment.baseUrlSB}/building/display/?customer=${this.customerid}`;
+
+    this.apiService.get(slug).subscribe((resp: any) => {
+      this.displayData = resp.data['data'];
+      const dt = resp.data['data'];
+      if ((dt && dt.length) && type !== 'refresh') {
+        this.camView.setValue(dt[0].id);
+        this.onChangeView(dt[0].id);
+      }
+      this.loading = false;
+    }, (err: any) => {
+      this.loading = false;
+      this.toastr.error(err.error['message'], 'Error getting display layout');
     });
   }
 
@@ -291,25 +189,38 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     const dt = this.displayData.find(ele => {
       return ele.id === ev;
     });
-    this.final = [];
+    const final: any[] = [];
+    const devs: any[] = [];
     if (dt.display_phenomenun.length > 0) {
       dt.display_phenomenun.forEach(element => {
         this.viewsDevices.forEach(elem => {
           if (element.camera_id === elem.device) {
-            this.final.push(elem);
+            final.push(elem);
+            devs.push(elem);
           }
         });
       });
-      this.devices = this.final;
-
+      this.devices = final;
     }
 
-    this.devices.forEach(ele => {
-      this.playCameras(ele.device);
-    })
-    this.getCameraViews();
-    this.getCameraDownloads();
+    if (!!devs && devs.length > 0) {
+      this.camIds = '';
+      devs.forEach((ele, idx) => {
+        this.camIds += ele.device;
+        this.playCameras(ele.device);
+        if (idx !== devs.length - 1) {
+          this.camIds += ',';
+        }
+      });
+    }
 
+    if (!!this.camIds && this.camIds !== '') {
+      this.getCameraViews();
+      this.getCameraDownloads();
+    } else {
+      this.loading = false;
+      this.toastr.info('No camera device assigned to this customer');
+    }
   }
 
   getCameraViews() {
@@ -337,29 +248,25 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     });
   }
 
-  getCameraViewsforDisplay(cam_id) {
+  getCameraDownloads() {
     this.loading = true;
-    let url = new URL(`${environment.baseUrlSB}/building/views/`);
-    if (cam_id != '') {
-      url.searchParams.set('camera_ids', cam_id);
-    }
+    let url = new URL(`${environment.baseUrlSB}/building/downloads/`);
+    url.searchParams.set('camera_ids', this.camIds);
     url.searchParams.set('guid', this.userGuid);
+    url.searchParams.set('type', 'mobile');
 
     this.apiService.get(url.href).subscribe((resp: any) => {
-      this.viewCounts = resp.data.data;
+      this.downloadCounts = resp.data.data;
 
-      this.viewCounts.forEach((element: any) => {
-
-        this.MainDevices.filter((elem) => {
-          if (element.camera_name === elem.device) {
-            elem['views_count'] = element['user_count'];
-     
-            this.devices.splice(this.globalIndex,1 ,elem)
-          }
-        })
-
-      })
-      this.getCameraDownloads();
+      if (this.downloadCounts && this.downloadCounts.length > 0) {
+        this.downloadCounts.forEach((element: any, idx) => {
+          this.devices.forEach(dev => {
+            if (element.camera_name === dev.device) {
+              dev['download_count'] = element['user_count'];
+            }
+          });
+        });
+      }
 
       this.loading = false;
     }, (err: any) => {
@@ -368,44 +275,120 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     });
   }
 
-  // getCameraDetails(filters: any): void {
-  //   this.camerasData = [];
-  //   let url = new URL(`${environment.baseUrlSS}/manage-camera`);
-  //   for (const key in filters) {
-  //     if (!!filters[key]) {
-  //       url.searchParams.set(key, filters[key]);
-  //     }
-  //   }
+  getBuildingList() {
+    let slug = `${environment.baseUrlSB}/building/`;
 
-  //   this.apiService.get(url.href).subscribe((resp: any) => {
-  //     const dt = resp.data;
-  //     this.cameraid = dt.map(t => t.id);
-  //     dt.forEach(element => {
-  //       this.camerasData.push({
-  //         camera_name: element.camera_name,
-  //         camera_id: element.camera_id,
-  //         url: `https://dev.gateway.iot.vodafone.com.qa/ss-camera/liveserver/${element.camera_id}/out.m3u8`,
-  //         views: element.views,
-  //         downloads: element.downloads
-  //       });
-  //     });
-  //     //  this.loading = false;
+    this.apiService.get(slug).subscribe((resp: any) => {
+      this.buildings = resp.data['data'];
+    }, (err: any) => {
+      this.toastr.error(err.error['message'], 'Error getting data for buildings');
+    });
+  }
 
-  //   }, (err: any) => {
-  //     //  this.loading = false;
-  //   });
-  // }
+  onSelectBuilding(ev: any) {
+    this.getCameraforBuilding(ev);
+  }
+
+  getCameraforBuilding(building_id?: any) {
+    let url = new URL(`${environment.baseUrlSB}/building/smart_devices/`);
+    url.searchParams.set('device_type', 'camera')
+    url.searchParams.set('customer_id', this.customerid)
+    if (building_id) {
+      url.searchParams.set('building', building_id)
+    }
+
+    this.apiService.get(url.href).subscribe((resp: any) => {
+      this.cameras = [];
+      const d = resp.data['data'];
+      d.forEach(dev => {
+        this.cameraFeatures.forEach(ele => {
+          if (dev.device === ele) {
+            this.cameras.push(dev);
+          }
+        });
+      });
+    }, (err: any) => {
+      this.loading = false;
+      this.toastr.error(err.error['message'], 'Error getting cameras');
+    });
+  }
+
+  onSelectCamera(ev: any) {
+    this.cam_id = ev;
+    this.selectedCamera = this.cameras.find(ele => {
+      return ele.device === ev;
+    });
+  }
+ 
+  showFootage(idx: number) {
+    this.devices.splice(idx, 1, this.selectedCamera);
+    this.globalIndex = idx;
+    this.getCameraViewCount(this.selectedCamera.device, idx);
+    this.getCameraDownloadCount(this.selectedCamera.device, idx);
+    this.playCameras(this.selectedCamera.device)
+    this.selectedCamera = null;
+    // this.getCameraViewsforDisplay(this.cam_id);
+  }
+
+  getCameraViewCount(camId: string, idx: number) {
+    this.loading = true;
+    let url = new URL(`${environment.baseUrlSB}/building/views/`);
+    if (camId != '') {
+      url.searchParams.set('camera_ids', camId);
+    }
+    url.searchParams.set('guid', this.userGuid);
+
+    this.apiService.get(url.href).subscribe((resp: any) => {
+      const dt = resp.data['data'];
+      if (dt && dt.length > 0) {
+        if (this.devices[idx].device === dt[0]['camera_name']) {
+          this.devices[idx].views_count = dt[0]['user_count'];
+        }
+      }
+
+      // this.viewCounts = resp.data.data;
+      // this.viewCounts.forEach((element: any) => {
+
+      //   this.mainDevices.filter((elem) => {
+      //     if (element.camera_name === elem.device) {
+      //       elem['views_count'] = element['user_count'];
+     
+      //       this.devices.splice(this.globalIndex,1 ,elem)
+      //     }
+      //   })
+
+      // })
+      // this.getCameraDownloads();
+
+      this.loading = false;
+    }, (err: any) => {
+      this.loading = false;
+      this.toastr.error(err.error['message'], '');
+    });
+  }
+
+  getCameraDownloadCount(camId: string, idx: number) {
+    this.loading = true;
+    let url = new URL(`${environment.baseUrlSB}/building/downloads/`);
+    url.searchParams.set('camera_ids', camId);
+    url.searchParams.set('guid', this.userGuid);
+    url.searchParams.set('type', 'mobile');
+
+    this.apiService.get(url.href).subscribe((resp: any) => {
+      const dt = resp.data['data'];
+      if (dt && dt.length > 0) {
+        if (this.devices[idx].device === dt[0]['camera_name']) {
+          this.devices[idx].download_count = dt[0]['user_count'];
+        }
+      }
+      this.loading = false;
+    }, (err: any) => {
+      this.loading = false;
+      this.toastr.error(err.error['message'], '');
+    });
+  }
 
   playCameras(cameraID: any = 'CAM1') {
-    // setTimeout(() => {
-    //   // @ts-ignore JSMpeg defined via script
-    //   // let player = new JSMpeg.VideoElement("#video-canvas", url)
-    //   var canvas = document.getElementById('56');
-    //   // @ts-ignore JSMpeg defined via script
-    //   var player2 = new JSMpeg.Player('wss://staging.gateway.iot.vodafone.com.qa/sb_node_live_stream:443', { canvas: canvas });
-
-    // }, 1200);
-
     let url = new URL(`${environment.baseUrlLiveStream}/camera/stream`);
     let payload = { ip_address: '51.144.150.199', camera_id: cameraID };
     this.apiService.post(url.href, payload).subscribe((resp: any) => {
@@ -489,38 +472,28 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     });
   }
 
-  open(content: any) {
-    this.dialog.open(content);
-  }
+  onAddlivefeed(ev?: any) {
+    const options: NgbModalOptions = { size: 'md', scrollable: true };
+    const dialogRef = this.dialog.open(LivefeedformComponent, options);
 
+    dialogRef.componentInstance.data = this.views;
+    
+    dialogRef.closed.subscribe((result) => {
+      this.getDisplay('refresh');
+    });
+  }
 
   onEditlivefeed(ev?: any) {
     const options: NgbModalOptions = { size: 'md', scrollable: true };
     const dialogRef = this.dialog.open(LivefeedformComponent, options);
+    
     dialogRef.componentInstance.title = 'Edit View';
+    dialogRef.componentInstance.category = 'edit';
     dialogRef.componentInstance.data = this.views;
-    dialogRef.componentInstance.data1 = this.viewsDevices;
-    dialogRef.componentInstance.catagory = 'edit';
+
     dialogRef.closed.subscribe(() => {
-      this.getDisplay();
+      this.getDisplay('refresh');
     });
-  }
-
-  onAddlivefeed(ev?: any) {
-    const options: NgbModalOptions = { size: 'sm', scrollable: true };
-    const dialogRef = this.dialog.open(LivefeedformComponent, options);
-    dialogRef.componentInstance.title = 'Add View';
-    dialogRef.componentInstance.catagory = 'add';
-    dialogRef.componentInstance.data = this.views;
-    dialogRef.componentInstance.data1 = this.viewsDevices;
-    // dialogRef.componentInstance.passEntry.subscribe((receivedEntry) => {
-    //   // console.log(receivedEntry);
-    //   this.newdisplay = receivedEntry;
-    // })
-    dialogRef.closed.subscribe((result) => {
-      this.getDisplay();
-    })
-
   }
 
   openSingleCamera(ev: any) {
