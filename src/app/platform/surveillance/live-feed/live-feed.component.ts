@@ -323,10 +323,13 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
   showFootage(idx: number) {
     this.devices.splice(idx, 1, this.selectedCamera);
     this.globalIndex = idx;
-    this.getCameraViewCount(this.selectedCamera.device, idx);
-    this.getCameraDownloadCount(this.selectedCamera.device, idx);
+    this.updateCameraViews(this.selectedCamera.device);
     this.playCameras(this.selectedCamera.device)
-    this.selectedCamera = null;
+    setTimeout(() => {
+      this.getCameraViewCount(this.selectedCamera.device, idx);
+      this.getCameraDownloadCount(this.selectedCamera.device, idx);
+      // this.selectedCamera = null;
+    }, 1200);
     // this.getCameraViewsforDisplay(this.cam_id);
   }
 
@@ -342,6 +345,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
       const dt = resp.data['data'];
       if (dt && dt.length > 0) {
         if (this.devices[idx].device === dt[0]['camera_name']) {
+          console.log(dt);
           this.devices[idx].views_count = dt[0]['user_count'];
         }
       }
@@ -454,6 +458,18 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     }, (err: any) => {
       this.loading = false;
       this.toastr.error(err.error.message, 'Error updating layout');
+    });
+  }
+
+  updateCameraViews(camId: any) {
+    let payload = {
+      camera_ids: camId,
+      guid: this.userGuid
+    }
+    const slug = `${environment.baseUrlSB}/building/views/`;
+
+    this.apiService.patch(slug, payload).subscribe((resp: any) => { }, (err: any) => {
+      this.toastr.error(err.error.message, 'Error');
     });
   }
 
