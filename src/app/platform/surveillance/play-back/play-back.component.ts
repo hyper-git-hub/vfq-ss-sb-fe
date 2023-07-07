@@ -405,11 +405,15 @@ export class PlayBackComponent implements OnInit, OnDestroy {
   setDownloads() {
     this.loading = true;
     let url = new URL(`${environment.baseUrlSB}/building/downloads/`);
-    url.searchParams.set('camera_ids', this.camIds);
-    url.searchParams.set('guid', this.userGuid);
+    // url.searchParams.set('camera_ids', this.camIds);
+    // url.searchParams.set('guid', this.userGuid);
+    let params={
+      'camera_ids': this.camIds,
+      'guid': this.userGuid
+    }
     // url.searchParams.set('type', 'mobile');
 
-    this.apiService.get(url.href).subscribe((resp: any) => {
+    this.apiService.post(url.href, params).subscribe((resp: any) => {
       this.viewCounts = resp.data.data;
 
       // this.viewCounts.forEach((element: any, idx) => {
