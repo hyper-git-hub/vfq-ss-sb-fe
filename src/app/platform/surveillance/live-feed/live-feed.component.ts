@@ -253,7 +253,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     let url = new URL(`${environment.baseUrlSB}/building/downloads/`);
     url.searchParams.set('camera_ids', this.camIds);
     url.searchParams.set('guid', this.userGuid);
-    url.searchParams.set('type', 'mobile');
+    // url.searchParams.set('type', 'mobile');
 
     this.apiService.get(url.href).subscribe((resp: any) => {
       this.downloadCounts = resp.data.data;
@@ -376,7 +376,7 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     let url = new URL(`${environment.baseUrlSB}/building/downloads/`);
     url.searchParams.set('camera_ids', camId);
     url.searchParams.set('guid', this.userGuid);
-    url.searchParams.set('type', 'mobile');
+    // url.searchParams.set('type', 'mobile');
 
     this.apiService.get(url.href).subscribe((resp: any) => {
       const dt = resp.data['data'];
