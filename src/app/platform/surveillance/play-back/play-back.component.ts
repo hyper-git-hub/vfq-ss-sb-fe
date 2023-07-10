@@ -361,6 +361,9 @@ export class PlayBackComponent implements OnInit, OnDestroy {
   }
   
   setupSocket(socketId: any, device: any) {
+    if (this.player2) {
+      this.player2.destroy();
+    }
     setTimeout(() => {
       let url = `${environment.websocketUrl}/playback/?socketId=${socketId}`;
       
