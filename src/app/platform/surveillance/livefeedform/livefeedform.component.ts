@@ -24,6 +24,7 @@ export class LivefeedformComponent implements OnInit {
   cameras: any[];
   displayData: any[];
   viewList: any[];
+  viewsList: any[];
   selectedCameras: any[];
   cameraFeatures: any[];  
   
@@ -33,6 +34,8 @@ export class LivefeedformComponent implements OnInit {
   selectedViewName: any;
 
   previousSelectedView: any;
+  selectedViewList: any[] = [];
+  selectedViews: any = {};
 
   constructor (
     private modalRef: NgbActiveModal,
@@ -47,6 +50,7 @@ export class LivefeedformComponent implements OnInit {
     this.cameras = [];
     this.displayData = [];
     this.viewList = [];
+    this.viewsList = [];
     this.selectedCameras = [];
     this.cameraFeatures = [];
 
@@ -80,6 +84,7 @@ export class LivefeedformComponent implements OnInit {
       let layout = this.data.layout;
       for(let i = 0; i < layout * layout; i++) {
         this.viewList.push({ id: `${i+1}`, view_no: `${i+1}`, name: `View ${i+1}`, selected: false, previousSelected: false });
+        this.viewsList.push({ id: `${i+1}`, view_no: `${i+1}`, name: `View ${i+1}`, selected: false, previousSelected: false });
         this.addViewGroup();
       }
       // this.editViewGroup();
@@ -115,7 +120,7 @@ export class LivefeedformComponent implements OnInit {
           }
         });
       });
-      // console.log("cameras:", this.cameras)
+      console.log("cameras:", this.cameras)
     }, (err: any) => {
       this.toastr.error(err.error['message'], 'Error getting cameras');
     });
@@ -196,10 +201,13 @@ export class LivefeedformComponent implements OnInit {
     // this.viewList = ev.display_phenomenun;
     const v = ev.display_phenomenun;
     const layout = this.data.layout;
-
+    
     for(let i = 0; i < layout * layout; i++) {
       this.viewList.push({ id: `${i+1}`, view_no: `${i+1}`, name: `View ${i+1}` });
     }
+    console.log(v);
+    console.log(this.viewList);
+    console.log(this.selectedCameras);
 
     v.forEach(element => {
       this.viewList.forEach(ele => {
@@ -224,14 +232,89 @@ export class LivefeedformComponent implements OnInit {
     // });
   }
 
-  onChangeView(ev: any) {
-    let idx = this.viewList.findIndex(ele => {
+  onChangeView(ev: any, index: number) {
+    let idx = this.viewsList.findIndex(ele => {
       return ele.id === ev;
     });
+    this.viewList = [];
 
-    if (idx != -1) {
-      this.viewList.splice(idx, 1);
+    const tempSelection: any[] = [];
+
+
+    // if (!this.selectedViewList.includes(this.viewList[idx])) {
+      // this.selectedViewList.push(this.viewsList[idx]);
+    // }
+
+
+    this.selectedViews[index] = this.viewsList[idx];
+
+
+    for (const n in this.selectedViews) {
+      tempSelection.push(this.selectedViews[n])
     }
+
+
+
+    console.log(tempSelection);
+
+    this.viewsList.forEach(vl => {
+      if (!tempSelection.includes(vl)) {
+        this.viewList.push(vl)
+      }
+    });
+
+
+
+
+
+
+
+    // if (idx != -1) {
+    //   // const fd = this.addView.value;
+    //   // const views = fd.views;
+
+    //   // views.forEach(v => {
+    //   //   this.selectedViewList.forEach(sv => {
+    //   //     if (v.views != null && v.views != sv.view_no) {
+    //   //       this.viewList.push(sv);
+    //   //     }
+    //   //   });
+    //   // });
+
+    //   // var unique_views = this.viewList.filter((elem, index, self) => {
+    //   //   return index === self.indexOf(elem);
+    //   // })
+    //   // console.log(unique_views);
+    //   // this.viewList = unique_views;
+      
+    //   // this.selectedViewList.push(this.viewList[idx]);
+
+
+
+
+    //   // this.selectedViews[index] = this.viewsList[idx];
+
+    //   // this.viewsList.forEach(vl => {
+    //   //   if (!this.viewsList.includes(this.selectedViews[index])) {
+    //   //     this.viewList.push(vl);
+    //   //   }
+    //   // });
+
+    //   // this.viewsList.forEach(vl => {
+    //   //   for (const key in this.selectedViews) {
+    //   //     if (this.selectedViews[key].view_no !== vl.view_no) {
+    //   //       this.viewList.push(vl);
+    //   //       // if(!this.viewList.includes(vl)) {
+    //   //       // }
+    //   //     }
+    //   //   }
+    //   // });
+
+
+    //   // this.viewList.splice(idx, 1);
+    //   // console.log(this.selectedViewList);
+    //   // console.log(this.selectedViews, this.viewList);
+    // }
   }
 
   onChangeCam(ev: any) {
@@ -245,6 +328,7 @@ export class LivefeedformComponent implements OnInit {
   }
 
   onSelectCamera(ev: any) {
+    // console.log(ev, this.selectedCameras);
     let idx = this.selectedCameras.findIndex(ele => {
       return ev.device == ele.camera_id;
     });

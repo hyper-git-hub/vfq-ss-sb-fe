@@ -27,7 +27,7 @@
                             <div class="form-group ">
                                 <label>Views</label> <span class="text-danger">*</span>
                                 <ng-select [searchable]="false" [clearable]="false" placeholder="Select Space"
-                                    (change)="onChangeView($event)" formControlName="views">
+                                    (change)="onChangeView($event, i)" formControlName="views">
                                     <ng-option *ngFor="let view of viewList" [value]="view.id">
                                         {{ view.name }}
                                     </ng-option>
