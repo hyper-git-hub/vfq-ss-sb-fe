@@ -206,6 +206,7 @@ export class PlayBackComponent implements OnInit, OnDestroy {
       this.pbFilterForm.controls['space'].setValue(null);
       this.pbFilterForm.controls['room'].setValue(null);
       this.pbFilterForm.controls['open_area'].setValue(null);
+      this.pbFilterForm.controls['device'].setValue(null);
       this.pbFilters.floor = '';
       this.pbFilters.space = '';
       this.pbFilters.space_attribute = '';
@@ -486,6 +487,14 @@ export class PlayBackComponent implements OnInit, OnDestroy {
     
     let copied = this.clipboard.copy(url.href);
     this.toastr.info('', 'URL Copied');
+  }
+
+  onPlay() {
+    console.log('on play clicked');
+    this.player2.play();
+  }
+  onPause() {
+    this.player2.pause();
   }
 
   getplaybackVedio(filter: any): void {
