@@ -22,10 +22,8 @@ export class LivefeedformComponent implements OnInit {
   editView: FormGroup;
 
   cameras: any[];
-  totalCameras: any[];
   displayData: any[];
   viewList: any[];
-  viewsList: any[];
   selectedCameras: any[];
   cameraFeatures: any[];  
   
@@ -33,6 +31,8 @@ export class LivefeedformComponent implements OnInit {
   customerId: any;
   selectedViewID: any;
   selectedViewName: any;
+
+  previousSelectedView: any;
 
   constructor (
     private modalRef: NgbActiveModal,
@@ -45,10 +45,8 @@ export class LivefeedformComponent implements OnInit {
     this.category = 'add';
 
     this.cameras = [];
-    this.totalCameras = [];
     this.displayData = [];
     this.viewList = [];
-    this.viewsList = [];
     this.selectedCameras = [];
     this.cameraFeatures = [];
 
@@ -81,8 +79,7 @@ export class LivefeedformComponent implements OnInit {
     if (this.data && this.category == 'add') {
       let layout = this.data.layout;
       for(let i = 0; i < layout * layout; i++) {
-        this.viewList.push({ id: `${i+1}`, view_no: `${i+1}`, name: `View ${i+1}`, selected: false });
-        this.viewsList.push({ id: `${i+1}`, view_no: `${i+1}`, name: `View ${i+1}`, selected: false });
+        this.viewList.push({ id: `${i+1}`, view_no: `${i+1}`, name: `View ${i+1}`, selected: false, previousSelected: false });
         this.addViewGroup();
       }
       // this.editViewGroup();
@@ -114,9 +111,7 @@ export class LivefeedformComponent implements OnInit {
       dt.forEach(dev => {
         this.cameraFeatures.forEach(ele => {
           if (dev.device === ele) {
-            dev['selected'] = false;
             this.cameras.push(dev);
-            this.totalCameras.push(dev);
           }
         });
       });
@@ -230,20 +225,12 @@ export class LivefeedformComponent implements OnInit {
   }
 
   onChangeView(ev: any) {
-    this.viewsList.forEach(element => {
-      element.selected = false;
-    });
-    let idx = this.viewsList.findIndex(ele => {
-      // ele.selected = false;
+    let idx = this.viewList.findIndex(ele => {
       return ele.id === ev;
     });
 
     if (idx != -1) {
-      this.viewsList[idx].selected = true;
-      this.viewList = this.viewsList.filter(ele => {
-        return ele.selected == false;
-      });
-      // this.viewList.splice(idx, 1);
+      this.viewList.splice(idx, 1);
     }
   }
 
@@ -253,11 +240,7 @@ export class LivefeedformComponent implements OnInit {
     });
 
     if (idx != -1) {
-      this.totalCameras[idx].selected = true;
-      this.cameras = this.totalCameras.filter(ele => {
-        return !ele.selected;
-      });
-      // this.cameras.splice(idx, 1);
+      this.cameras.splice(idx, 1);
     }
   }
 
