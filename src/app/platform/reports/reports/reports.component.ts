@@ -106,7 +106,7 @@ export class ReportsComponent implements OnInit {
       { id: 'watch_time_report', name: 'Watch Time Report', device_type: 'Camera' },
       { id: 'geo_zone_motion_alert_report', name: 'Geo-zone Motion Alert', device_type: 'Camera' },
       { id: 'alert_and_event_trigger_report', name: 'Alert and event trigger', device_type: 'Camera' },
-      { id: 'occupancy_report', name: 'Occupancy', device_type: 'Camera' },
+      // { id: 'occupancy_report', name: 'Occupancy', device_type: 'Camera' },
       { id: 'user_activity_report', name: 'User Activity', device_type: 'Camera' },
     ];
 

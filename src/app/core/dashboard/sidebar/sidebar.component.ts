@@ -43,17 +43,17 @@ export class SidebarComponent implements OnInit {
             sub_menu: [],
             permission: ['RW']
           },
-          {
-            id: 301,
-            name: 'Occupancy',
-            icon: 'ri-admin-line',
-            route: '/ss/dashboard/occupancy',
-            is_parent: false,
-            created_at: '2021-10-21T09:55:13.509101Z',
-            modified_at: '2021-10-21T09:55:13.509121Z',
-            sub_menu: [],
-            permission: ['RW']
-          },
+          // {
+          //   id: 301,
+          //   name: 'Occupancy',
+          //   icon: 'ri-admin-line',
+          //   route: '/ss/dashboard/occupancy',
+          //   is_parent: false,
+          //   created_at: '2021-10-21T09:55:13.509101Z',
+          //   modified_at: '2021-10-21T09:55:13.509121Z',
+          //   sub_menu: [],
+          //   permission: ['RW']
+          // },
         ],
       },
       {
