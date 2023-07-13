@@ -22,6 +22,7 @@ export class LivefeedformComponent implements OnInit {
   editView: FormGroup;
 
   cameras: any[];
+  totalCameras: any[];
   displayData: any[];
   viewList: any[];
   viewsList: any[];
@@ -36,6 +37,7 @@ export class LivefeedformComponent implements OnInit {
   previousSelectedView: any;
   selectedViewList: any[] = [];
   selectedViews: any = {};
+  selectedCamera: any = {};
 
   constructor (
     private modalRef: NgbActiveModal,
@@ -48,6 +50,7 @@ export class LivefeedformComponent implements OnInit {
     this.category = 'add';
 
     this.cameras = [];
+    this.totalCameras = [];
     this.displayData = [];
     this.viewList = [];
     this.viewsList = [];
@@ -117,6 +120,7 @@ export class LivefeedformComponent implements OnInit {
         this.cameraFeatures.forEach(ele => {
           if (dev.device === ele) {
             this.cameras.push(dev);
+            this.totalCameras.push(dev);
           }
         });
       });
@@ -237,84 +241,38 @@ export class LivefeedformComponent implements OnInit {
       return ele.id === ev;
     });
     this.viewList = [];
-
     const tempSelection: any[] = [];
 
-
-    // if (!this.selectedViewList.includes(this.viewList[idx])) {
-      // this.selectedViewList.push(this.viewsList[idx]);
-    // }
-
-
     this.selectedViews[index] = this.viewsList[idx];
-
-
     for (const n in this.selectedViews) {
       tempSelection.push(this.selectedViews[n])
     }
-
-
-
-    console.log(tempSelection);
 
     this.viewsList.forEach(vl => {
       if (!tempSelection.includes(vl)) {
         this.viewList.push(vl)
       }
     });
+  }
 
+  onChangeSelectedCamera(ev: any, index: number) {
+    let idx = this.totalCameras.findIndex(ele => {
+      return ele.device === ev;
+    });
 
+    this.cameras = [];
+    const tempSelection: any[] = [];
+    this.selectedCamera[index] = this.totalCameras[idx];
 
+    for (const n in this.selectedCamera) {
+      tempSelection.push(this.selectedCamera[n])
+    }
 
-
-
-
-    // if (idx != -1) {
-    //   // const fd = this.addView.value;
-    //   // const views = fd.views;
-
-    //   // views.forEach(v => {
-    //   //   this.selectedViewList.forEach(sv => {
-    //   //     if (v.views != null && v.views != sv.view_no) {
-    //   //       this.viewList.push(sv);
-    //   //     }
-    //   //   });
-    //   // });
-
-    //   // var unique_views = this.viewList.filter((elem, index, self) => {
-    //   //   return index === self.indexOf(elem);
-    //   // })
-    //   // console.log(unique_views);
-    //   // this.viewList = unique_views;
-      
-    //   // this.selectedViewList.push(this.viewList[idx]);
-
-
-
-
-    //   // this.selectedViews[index] = this.viewsList[idx];
-
-    //   // this.viewsList.forEach(vl => {
-    //   //   if (!this.viewsList.includes(this.selectedViews[index])) {
-    //   //     this.viewList.push(vl);
-    //   //   }
-    //   // });
-
-    //   // this.viewsList.forEach(vl => {
-    //   //   for (const key in this.selectedViews) {
-    //   //     if (this.selectedViews[key].view_no !== vl.view_no) {
-    //   //       this.viewList.push(vl);
-    //   //       // if(!this.viewList.includes(vl)) {
-    //   //       // }
-    //   //     }
-    //   //   }
-    //   // });
-
-
-    //   // this.viewList.splice(idx, 1);
-    //   // console.log(this.selectedViewList);
-    //   // console.log(this.selectedViews, this.viewList);
-    // }
+    this.totalCameras.forEach(vl => {
+      if (!tempSelection.includes(vl)) {
+        this.cameras.push(vl)
+      }
+    });
   }
 
   onChangeCam(ev: any) {

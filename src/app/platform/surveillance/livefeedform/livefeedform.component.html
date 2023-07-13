@@ -42,7 +42,7 @@
                             <div class="form-group ">
                                 <label>Camera</label> <span class="text-danger">*</span>
                                 <ng-select [searchable]="false" [clearable]="false" placeholder="Select Camera"
-                                    (change)="onChangeCam($event)" formControlName="camera">
+                                    (change)="onChangeSelectedCamera($event, i)" formControlName="camera">
                                     <ng-option *ngFor="let cam of cameras" [value]="cam.device">
                                         {{ cam.device_name }}
                                     </ng-option>
