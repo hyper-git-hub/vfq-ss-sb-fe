@@ -191,20 +191,21 @@ export class LiveFeedComponent implements OnInit, OnDestroy {
     });
     const final: any[] = [];
     const devs: any[] = [];
-    if (dt.display_phenomenun.length > 0) {
-      dt.display_phenomenun.forEach(element => {
-        this.viewsDevices.forEach(elem => {
-          if (element.camera_id === elem.device) {
-            final.push(elem);
-            devs.push(elem);
-          }
-        });
+    // if (dt.display_phenomenun.length > 0) {
+    //   console.log(dt);
+    // }
+    dt.display_phenomenun.forEach(element => {
+      this.viewsDevices.forEach(elem => {
+        if (element.camera_id === elem.device) {
+          final.push(elem);
+          devs.push(elem);
+        }
       });
-      this.devices = final;
-    }
+    });
+    this.devices = final;
 
+    this.camIds = '';
     if (!!devs && devs.length > 0) {
-      this.camIds = '';
       devs.forEach((ele, idx) => {
         this.camIds += ele.device;
         this.playCameras(ele.device);

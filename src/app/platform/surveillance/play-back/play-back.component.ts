@@ -206,6 +206,7 @@ export class PlayBackComponent implements OnInit, OnDestroy {
       this.pbFilterForm.controls['space'].setValue(null);
       this.pbFilterForm.controls['room'].setValue(null);
       this.pbFilterForm.controls['open_area'].setValue(null);
+      this.pbFilterForm.controls['device'].setValue(null);
       this.pbFilters.floor = '';
       this.pbFilters.space = '';
       this.pbFilters.space_attribute = '';
@@ -361,6 +362,9 @@ export class PlayBackComponent implements OnInit, OnDestroy {
   }
   
   setupSocket(socketId: any, device: any) {
+    if (this.player2) {
+      this.player2.destroy();
+    }
     setTimeout(() => {
       let url = `${environment.websocketUrl}/playback/?socketId=${socketId}`;
       
@@ -483,6 +487,14 @@ export class PlayBackComponent implements OnInit, OnDestroy {
     
     let copied = this.clipboard.copy(url.href);
     this.toastr.info('', 'URL Copied');
+  }
+
+  onPlay() {
+    console.log('on play clicked');
+    this.player2.play();
+  }
+  onPause() {
+    this.player2.pause();
   }
 
   getplaybackVedio(filter: any): void {

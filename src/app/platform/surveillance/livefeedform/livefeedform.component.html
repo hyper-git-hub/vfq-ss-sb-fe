@@ -5,7 +5,7 @@
 <img *ngIf="loading" src="/assets/images/block-loader.gif" alt="Loading" width="150px" height="150px"
     style="position: absolute; top: 30%; left: 35%; z-index: 1;"/>
 
-<div class="modal-body">
+<div class="modal-body" style="min-height: 260px;">
     <div class="card w-100-p" style="border: none; height: 100%">
 
         <!--VIEW ADD -->
@@ -27,7 +27,7 @@
                             <div class="form-group ">
                                 <label>Views</label> <span class="text-danger">*</span>
                                 <ng-select [searchable]="false" [clearable]="false" placeholder="Select Space"
-                                    (change)="onChangeView($event)" formControlName="views">
+                                    (change)="onChangeView($event, i)" formControlName="views">
                                     <ng-option *ngFor="let view of viewList" [value]="view.id">
                                         {{ view.name }}
                                     </ng-option>
@@ -42,7 +42,7 @@
                             <div class="form-group ">
                                 <label>Camera</label> <span class="text-danger">*</span>
                                 <ng-select [searchable]="false" [clearable]="false" placeholder="Select Camera"
-                                    (change)="onChangeCam($event)" formControlName="camera">
+                                    (change)="onChangeSelectedCamera($event, i)" formControlName="camera">
                                     <ng-option *ngFor="let cam of cameras" [value]="cam.device">
                                         {{ cam.device_name }}
                                     </ng-option>

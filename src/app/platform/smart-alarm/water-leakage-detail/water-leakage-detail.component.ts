@@ -93,7 +93,7 @@ export class WaterLeakageDetailComponent implements OnInit {
     this.apiService.get(slug).subscribe((resp: any) => {
       const dt = resp.data;
       this.loading = false;
-      this.table[0].value = dt.connectivity_status ? 'On' : 'Off';
+      // this.table[0].value = dt.connectivity_status ? 'On' : 'Off';
     }, (err: any) => {
       this.loading = false;
       this.toastr.error(err.error['message']);
@@ -106,6 +106,7 @@ export class WaterLeakageDetailComponent implements OnInit {
 
     this.apiService.get(url.href).subscribe((resp: any) => {
       const dt = resp.data;
+      this.table[0].value = dt.device_online ? 'On' : 'Off';
       this.table[5].value = dt['last_alarm'] ? this.df.transform(dt['last_alarm'], 'dd-MM-yyyy, hh:mm a') : '';
       this.table[6].value = dt['updated_at'] ? this.df.transform(this.convertToSystemTime(dt['updated_at']), 'dd-MM-yyyy, hh:mm a') : '';
       this.loading = false;
